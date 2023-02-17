@@ -1,0 +1,387 @@
+﻿<Page
+    x:Class="Sistema_Mercadito.Pages.Dashboard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Dashboard"
+    MaxWidth="800"
+    MaxHeight="500"
+    d:DesignHeight="500"
+    d:DesignWidth="800"
+    FontSize="20"
+    Foreground="{DynamicResource PrimaryTextColor}"
+    mc:Ignorable="d">
+
+    <Border Background="{DynamicResource SecundaryBackgroundColor}" CornerRadius="5">
+        <Grid Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+
+            <!--#region LABELS-->
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Text="Abrir caja" />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="15,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="20 Mil" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                Margin="15,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="10 Mil" />
+            <TextBlock
+                Grid.Row="7"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="5 mil" />
+            <TextBlock
+                Grid.Row="9"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="2 Mil" />
+            <TextBlock
+                Grid.Row="11"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="1 Mil" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="6"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="500" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="6"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="100" />
+            <TextBlock
+                Grid.Row="7"
+                Grid.Column="6"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="50" />
+            <TextBlock
+                Grid.Row="9"
+                Grid.Column="6"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="25" />
+            <TextBlock
+                Grid.Row="11"
+                Grid.Column="6"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="10" />
+            <TextBlock
+                Grid.Row="13"
+                Grid.Column="6"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="5" />
+            <!--#endregion-->
+
+            <!--#region Campos Numericos-->
+            <TextBox
+                x:Name="txt20mil"
+                Grid.Row="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                Tag="20000"
+                TextChanged="txt20mil_TextChanged" />
+            <TextBox
+                x:Name="txt10mil"
+                Grid.Row="5"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt10mil_TextChanged" />
+            <TextBox
+                x:Name="txt5mil"
+                Grid.Row="7"
+                Grid.Column="2"
+                       Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt5mil_TextChanged" />
+            <TextBox
+                x:Name="txt2mil"
+                Grid.Row="9"
+                Grid.Column="2"
+                       Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt2mil_TextChanged" />
+            <TextBox
+                x:Name="txt1mil"
+                Grid.Row="11"
+                Grid.Column="2"
+                       Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt1mil_TextChanged" />
+            <TextBox
+                x:Name="txt500"
+                Grid.Row="3"
+                Grid.Column="7"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt500_TextChanged" />
+            <TextBox
+                x:Name="txt100"
+                Grid.Row="5"
+                Grid.Column="7"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt100_TextChanged" />
+            <TextBox
+                x:Name="txt50"
+                Grid.Row="7"
+                Grid.Column="7"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt50_TextChanged" />
+            <TextBox
+                x:Name="txt25"
+                Grid.Row="9"
+                Grid.Column="7"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt25_TextChanged" />
+            <TextBox
+                x:Name="txt10"
+                Grid.Row="11"
+                Grid.Column="7"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txt10_TextChanged" />
+            <TextBox
+                x:Name="txt5"
+                Grid.Row="13"
+                Grid.Column="7"
+                Grid.ColumnSpan="2"
+                GotFocus="txtFocusEvent"
+                LostFocus="txtLostFocus"
+                MaxLength="3"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="tx5_TextChanged" />
+            <!--#endregion-->
+
+            <TextBlock
+                x:Name="tb20mil"
+                Grid.Row="3"
+                Grid.Column="4"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="20 Mil" />
+            <TextBlock
+                x:Name="tb10mil"
+                Grid.Row="5"
+                Grid.Column="4"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="10 Mil" />
+            <TextBlock
+                x:Name="tb5mil"
+                Grid.Row="7"
+                Grid.Column="4"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="5 mil" />
+            <TextBlock
+                x:Name="tb2mil"
+                Grid.Row="9"
+                Grid.Column="4"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="2 Mil" />
+            <TextBlock
+                x:Name="tb1mil"
+                Grid.Row="11"
+                Grid.Column="4"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="1 Mil" />
+            <TextBlock
+                x:Name="tb500"
+                Grid.Row="3"
+                Grid.Column="9"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="500" />
+            <TextBlock
+                x:Name="tb100"
+                Grid.Row="5"
+                Grid.Column="9"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="2 Mil" />
+            <TextBlock
+                x:Name="tb50"
+                Grid.Row="7"
+                Grid.Column="9"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="2 Mil" />
+            <TextBlock
+                x:Name="tb25"
+                Grid.Row="9"
+                Grid.Column="9"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="2 Mil" />
+            <TextBlock
+                x:Name="tb10"
+                Grid.Row="11"
+                Grid.Column="9"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="2 Mil" />
+            <TextBlock
+                x:Name="tb5"
+                Grid.Row="13"
+                Grid.Column="9"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="2 Mil" />
+
+            <TextBlock
+                x:Name="tbTotal"
+                Grid.Row="15"
+                Grid.Column="3"
+                Grid.ColumnSpan="6"
+                HorizontalAlignment="Center"
+                Text="Monto final" />
+            <Button
+                x:Name="btnIniciar"
+                Grid.Row="16"
+                Grid.Column="3"
+                Grid.ColumnSpan="6"
+                Width="150"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="btnIniciar_Click"
+                Content="Iniciar" />
+        </Grid>
+    </Border>
+</Page>
