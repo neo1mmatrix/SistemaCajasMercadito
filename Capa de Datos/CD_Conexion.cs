@@ -156,6 +156,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                     SharedResources._Sinpe = lector.GetDecimal(4);
                     SharedResources._Tarjeta = lector.GetDecimal(5);
                     SharedResources._TipoCambio = (decimal)lector.GetDouble(6);
+                    SharedResources._FechaFormateada = lector.GetString(7);
                 }
             }
             catch (Exception ex)

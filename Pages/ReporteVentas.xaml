@@ -92,18 +92,19 @@
                                         BorderBrush="Transparent"
                                         Click="Consultar"
                                         CommandParameter="{Binding IdVenta}">
+                                        <Image Height="30" Source="/Resources/search.png" />
                                     </Button>
                                     <Button
                                         x:Name="btnActualizar"
                                         Background="#018abd"
                                         Style="{DynamicResource ButtonGrid}">
-                                        <Image Height="30" Source="/Resources/ItemModificar.png" />
+                                        <Image Height="30" Source="/Resources/pencil.png" />
                                     </Button>
                                     <Button
                                         x:Name="btnEliminar"
                                         Background="#8e0000 "
                                         Style="{DynamicResource ButtonGrid}">
-                                        <Image Height="30" Source="/Resources/ItemDelete.png" />
+                                        <Image Height="30" Source="/Resources/recycle-bin.png" />
                                     </Button>
                                     <!--#endregion-->
                                 </DockPanel>

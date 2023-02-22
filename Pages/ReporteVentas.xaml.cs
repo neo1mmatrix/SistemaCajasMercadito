@@ -43,6 +43,9 @@ namespace Sistema_Mercadito.Pages
             vc.txtTarjeta.IsEnabled = false;
             vc.txtTipoCambio.IsEnabled = false;
             vc.btnPagar.Visibility = Visibility.Collapsed;
+            vc.tbfechaAntigua.Visibility = Visibility.Visible;
+            vc.tbfecha.Visibility = Visibility.Collapsed;
+            vc.btnRegresar.Visibility = Visibility.Visible;
         }
 
         private void Actualizar(object sender, RoutedEventArgs e)

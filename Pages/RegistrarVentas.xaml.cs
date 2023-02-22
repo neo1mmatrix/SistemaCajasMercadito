@@ -334,18 +334,18 @@ namespace Sistema_Mercadito.Pages
 
         private Dictionary<int, string> mesesEnEspanol = new Dictionary<int, string>()
         {
-                   { 1, "Enero" },
-                 { 2, "Febrero" },
-                 { 3, "Marzo" },
-                { 4, "Abril" },
+            { 1, "Enero" },
+            { 2, "Febrero" },
+            { 3, "Marzo" },
+            { 4, "Abril" },
             { 5, "Mayo" },
-                { 6, "Junio" },
-             { 7, "Julio" },
-                { 8, "Agosto" },
-                { 9, "Septiembre" },
-                { 10, "Octubre" },
-                { 11, "Noviembre" },
-                { 12, "Diciembre" }
+            { 6, "Junio" },
+            { 7, "Julio" },
+            { 8, "Agosto" },
+            { 9, "Septiembre" },
+            { 10, "Octubre" },
+            { 11, "Noviembre" },
+            { 12, "Diciembre" }
         };
 
         private void PagoDesglosado()
@@ -544,7 +544,7 @@ namespace Sistema_Mercadito.Pages
             txtTipoCambio.Text = Math.Truncate(SharedResources._TipoCambio).ToString("N0");
             txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
             tbVuelto.Text = Math.Truncate(SharedResources._Vuelto).ToString("N0");
-            SumaDinero();
+            tbfechaAntigua.Text = SharedResources._FechaFormateada.ToString();
             LimpiarCampos();
         }
 
@@ -558,10 +558,12 @@ namespace Sistema_Mercadito.Pages
             SharedResources._TipoCambio = 0;
             SharedResources._Tarjeta = 0;
             SharedResources._Vuelto = 0;
+            SharedResources._FechaFormateada = "";
         }
 
         private void RegresarClick(object sender, RoutedEventArgs e)
         {
+            NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
         }
     }
 }

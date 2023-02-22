@@ -18,5 +18,6 @@
         public static decimal _MontoPagar { get; set; }
         public static decimal _Vuelto { get; set; }
         public static decimal _TipoCambio { get; set; }
+        public static string _FechaFormateada { get; set; }
     }
 }

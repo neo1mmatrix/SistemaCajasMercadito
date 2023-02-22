@@ -211,5 +211,17 @@
   <ItemGroup>
     <Resource Include="Resources\ItemDelete.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\recycle-bin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pencil.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
