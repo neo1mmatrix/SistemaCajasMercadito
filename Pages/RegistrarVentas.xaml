@@ -6,13 +6,14 @@
     xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="VentasCajas"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
     MinWidth="800"
     MinHeight="450"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    FontSize="20"
     Foreground="{DynamicResource PrimaryTextColor}"
-    FontSize="20" Loaded="loaded">
+    Loaded="loaded"
+    mc:Ignorable="d">
 
     <Border Background="{DynamicResource SecundaryBackgroundColor}" CornerRadius="5">
 
@@ -45,151 +46,182 @@
 
             <!--#region TEXTBLOCKS-->
             <TextBlock
-            Grid.Row="3"
-            Grid.Column="1"
-            Text="Monto" />
+                Grid.Row="3"
+                Grid.Column="1"
+                Text="Venta" />
             <TextBlock
-            Grid.Row="4"
-            Grid.Column="1"
-            Text="Colones" />
+                Grid.Row="4"
+                Grid.Column="1"
+                Text="Colones" />
             <TextBlock
-            Grid.Row="5"
-            Grid.Column="1"
-            Text="Dolares" />
+                Grid.Row="5"
+                Grid.Column="1"
+                Text="Dolares" />
             <TextBlock
-            Grid.Row="8"
-            Grid.Column="2"
-            Text="Vuelto ₡" />
+                Grid.Row="8"
+                Grid.Column="2"
+                Text="Vuelto ₡" />
             <TextBlock
-            x:Name="tbVuelto"
-            Grid.Row="8"
-            Grid.Column="3"
-            Grid.ColumnSpan="3"
+                x:Name="tbVuelto"
+                Grid.Row="8"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
                 Background="White"
-
-            Text="0" KeyDown="AtajoTeclado" />
+                KeyDown="AtajoTeclado"
+                Text="0" />
             <TextBlock
-            Grid.Row="4"
-            Grid.Column="4"
-            Text="Tipo Cambio" />
+                Grid.Row="4"
+                Grid.Column="4"
+                Text="Tipo Cambio" />
             <TextBlock
-            Grid.Row="5"
-            Grid.Column="4"
-            Text="Sinpe" />
+                Grid.Row="5"
+                Grid.Column="4"
+                Text="Sinpe" />
             <TextBlock
-            Grid.Row="3"
-            Grid.Column="4"
-            Text="Tarjeta" />
+                Grid.Row="3"
+                Grid.Column="4"
+                Text="Tarjeta" />
             <TextBlock
-            x:Name="tbDolarToColones"
-            Grid.Row="6"
-            Grid.Column="1"
-            Grid.ColumnSpan="3"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Foreground="White"
-            Text="Equivalen a "
-            Visibility="Hidden" />
+                x:Name="tbDolarToColones"
+                Grid.Row="6"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Foreground="White"
+                Text="Equivalen a "
+                Visibility="Hidden" />
             <TextBlock
-            x:Name="tbAdvertencia"
-            Grid.Row="9"
-            Grid.Column="1"
-            Grid.ColumnSpan="6"
-            HorizontalAlignment="Center"
-            Foreground="Red"
-            Text="Advertencia"
-            Visibility="Hidden" />
+                x:Name="tbAdvertencia"
+                Grid.Row="9"
+                Grid.Column="1"
+                Grid.ColumnSpan="6"
+                HorizontalAlignment="Center"
+                Foreground="Red"
+                Text="Advertencia"
+                Visibility="Hidden" />
             <!--#endregion-->
             <!--#region BOTONES-->
             <Button
-            x:Name="btnPagar"
-            Grid.Row="10"
-            Grid.Column="1"
-            Grid.ColumnSpan="6"
-            Click="btnPagarClick"
-            Content="Pagar" />
+                x:Name="btnPagar"
+                Grid.Row="10"
+                Grid.Column="1"
+                Grid.ColumnSpan="6"
+                Click="btnPagarClick"
+                Content="Pagar" />
+
+            <Button
+                x:Name="btnActualizar"
+                Grid.Row="10"
+                Grid.Column="1"
+                Grid.ColumnSpan="6"
+                Click="btnActualizarClick"
+                Content="Actualizar"
+                Visibility="Hidden" />
+            <Button
+                x:Name="btnRegresar"
+                Grid.Row="1"
+                Grid.Column="1"
+                Click="RegresarClick"
+                Content="Regresar"
+                Visibility="Hidden" />
             <!--#endregion-->
             <!--#region Campos de Texto Montos-->
             <TextBox
-            x:Name="txtMonto"
-            Grid.Row="3"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
-            KeyDown="AtajoTeclado"
-            LostFocus="txtLostFocus"
-            MaxLength="15"
-            PreviewKeyDown="txtPreviewKeyDownEvent"
-            PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-            PreviewTextInput="NumberValidationTextBox"
-            TextChanged="txtTextChangedMonto" />
+                x:Name="txtVenta"
+                Grid.Row="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="15"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+
+                TextChanged="txtTextChangedMonto" />
             <TextBox
-            x:Name="txtColones"
-            Grid.Row="4"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
-            GotFocus="ColonesGotFocus"
-            LostFocus="txtLostFocus"
-            MaxLength="15"
-            PreviewKeyDown="txtPreviewKeyDownEvent"
-            PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-            PreviewTextInput="NumberValidationTextBox"
-            TextChanged="txtTextChanged" KeyDown="AtajoTeclado" />
+                x:Name="txtColones"
+                Grid.Row="4"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                GotFocus="ColonesGotFocus"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="15"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txtTextChanged" />
             <TextBox
-            x:Name="txtDolares"
-            Grid.Row="5"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
-            GotFocus="ColonesGotFocus"
-            LostFocus="txtLostFocus"
-            MaxLength="4"
-            PreviewKeyDown="txtPreviewKeyDownEvent"
-            PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-            PreviewTextInput="NumberValidationTextBox"
-            TextChanged="txtTextChanged" KeyDown="AtajoTeclado" />
+                x:Name="txtDolares"
+                Grid.Row="5"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                GotFocus="ColonesGotFocus"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="4"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txtTextChanged" />
             <TextBox
-            x:Name="txtTarjeta"
-            Grid.Row="3"
-            Grid.Column="5"
-            Grid.ColumnSpan="2"
-            GotFocus="ColonesGotFocus"
-            LostFocus="txtLostFocus"
-            MaxLength="15"
-            PreviewKeyDown="txtPreviewKeyDownEvent"
-            PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-            PreviewTextInput="NumberValidationTextBox"
-            TextChanged="txtTextChanged" KeyDown="AtajoTeclado" />
+                x:Name="txtTarjeta"
+                Grid.Row="3"
+                Grid.Column="5"
+                Grid.ColumnSpan="2"
+                GotFocus="ColonesGotFocus"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="15"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txtTextChanged" />
             <TextBox
-            x:Name="txtTipoCambio"
-            Grid.Row="4"
-            Grid.Column="5"
-            Grid.ColumnSpan="2"
-            GotFocus="ColonesGotFocus"
-            LostFocus="txtLostFocus"
-            MaxLength="4"
-            PreviewKeyDown="txtPreviewKeyDownEvent"
-            PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-            PreviewTextInput="NumberValidationTextBox"
-            TextChanged="txtTextChanged" KeyDown="AtajoTeclado" />
+                x:Name="txtTipoCambio"
+                Grid.Row="4"
+                Grid.Column="5"
+                Grid.ColumnSpan="2"
+                GotFocus="ColonesGotFocus"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="4"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txtTextChanged" />
             <TextBox
-            x:Name="txtSinpe"
-            Grid.Row="5"
-            Grid.Column="5"
-            Grid.ColumnSpan="2"
-            GotFocus="ColonesGotFocus"
-            LostFocus="txtLostFocus"
-            MaxLength="15"
-            PreviewKeyDown="txtPreviewKeyDownEvent"
-            PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-            PreviewTextInput="NumberValidationTextBox"
-            TextChanged="txtTextChanged" KeyDown="AtajoTeclado" />
+                x:Name="txtSinpe"
+                Grid.Row="5"
+                Grid.Column="5"
+                Grid.ColumnSpan="2"
+                GotFocus="ColonesGotFocus"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="15"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TextChanged="txtTextChanged" />
             <!--#endregion-->
 
-            <TextBlock x:Name="tbfecha"
-                            Grid.Row="1"
-            Grid.Column="1"
-            Grid.ColumnSpan="6"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
+            <TextBlock
+                x:Name="tbfecha"
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="6"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+            <TextBlock
+                x:Name="tbTitulo"
+                Grid.Row="0"
+                Grid.Column="1"
+                Grid.ColumnSpan="6"
+                Text="Ventas"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
         </Grid>
     </Border>
 </Page>

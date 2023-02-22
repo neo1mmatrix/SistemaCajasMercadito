@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Globalization;
 
 namespace Sistema_Mercadito
 {
@@ -17,6 +18,7 @@ namespace Sistema_Mercadito
         public MainWindow()
         {
             InitializeComponent();
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
             checkDatabaseFirstConfig();
         }
 

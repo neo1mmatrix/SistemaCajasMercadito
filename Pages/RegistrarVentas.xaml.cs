@@ -1,24 +1,14 @@
 ﻿using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using static Sistema_Mercadito.Capa_de_Datos.CD_Conexion;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -43,7 +33,7 @@ namespace Sistema_Mercadito.Pages
         // Obtener el día de la semana actual y traducirlo al español
         private string _diaSemana = "";
 
-        private string _numeroDia = "";
+        private string _mesActual = "";
 
         public VentasCajas()
         {
@@ -54,7 +44,7 @@ namespace Sistema_Mercadito.Pages
         private void Inicio()
         {
             _ValoresCargados = false;
-            txtMonto.Text = "0";
+            txtVenta.Text = "0";
             txtColones.Text = "0";
             txtDolares.Text = "0";
             txtTipoCambio.Text = "0";
@@ -67,7 +57,7 @@ namespace Sistema_Mercadito.Pages
         {
             try
             {
-                _Venta = decimal.Parse(txtMonto.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Venta = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
                 _Colones = decimal.Parse(txtColones.Text, System.Globalization.NumberStyles.AllowThousands);
                 _Dolares = decimal.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands);
                 _Sinpe = decimal.Parse(txtSinpe.Text, System.Globalization.NumberStyles.AllowThousands);
@@ -186,9 +176,9 @@ namespace Sistema_Mercadito.Pages
             try
             {
                 decimal _monto = 0;
-                if (txtMonto.Text.Length > 0)
+                if (txtVenta.Text.Length > 0)
                 {
-                    _monto = decimal.Parse(txtMonto.Text, System.Globalization.NumberStyles.AllowThousands);
+                    _monto = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
                     txtColones.Text = _monto.ToString("N0");
                 }
                 else
@@ -225,7 +215,7 @@ namespace Sistema_Mercadito.Pages
 
         private void txtTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (((TextBox)sender).Text.Length > 0 && _ValoresCargados && txtMonto.Text.Length > 0)
+            if (((TextBox)sender).Text.Length > 0 && _ValoresCargados && txtVenta.Text.Length > 0)
             {
                 SumaDinero();
             }
@@ -298,7 +288,22 @@ namespace Sistema_Mercadito.Pages
             textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
         }
 
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Obtener la hora actual y actualizar el contenido del Label
+            tbfecha.Text = "Hoy es " + _diaSemana + DateTime.Now.ToString("HH:mm:ss");
+        }
+
         #endregion Controles de Eventos
+
+        private void loaded(object sender, RoutedEventArgs e)
+        {
+            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
+            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
+            _mesActual = mesesEnEspanol[DateTime.Now.Month];
+            _diaSemana += " " + _mesActual + " Hora: ";
+            FechayHora();
+        }
 
         private void FechayHora()
         {
@@ -315,20 +320,6 @@ namespace Sistema_Mercadito.Pages
             // Controlador de eventos para el evento Tick del DispatcherTimer
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            // Obtener la hora actual y actualizar el contenido del Label
-            tbfecha.Text = "Hoy es " + _diaSemana + DateTime.Now.ToString("HH:mm:ss");
-        }
-
-        private void loaded(object sender, RoutedEventArgs e)
-        {
-            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
-            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
-            _diaSemana += " " + DateTime.Now.ToString("MMMM") + " Hora: ";
-            FechayHora();
-        }
-
         // Crear un diccionario de traducción de días de la semana
         private Dictionary<DayOfWeek, string> traduccionDias = new Dictionary<DayOfWeek, string>()
         {
@@ -339,6 +330,22 @@ namespace Sistema_Mercadito.Pages
             { DayOfWeek.Thursday, "Jueves" },
             { DayOfWeek.Friday, "Viernes" },
             { DayOfWeek.Saturday, "Sábado" }
+        };
+
+        private Dictionary<int, string> mesesEnEspanol = new Dictionary<int, string>()
+        {
+                   { 1, "Enero" },
+                 { 2, "Febrero" },
+                 { 3, "Marzo" },
+                { 4, "Abril" },
+            { 5, "Mayo" },
+                { 6, "Junio" },
+             { 7, "Julio" },
+                { 8, "Agosto" },
+                { 9, "Septiembre" },
+                { 10, "Octubre" },
+                { 11, "Noviembre" },
+                { 12, "Diciembre" }
         };
 
         private void PagoDesglosado()
@@ -521,6 +528,40 @@ namespace Sistema_Mercadito.Pages
                 MessageBox.Show(ex.ToString());
                 Clipboard.SetText(ex.ToString());
             }
+        }
+
+        private void btnActualizarClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        public void Consulta()
+        {
+            objetoSql.ConsultaVentaRealizada();
+            txtVenta.Text = Math.Truncate(SharedResources._Venta).ToString("N0");
+            txtColones.Text = Math.Truncate(SharedResources._Efectivo).ToString("N0");
+            txtDolares.Text = Math.Truncate(SharedResources._Dolares).ToString("N0");
+            txtSinpe.Text = Math.Truncate(SharedResources._Sinpe).ToString("N0");
+            txtTipoCambio.Text = Math.Truncate(SharedResources._TipoCambio).ToString("N0");
+            txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
+            tbVuelto.Text = Math.Truncate(SharedResources._Vuelto).ToString("N0");
+            SumaDinero();
+            LimpiarCampos();
+        }
+
+        private void LimpiarCampos()
+        {
+            SharedResources._idVenta = 0;
+            SharedResources._MontoPagar = 0;
+            SharedResources._Efectivo = 0;
+            SharedResources._Dolares = 0;
+            SharedResources._Sinpe = 0;
+            SharedResources._TipoCambio = 0;
+            SharedResources._Tarjeta = 0;
+            SharedResources._Vuelto = 0;
+        }
+
+        private void RegresarClick(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

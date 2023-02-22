@@ -1,9 +1,8 @@
 ﻿<Page
     x:Class="Sistema_Mercadito.Pages.ReporteVentas"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="ReporteVentas"
     MinWidth="800"
@@ -90,8 +89,9 @@
                                         x:Name="btnConsultar"
                                         Width="70"
                                         Background="#20B2AA"
-                                        BorderBrush="Transparent">
-                                        <Image Height="30" Source="/Resources/CheckAzul.png" />
+                                        BorderBrush="Transparent"
+                                        Click="Consultar"
+                                        CommandParameter="{Binding IdVenta}">
                                     </Button>
                                     <Button
                                         x:Name="btnActualizar"
@@ -113,8 +113,8 @@
                     <!--<DataGridTextColumn Width="50" Header="ID" />-->
                     <DataGridTextColumn
                         Width="0"
-                        Binding="{Binding idVenta}"
-                        Header="Venta"
+                        Binding="{Binding IdVenta}"
+                        Header="Id"
                         Visibility="Collapsed" />
                     <DataGridTextColumn
                         Width="50"
@@ -155,7 +155,6 @@
                                 <Setter Property="TextBlock.TextAlignment" Value="Right" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="80"

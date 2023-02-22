@@ -1,20 +1,7 @@
 ﻿using Sistema_Mercadito.Capa_de_Datos;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static Sistema_Mercadito.Capa_de_Datos.CD_Conexion;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -38,6 +25,59 @@ namespace Sistema_Mercadito.Pages
         private void btnColonClick(object sender, RoutedEventArgs e)
         {
             ConsultaVentaDia();
+        }
+
+        private void Consultar(object sender, RoutedEventArgs e)
+        {
+            int id = (int)((Button)sender).CommandParameter;
+            SharedResources._idVenta = id;
+            //NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+            VentasCajas vc = new VentasCajas();
+            vc.Consulta();
+            FrameReporte.Content = vc;
+            vc.tbTitulo.Text = "Consulta de Venta";
+            vc.txtColones.IsEnabled = false;
+            vc.txtDolares.IsEnabled = false;
+            vc.txtVenta.IsEnabled = false;
+            vc.txtSinpe.IsEnabled = false;
+            vc.txtTarjeta.IsEnabled = false;
+            vc.txtTipoCambio.IsEnabled = false;
+            vc.btnPagar.Visibility = Visibility.Collapsed;
+        }
+
+        private void Actualizar(object sender, RoutedEventArgs e)
+        {
+            int id = (int)((Button)sender).CommandParameter;
+            SharedResources._idVenta = id;
+            VentasCajas vc = new VentasCajas();
+            FrameReporte.Content = vc;
+            vc.tbTitulo.Text = "Consulta de Venta";
+            vc.txtColones.IsEnabled = true;
+            vc.txtDolares.IsEnabled = true;
+            vc.txtVenta.IsEnabled = true;
+            vc.txtSinpe.IsEnabled = true;
+            vc.txtTarjeta.IsEnabled = true;
+            vc.txtTipoCambio.IsEnabled = true;
+            vc.btnPagar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Visible;
+        }
+
+        private void Eliminar(object sender, RoutedEventArgs e)
+        {
+            int id = (int)((Button)sender).CommandParameter;
+            SharedResources._idVenta = id;
+            VentasCajas vc = new VentasCajas();
+            FrameReporte.Content = vc;
+            vc.tbTitulo.Text = "Consulta de Venta";
+            vc.txtColones.IsEnabled = false;
+            vc.txtDolares.IsEnabled = false;
+            vc.txtVenta.IsEnabled = false;
+            vc.txtSinpe.IsEnabled = false;
+            vc.txtTarjeta.IsEnabled = false;
+            vc.txtTipoCambio.IsEnabled = false;
+            vc.btnPagar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Visible;
+            vc.tbTitulo.Text = "Eliminar Venta";
         }
 
         private void ConsultaVentaDia()
