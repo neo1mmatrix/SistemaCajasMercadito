@@ -39,7 +39,8 @@ namespace Sistema_Mercadito.Capa_de_Datos
                                 decimal montoDolares,
                                 decimal montoSinpe,
                                 decimal montoTarjeta,
-                                float tipoCambio
+                                float tipoCambio,
+                                decimal montoPagoDolares
             )
         {
             SqlCommand com = new SqlCommand()
@@ -57,6 +58,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
             com.Parameters.AddWithValue("@MontoSinpe", montoSinpe);
             com.Parameters.AddWithValue("@MontoTarjeta", montoTarjeta);
             com.Parameters.AddWithValue("@TipoCambio", tipoCambio);
+            com.Parameters.AddWithValue("@MontoPagoDolares", montoPagoDolares);
 
             com.ExecuteNonQuery();
             com.Parameters.Clear();
@@ -147,8 +149,6 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Leer los resultados de la consulta
                 while (lector.Read())
                 {
-                    // Aquí puedes leer los datos del usuario y hacer lo que necesites con ellos
-
                     SharedResources._Venta = lector.GetDecimal(0);
                     SharedResources._Vuelto = lector.GetDecimal(1);
                     SharedResources._Efectivo = lector.GetDecimal(2);
@@ -157,6 +157,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                     SharedResources._Tarjeta = lector.GetDecimal(5);
                     SharedResources._TipoCambio = (decimal)lector.GetDouble(6);
                     SharedResources._FechaFormateada = lector.GetString(7);
+                    SharedResources._MontoPagoDolares = lector.GetDecimal(8);
                 }
             }
             catch (Exception ex)
@@ -177,7 +178,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
         }
 
         //Actualiza el registro de una venta seleccionada
-        private void ActualizarVenta()
+        public void ActualizarVenta()
         {
             SqlCommand com = new SqlCommand
             {
@@ -192,8 +193,9 @@ namespace Sistema_Mercadito.Capa_de_Datos
             com.Parameters.AddWithValue("@MontoColones", SharedResources._Efectivo);
             com.Parameters.AddWithValue("@MontoDolares", SharedResources._Dolares);
             com.Parameters.AddWithValue("@MontoSinpe", SharedResources._Sinpe);
-            com.Parameters.AddWithValue("@MontoTarjeta", SharedResources._TipoCambio);
+            com.Parameters.AddWithValue("@MontoTarjeta", SharedResources._Tarjeta);
             com.Parameters.AddWithValue("@TipoCambio", SharedResources._TipoCambio);
+            com.Parameters.AddWithValue("@MontoPagoDolares", SharedResources._MontoPagoDolares);
             com.ExecuteNonQuery();
             com.Parameters.Clear();
             CerrarConexion();

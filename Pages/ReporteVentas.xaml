@@ -97,12 +97,16 @@
                                     <Button
                                         x:Name="btnActualizar"
                                         Background="#018abd"
+                                        CommandParameter="{Binding IdVenta}"
+                                        Click="Actualizar"
                                         Style="{DynamicResource ButtonGrid}">
                                         <Image Height="30" Source="/Resources/pencil.png" />
                                     </Button>
                                     <Button
                                         x:Name="btnEliminar"
                                         Background="#8e0000 "
+                                        CommandParameter="{Binding IdVenta}"
+                                        Click="Eliminar"
                                         Style="{DynamicResource ButtonGrid}">
                                         <Image Height="30" Source="/Resources/recycle-bin.png" />
                                     </Button>

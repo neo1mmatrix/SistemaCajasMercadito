@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Globalization;
+using System.IO;
 
 namespace Sistema_Mercadito
 {
@@ -19,6 +20,7 @@ namespace Sistema_Mercadito
         {
             InitializeComponent();
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            VerificaCarpetaLogs();
             checkDatabaseFirstConfig();
         }
 
@@ -289,6 +291,18 @@ namespace Sistema_Mercadito
             if (_CajaAbierta == true)
             {
                 fContainer.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+            }
+        }
+
+        private void VerificaCarpetaLogs()
+        {
+            string logsFolderPath = "C:\\Logs";
+
+            // Verificar si la carpeta "Logs" existe
+            if (!Directory.Exists(logsFolderPath))
+            {
+                // Si la carpeta "Logs" no existe, crearla
+                Directory.CreateDirectory(logsFolderPath);
             }
         }
     }

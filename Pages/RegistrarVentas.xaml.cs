@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,7 @@ namespace Sistema_Mercadito.Pages
         private decimal _Vuelto = 0;
         private decimal _CompraDolares = 0;
         public int _idCajaAbierta = 0;
+        public decimal _MontoPagoDolares = 0;
 
         private readonly CD_Conexion objetoSql = new CD_Conexion();
 
@@ -66,6 +68,7 @@ namespace Sistema_Mercadito.Pages
 
                 _Vuelto = 0;
                 _CompraDolares = _Dolares * _TipoCambio;
+                _MontoPagoDolares = _CompraDolares;
                 _Vuelto = (_Colones + _CompraDolares + _Sinpe + _Tarjeta) - _Venta;
 
                 if (_Vuelto <= 0)
@@ -147,7 +150,13 @@ namespace Sistema_Mercadito.Pages
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    string filePath = "C:\\Logs\\ErrorLog.txt";
+
+                    // Crear la cadena de registro de error
+                    string logMessage = $"Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+
+                    // Agregar la cadena de registro de error al archivo
+                    File.AppendAllText(filePath, logMessage);
                 }
             }
         }
@@ -381,7 +390,8 @@ namespace Sistema_Mercadito.Pages
                                             _Dolares,
                                             _Sinpe,
                                             _Tarjeta,
-                                            (float)_TipoCambio);
+                                            (float)_TipoCambio,
+                                            _MontoPagoDolares);
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
                     Inicio();
                 }
@@ -426,7 +436,8 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             0,
                                             0,
-                                            0);
+                                            0,
+                                            _MontoPagoDolares);
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
                     Inicio();
                 }
@@ -472,7 +483,8 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             _Sinpe, //
                                             0,
-                                            0);
+                                            0,
+                                            _MontoPagoDolares);
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
                     Inicio();
                 }
@@ -518,7 +530,8 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             0,
                                             _Venta, //Tarjeta
-                                            0);
+                                            0,
+                                            _MontoPagoDolares);
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
                     Inicio();
                 }
@@ -532,6 +545,39 @@ namespace Sistema_Mercadito.Pages
 
         private void btnActualizarClick(object sender, RoutedEventArgs e)
         {
+            decimal _vuelto = 0;
+
+            try
+            {
+                _vuelto = decimal.Parse(tbVuelto.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                if (_vuelto < 0)
+                {
+                    MessageBox.Show("El Vuelto no puede ser inferior a Cero");
+                }
+                else if (_Venta <= 0)
+                {
+                    MessageBox.Show("El Monto a Cancelar debe ser mayor a Cero");
+                }
+                else
+                {
+                    SharedResources._Venta = _Venta;
+                    SharedResources._Efectivo = _Colones;
+                    SharedResources._Sinpe = _Sinpe;
+                    SharedResources._Dolares = _Dolares;
+                    SharedResources._Tarjeta = _Tarjeta;
+                    SharedResources._Vuelto = _Vuelto;
+
+                    objetoSql.ActualizarVenta();
+                    LimpiarCampos();
+                    MessageBox.Show("Los Datos han sido Actualizados correctamente");
+                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                Clipboard.SetText(ex.ToString());
+            }
         }
 
         public void Consulta()
@@ -545,7 +591,6 @@ namespace Sistema_Mercadito.Pages
             txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
             tbVuelto.Text = Math.Truncate(SharedResources._Vuelto).ToString("N0");
             tbfechaAntigua.Text = SharedResources._FechaFormateada.ToString();
-            LimpiarCampos();
         }
 
         private void LimpiarCampos()

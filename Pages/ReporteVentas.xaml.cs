@@ -53,6 +53,7 @@ namespace Sistema_Mercadito.Pages
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
             VentasCajas vc = new VentasCajas();
+            vc.Consulta();
             FrameReporte.Content = vc;
             vc.tbTitulo.Text = "Consulta de Venta";
             vc.txtColones.IsEnabled = true;
