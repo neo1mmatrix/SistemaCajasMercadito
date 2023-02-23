@@ -150,13 +150,9 @@ namespace Sistema_Mercadito.Pages
                 }
                 catch (Exception ex)
                 {
-                    string filePath = "C:\\Logs\\ErrorLog.txt";
-
                     // Crear la cadena de registro de error
-                    string logMessage = $"Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
-
-                    // Agregar la cadena de registro de error al archivo
-                    File.AppendAllText(filePath, logMessage);
+                    string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                    SharedResources.ManejoErrores(logMessage);
                 }
             }
         }
