@@ -29,17 +29,24 @@ namespace Sistema_Mercadito.Pages
         private decimal _CompraDolares = 0;
         public int _idCajaAbierta = 0;
         public decimal _MontoPagoDolares = 0;
+        public bool _NuevaVenta = true;
 
         private readonly CD_Conexion objetoSql = new CD_Conexion();
 
         // Obtener el día de la semana actual y traducirlo al español
         private string _diaSemana = "";
 
+        private string _horaActual = "";
         private string _mesActual = "";
 
         public VentasCajas()
         {
             InitializeComponent();
+            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
+            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
+            _mesActual = mesesEnEspanol[DateTime.Now.Month];
+            _diaSemana += " " + _mesActual;
+            FechayHora();
             Inicio();
         }
 
@@ -118,41 +125,44 @@ namespace Sistema_Mercadito.Pages
         //EVENTO KEYDOWN
         private void AtajoTeclado(object sender, KeyEventArgs e)
         {
-            //Monto en EFECTIVO
-            if (e.Key == Key.F1)
+            if (_NuevaVenta)
             {
-                PagoEfectivo();
-            }
-            //Monto en Sinpe
-            if (e.Key == Key.F5)
-            {
-                PagoSinpe();
-            }
-            //Monto en Tarjeta
-            if (e.Key == Key.F12)
-            {
-                PagoTarjeta();
-            }
-            if (e.Key == Key.Enter)
-            {
-                try
+                //Monto en EFECTIVO
+                if (e.Key == Key.F1)
                 {
-                    decimal _monto = 0;
-                    if (((TextBox)sender).Text.Length == 0)
-                    {
-                        ((TextBox)sender).Text = _monto.ToString("N0");
-                    }
-                    else
-                    {
-                        _monto = decimal.Parse(((TextBox)sender).Text, System.Globalization.NumberStyles.AllowThousands);
-                        ((TextBox)sender).Text = _monto.ToString("N0");
-                    }
+                    PagoEfectivo();
                 }
-                catch (Exception ex)
+                //Monto en Sinpe
+                if (e.Key == Key.F5)
                 {
-                    // Crear la cadena de registro de error
-                    string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
-                    SharedResources.ManejoErrores(logMessage);
+                    PagoSinpe();
+                }
+                //Monto en Tarjeta
+                if (e.Key == Key.F12)
+                {
+                    PagoTarjeta();
+                }
+                if (e.Key == Key.Enter)
+                {
+                    try
+                    {
+                        decimal _monto = 0;
+                        if (((TextBox)sender).Text.Length == 0)
+                        {
+                            ((TextBox)sender).Text = _monto.ToString("N0");
+                        }
+                        else
+                        {
+                            _monto = decimal.Parse(((TextBox)sender).Text, System.Globalization.NumberStyles.AllowThousands);
+                            ((TextBox)sender).Text = _monto.ToString("N0");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Crear la cadena de registro de error
+                        string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                        SharedResources.ManejoErrores(logMessage);
+                    }
                 }
             }
         }
@@ -296,18 +306,14 @@ namespace Sistema_Mercadito.Pages
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Obtener la hora actual y actualizar el contenido del Label
-            tbfecha.Text = "Hoy es " + _diaSemana + DateTime.Now.ToString("HH:mm:ss");
+            tbfecha.Text = _diaSemana;
+            tbfechaHora.Text = DateTime.Now.ToString("HH:mm:ss");
         }
 
         #endregion Controles de Eventos
 
         private void loaded(object sender, RoutedEventArgs e)
         {
-            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
-            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
-            _mesActual = mesesEnEspanol[DateTime.Now.Month];
-            _diaSemana += " " + _mesActual + " Hora: ";
-            FechayHora();
         }
 
         private void FechayHora()
@@ -605,6 +611,25 @@ namespace Sistema_Mercadito.Pages
         private void RegresarClick(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+        }
+
+        private void Eliminar_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtElimarMotivo.Text.Length > 0)
+            {
+                MessageBoxResult result = MessageBox.Show("¿Está seguro de que desea borrar esta venta?", "Advertencia", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    objetoSql.EliminarVenta(txtElimarMotivo.Text);
+                    LimpiarCampos();
+                    MessageBox.Show("Los Datos han sido Borrados correctamente");
+                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+        }
+
+        private void InitializedVariables(object sender, EventArgs e)
+        {
         }
     }
 }

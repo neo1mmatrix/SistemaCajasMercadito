@@ -12,139 +12,191 @@
     d:DesignWidth="800"
     FontSize="20"
     Foreground="{DynamicResource PrimaryTextColor}"
+    Initialized="InitializedVariables"
     Loaded="loaded"
     mc:Ignorable="d">
 
     <Border Background="{DynamicResource SecundaryBackgroundColor}" CornerRadius="5">
 
-        <Grid Background="Transparent" KeyDown="AtajoTeclado">
+        <Grid MaxHeight="800" Background="Transparent">
 
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
                 <ColumnDefinition />
                 <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition MaxHeight="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition MaxHeight="15" />
+                <RowDefinition Height="*" />
+                <RowDefinition MaxHeight="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="*" />
+                <RowDefinition Name="anteBorde" Height="10" />
+                <RowDefinition Name="borde" Height="5" />
+                <RowDefinition Name="posBorde" Height="10" />
+                <RowDefinition Name="Advertencia" Height="30" />
+                <RowDefinition Name="linea17" Height="5" />
+                <RowDefinition Name="linea18" Height="*" />
+                <RowDefinition Name="linea19" Height="5" />
+                <RowDefinition Name="linea20" Height="40" />
+
+                <RowDefinition MaxHeight="10" />
             </Grid.RowDefinitions>
 
             <!--#region TEXTBLOCKS-->
             <TextBlock
                 Grid.Row="3"
                 Grid.Column="1"
+                Grid.ColumnSpan="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 Text="Venta" />
-            <TextBlock
-                Grid.Row="4"
-                Grid.Column="1"
-                Text="Colones" />
             <TextBlock
                 Grid.Row="5"
                 Grid.Column="1"
+                Grid.ColumnSpan="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Colones" />
+            <TextBlock
+                Grid.Row="10"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
                 Text="Dolares" />
             <TextBlock
-                Grid.Row="8"
-                Grid.Column="2"
+                Grid.Row="18"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 Text="Vuelto ₡" />
             <TextBlock
                 x:Name="tbVuelto"
-                Grid.Row="8"
+                Grid.Row="18"
                 Grid.Column="3"
-                Grid.ColumnSpan="3"
+                Grid.ColumnSpan="6"
                 Background="White"
                 KeyDown="AtajoTeclado"
                 Text="0" />
             <TextBlock
-                Grid.Row="4"
-                Grid.Column="4"
+                Grid.Row="10"
+                Grid.Column="7"
+                HorizontalAlignment="Right"
                 Text="Tipo Cambio" />
             <TextBlock
-                Grid.Row="5"
-                Grid.Column="4"
+                Grid.Row="8"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
                 Text="Sinpe" />
             <TextBlock
-                Grid.Row="3"
-                Grid.Column="4"
+                Grid.Row="8"
+                Grid.Column="7"
+                HorizontalAlignment="Right"
                 Text="Tarjeta" />
             <TextBlock
                 x:Name="tbDolarToColones"
-                Grid.Row="6"
-                Grid.Column="1"
+                Grid.Row="12"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Foreground="White"
+                Text="Equivalen a "
+                Visibility="Collapsed" />
+            <TextBlock
+                x:Name="tbSumaDolarToColones"
+                Grid.Row="12"
+                Grid.Column="3"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Foreground="White"
-                Text="Equivalen a "
-                Visibility="Hidden" />
+                Text="0"
+                Visibility="Collapsed" />
             <TextBlock
                 x:Name="tbAdvertencia"
-                Grid.Row="9"
-                Grid.Column="1"
-                Grid.ColumnSpan="6"
-                HorizontalAlignment="Center"
+                Grid.Row="16"
+                Grid.Column="3"
+                Grid.ColumnSpan="8"
+                HorizontalAlignment="Left"
                 Foreground="Red"
                 Text="Advertencia"
-                Visibility="Hidden" />
+                Visibility="Collapsed" />
             <!--#endregion-->
             <!--#region BOTONES-->
             <Button
                 x:Name="btnPagar"
-                Grid.Row="10"
-                Grid.Column="1"
-                Grid.ColumnSpan="6"
+                Grid.Row="20"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                Height="45"
                 Click="btnPagarClick"
-                Content="Pagar" />
+                Content="Pagar"
+                TabIndex="7" />
 
             <Button
                 x:Name="btnActualizar"
-                Grid.Row="10"
-                Grid.Column="1"
-                Grid.ColumnSpan="6"
+                Grid.Row="20"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
                 Click="btnActualizarClick"
                 Content="Actualizar"
-                Visibility="Hidden" />
+                TabIndex="8"
+                Visibility="Collapsed" />
+            <Button
+                x:Name="btnEliminar"
+                Grid.Row="20"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                Click="Eliminar_Click"
+                Content="Eliminar Registro"
+                TabIndex="9"
+                Visibility="Collapsed" />
             <Button
                 x:Name="btnRegresar"
                 Grid.Row="1"
                 Grid.Column="1"
                 Click="RegresarClick"
                 Content="Regresar"
-                Visibility="Hidden" />
+                TabIndex="10"
+                Visibility="Collapsed" />
             <!--#endregion-->
             <!--#region Campos de Texto Montos-->
             <TextBox
                 x:Name="txtVenta"
                 Grid.Row="3"
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
                 KeyDown="AtajoTeclado"
                 LostFocus="txtLostFocus"
                 MaxLength="15"
                 PreviewKeyDown="txtPreviewKeyDownEvent"
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
-
+                TabIndex="0"
                 TextChanged="txtTextChangedMonto" />
             <TextBox
                 x:Name="txtColones"
-                Grid.Row="4"
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
+                Grid.Row="5"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
                 LostFocus="txtLostFocus"
@@ -152,24 +204,12 @@
                 PreviewKeyDown="txtPreviewKeyDownEvent"
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
-                TextChanged="txtTextChanged" />
-            <TextBox
-                x:Name="txtDolares"
-                Grid.Row="5"
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
-                GotFocus="ColonesGotFocus"
-                KeyDown="AtajoTeclado"
-                LostFocus="txtLostFocus"
-                MaxLength="4"
-                PreviewKeyDown="txtPreviewKeyDownEvent"
-                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-                PreviewTextInput="NumberValidationTextBox"
+                TabIndex="1"
                 TextChanged="txtTextChanged" />
             <TextBox
                 x:Name="txtTarjeta"
-                Grid.Row="3"
-                Grid.Column="5"
+                Grid.Row="8"
+                Grid.Column="9"
                 Grid.ColumnSpan="2"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
@@ -178,11 +218,27 @@
                 PreviewKeyDown="txtPreviewKeyDownEvent"
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
+                TabIndex="4"
+                TextChanged="txtTextChanged" />
+
+            <TextBox
+                x:Name="txtDolares"
+                Grid.Row="10"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                GotFocus="ColonesGotFocus"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="4"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                TabIndex="5"
                 TextChanged="txtTextChanged" />
             <TextBox
                 x:Name="txtTipoCambio"
-                Grid.Row="4"
-                Grid.Column="5"
+                Grid.Row="10"
+                Grid.Column="9"
                 Grid.ColumnSpan="2"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
@@ -191,12 +247,13 @@
                 PreviewKeyDown="txtPreviewKeyDownEvent"
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
+                TabIndex="6"
                 TextChanged="txtTextChanged" />
             <TextBox
                 x:Name="txtSinpe"
-                Grid.Row="5"
-                Grid.Column="5"
-                Grid.ColumnSpan="2"
+                Grid.Row="8"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
                 LostFocus="txtLostFocus"
@@ -204,31 +261,75 @@
                 PreviewKeyDown="txtPreviewKeyDownEvent"
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
+                TabIndex="2"
                 TextChanged="txtTextChanged" />
+            <TextBox
+                x:Name="txtElimarMotivo"
+                Grid.Row="20"
+                Grid.Column="2"
+                Grid.ColumnSpan="5"
+                MaxLength="500"
+                TabIndex="6"
+                Visibility="Collapsed" />
             <!--#endregion-->
 
             <TextBlock
                 x:Name="tbfecha"
                 Grid.Row="1"
-                Grid.Column="1"
-                Grid.ColumnSpan="6"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                Grid.Column="9"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Text="Lunes"
+                Visibility="Visible" />
+            <TextBlock
+                x:Name="tbfechaHora"
+                Grid.Row="2"
+                Grid.RowSpan="2"
+                Grid.Column="9"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                FontSize="18"
+                Text="14:25:12"
+                Visibility="Visible" />
             <TextBlock
                 x:Name="tbfechaAntigua"
                 Grid.Row="1"
-                Grid.Column="1"
-                Grid.ColumnSpan="6"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" Visibility="Hidden" />
+                Grid.Column="9"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Visibility="Collapsed" />
             <TextBlock
                 x:Name="tbTitulo"
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.Column="1"
-                Grid.ColumnSpan="6"
-                Text="Ventas"
+                Grid.ColumnSpan="11"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+                Text="Ventas" />
+            <TextBlock
+                x:Name="tbEliminarMotivo"
+                Grid.Row="20"
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                MaxHeight="60"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Motivo"
+                Visibility="Collapsed" />
+
+            <Border
+                Grid.Row="7"
+                Grid.RowSpan="5"
+                Grid.Column="1"
+                Grid.ColumnSpan="11"
+                BorderBrush="#919394"
+                BorderThickness="4"
+                CornerRadius="3" />
         </Grid>
     </Border>
 </Page>

@@ -7,6 +7,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Globalization;
 using System.IO;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace Sistema_Mercadito
 {
@@ -239,7 +241,8 @@ namespace Sistema_Mercadito
             }
             else
             {
-                fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                VistaVenta();
+                // fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
             }
         }
 
@@ -253,7 +256,8 @@ namespace Sistema_Mercadito
 
         private void btnProducts_Click(object sender, RoutedEventArgs e)
         {
-            fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+            VistaVenta();
+            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void checkOpenCasher()
@@ -274,7 +278,8 @@ namespace Sistema_Mercadito
                         {
                             SharedResources._idCajaAbierta = reader.GetInt32(0);
                             _CajaAbierta = true;
-                            fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                            VistaVenta();
                             btnDashboard.Visibility = Visibility.Hidden;
                         }
                         else
@@ -304,6 +309,29 @@ namespace Sistema_Mercadito
                 // Si la carpeta "Logs" no existe, crearla
                 Directory.CreateDirectory(logsFolderPath);
             }
+        }
+
+        private void VistaVenta()
+        {
+            fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+            VentasCajas vc = new VentasCajas();
+            //Controla los campos de texto
+            vc.tbTitulo.Text = "Consulta de Venta";
+            vc.txtColones.IsEnabled = true;
+            vc.txtDolares.IsEnabled = true;
+            vc.txtVenta.IsEnabled = true;
+            vc.txtSinpe.IsEnabled = true;
+            vc.txtTarjeta.IsEnabled = true;
+            vc.txtTipoCambio.IsEnabled = true;
+            vc._NuevaVenta = true;
+            // Controla los botones
+            vc.btnPagar.Visibility = Visibility.Collapsed;
+            vc.btnRegresar.Visibility = Visibility.Visible;
+            vc.btnEliminar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            vc.tbfechaAntigua.Visibility = Visibility.Visible;
+            vc.tbfecha.Visibility = Visibility.Collapsed;
         }
     }
 }

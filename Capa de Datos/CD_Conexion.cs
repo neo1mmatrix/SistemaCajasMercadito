@@ -201,7 +201,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
             CerrarConexion();
         }
 
-        private void EliminarVenta()
+        public void EliminarVenta(string _Motivo)
         {
             SqlCommand com = new SqlCommand
             {
@@ -210,7 +210,9 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 CommandType = CommandType.StoredProcedure
             };
 
-            com.Parameters.AddWithValue("IdVenta", SharedResources._idVenta);
+            com.Parameters.AddWithValue("@idVenta", SharedResources._idVenta);
+            com.Parameters.AddWithValue("@Motivo", _Motivo);
+
             com.ExecuteNonQuery();
             com.Parameters.Clear();
             CerrarConexion();
