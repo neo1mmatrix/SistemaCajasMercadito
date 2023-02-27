@@ -14,6 +14,10 @@
                 <ResourceDictionary Source="Styles/MainStyle.xaml" />
 
                 <ResourceDictionary Source="Styles/DictionaryObjects.xaml" />
+
+                <ResourceDictionary Source="Styles/DictionaryGlobalButton.xaml" />
+
+                <ResourceDictionary Source="Styles/GlobalTextBoxNumb.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

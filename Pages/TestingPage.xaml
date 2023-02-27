@@ -18,5 +18,7 @@
                 Foreground="White"
                 FontWeight="Bold"
                 FontSize="16" />
+
+        <TextBox Style="{DynamicResource TextBoxStyle1}" Height="40" Width="50" Margin="139,198,611,212" />
     </Grid>
 </Page>
