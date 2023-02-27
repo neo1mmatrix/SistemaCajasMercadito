@@ -190,7 +190,7 @@
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
                 TabIndex="0"
-                TextChanged="txtTextChangedMonto" />
+                TextChanged="txtTextChangedMonto" Style="{DynamicResource TextBoxStyleNumb}" />
             <TextBox
                 x:Name="txtColones"
                 Grid.Row="5"
@@ -204,7 +204,7 @@
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
                 TabIndex="1"
-                TextChanged="txtTextChanged" />
+                TextChanged="txtTextChanged" Style="{DynamicResource TextBoxStyleNumb}" />
             <TextBox
                 x:Name="txtTarjeta"
                 Grid.Row="8"
@@ -218,7 +218,7 @@
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
                 TabIndex="4"
-                TextChanged="txtTextChanged" />
+                TextChanged="txtTextChanged" Style="{DynamicResource TextBoxStyleNumb}" />
 
             <TextBox
                 x:Name="txtDolares"
@@ -247,7 +247,7 @@
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
                 TabIndex="6"
-                TextChanged="txtTextChanged" />
+                TextChanged="txtTextChanged" Style="{DynamicResource TextBoxStyleNumb}" />
             <TextBox
                 x:Name="txtSinpe"
                 Grid.Row="8"
@@ -261,7 +261,7 @@
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
                 TabIndex="2"
-                TextChanged="txtTextChanged" />
+                TextChanged="txtTextChanged" Style="{DynamicResource TextBoxStyleNumb}" />
             <TextBox
                 x:Name="txtElimarMotivo"
                 Grid.Row="20"
