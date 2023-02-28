@@ -10,54 +10,27 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid
-        Width="150"
-        Height="90"
-        Background="Transparent">
+    <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Border
-            Grid.Row="0"
-            Width="100"
-            HorizontalAlignment="Left"
-            Background="#3f475b"
-            BorderBrush="White"
-            BorderThickness="0.5"
-            CornerRadius="5">
-            <Label
-                VerticalAlignment="Center"
-                Content="F1 = Efectivo"
-                FontSize="15" />
-        </Border>
-        <Border
-            Grid.Row="1"
-            Width="110"
-            HorizontalAlignment="Left"
-            Background="#3f475b"
-            BorderBrush="White"
-            BorderThickness="0.5"
-            CornerRadius="5">
-            <Label
-                VerticalAlignment="Center"
-                Content="F5 = Sinpe"
-                FontSize="15" />
-        </Border>
-        <Border
-            Grid.Row="2"
-            Width="120"
-           HorizontalAlignment="Left"
-            Background="#3f475b"
-            BorderBrush="White"
-            BorderThickness="0.5"
-            CornerRadius="5">
-            <Label
-                VerticalAlignment="Center"
-                Content="F12 = Tarjeta"
-                FontSize="15" />
-        </Border>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock
+                            Grid.Column="0"
+                            Width="80"
+                            Margin="0,5,5,5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            Text="Sinpe" />
+        <TextBlock
+                            x:Name="tbMontoSinpe"
+                            Grid.Column="1"
+                            Margin="0,5,5,5"
+                            FontSize="20"
+                            FontWeight="DemiBold"
+                            Foreground="#175873"
+                            Text="Montosinpe" />
     </Grid>
 </Page>

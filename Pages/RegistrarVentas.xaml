@@ -69,7 +69,8 @@
                 Grid.ColumnSpan="2"
                 Width="150"
                 Height="90"
-                Background="Transparent" Visibility="Visible">
+                Background="Transparent"
+                Visibility="Visible">
 
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -86,7 +87,8 @@
                     BorderThickness="0.5"
                     CornerRadius="5"
                     Visibility="Visible">
-                    <Label x:Name="lbEfectivo"
+                    <Label
+                        x:Name="lbEfectivo"
                         VerticalAlignment="Center"
                         Content="F1 = Efectivo"
                         FontSize="15"
@@ -433,6 +435,15 @@
                 BorderBrush="#919394"
                 BorderThickness="4"
                 CornerRadius="3" />
+            <Frame
+                    Name="fContainer"
+                    Grid.Row="0"
+                    Grid.RowSpan="22"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="13"
+                    Margin="7"
+
+                    NavigationUIVisibility="Hidden" />
         </Grid>
     </Border>
 </Page>

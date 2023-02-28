@@ -31,8 +31,7 @@ namespace Sistema_Mercadito.Pages
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            Inicio();
-            NavigationService.GoBack();
+            NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
             LimpiarVariables();
         }
 
@@ -101,10 +100,31 @@ namespace Sistema_Mercadito.Pages
             txtEfectivo.IsReadOnly = true;
             txtEfectivo.Text = SharedResources._Efectivo.ToString("N2");
             txtVuelto.Text = SharedResources._Vuelto.ToString("N2");
-            tbMontoDineroCompra.Text = SharedResources._MontoPagar.ToString("N2");
-            tbMontoDolares.Text = SharedResources._Dolares.ToString("N2");
-            tbMontoSinpe.Text = SharedResources._Sinpe.ToString("N2");
-            tbMontoTarjeta.Text = SharedResources._Tarjeta.ToString("N2");
+            tbMontoDineroCompra.Text = "₡ " + SharedResources._MontoPagar.ToString("N2");
+            tbMontoDolares.Text = "$ " + SharedResources._Dolares.ToString("N2") + " (" + SharedResources._TipoCambio + ")";
+            tbMontoSinpe.Text = "₡ " + SharedResources._Sinpe.ToString("N2");
+            tbMontoTarjeta.Text = "₡ " + SharedResources._Tarjeta.ToString("N2");
+
+            if (SharedResources._Sinpe <= 0)
+            {
+                tbMontoSinpe.Visibility = Visibility.Collapsed;
+                tbSinpe.Visibility = Visibility.Collapsed;
+            }
+
+            if (SharedResources._Tarjeta <= 0)
+            {
+                tbMontoTarjeta.Visibility = Visibility.Collapsed;
+                tbTarjeta.Visibility = Visibility.Collapsed;
+            }
+
+            if (SharedResources._MontoPagoDolares > 0)
+            {
+                tbEquivaleDolares.Visibility = Visibility.Visible;
+                tbMontoDolaresaColones.Visibility = Visibility.Visible;
+                tbMontoDolares.Visibility = Visibility.Visible;
+                tbDolares.Visibility = Visibility.Visible;
+            }
+            tbMontoDolaresaColones.Text = "₡" + SharedResources._MontoPagoDolares.ToString("N2");
             _CargaDatos = true;
         }
 

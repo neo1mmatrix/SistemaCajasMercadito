@@ -384,7 +384,11 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._Dolares = _Dolares;
                     SharedResources._Tarjeta = _Tarjeta;
                     SharedResources._Vuelto = _Vuelto;
-                    NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
+                    SharedResources._MontoPagoDolares = _MontoPagoDolares;
+                    SharedResources._TipoCambio = _TipoCambio;
+
+                    VistaVuelto();
+                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
@@ -632,6 +636,13 @@ namespace Sistema_Mercadito.Pages
 
         private void InitializedVariables(object sender, EventArgs e)
         {
+        }
+
+        private void VistaVuelto()
+        {
+            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+            MensajeVueltoCliente mvc = new MensajeVueltoCliente();
+            fContainer.Content = mvc;
         }
     }
 }
