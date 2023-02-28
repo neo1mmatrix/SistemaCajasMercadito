@@ -36,7 +36,6 @@ namespace Sistema_Mercadito.Pages
         // Obtener el día de la semana actual y traducirlo al español
         private string _diaSemana = "";
 
-        private string _horaActual = "";
         private string _mesActual = "";
 
         public VentasCajas()
@@ -78,15 +77,15 @@ namespace Sistema_Mercadito.Pages
                 _MontoPagoDolares = _CompraDolares;
                 _Vuelto = (_Colones + _CompraDolares + _Sinpe + _Tarjeta) - _Venta;
 
-                if (_Vuelto <= 0)
+                if (_Vuelto < 0)
                 {
                     tbVuelto.Foreground = new SolidColorBrush(Colors.Red);
-                    tbVuelto.Text = _Vuelto.ToString("N0");
+                    tbVuelto.Content = _Vuelto.ToString("N0");
                 }
                 else
                 {
-                    tbVuelto.Foreground = new SolidColorBrush(Colors.Navy);
-                    tbVuelto.Text = _Vuelto.ToString("N0");
+                    tbVuelto.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#ddc77a"));
+                    tbVuelto.Content = _Vuelto.ToString("N0");
                 }
 
                 if (int.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands) > 0 && int.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands) == 0)
@@ -96,17 +95,20 @@ namespace Sistema_Mercadito.Pages
                 }
                 else
                 {
-                    tbAdvertencia.Visibility = Visibility.Hidden;
+                    tbAdvertencia.Visibility = Visibility.Collapsed;
                 }
 
                 if (_CompraDolares > 0)
                 {
-                    tbDolarToColones.Text = "Equivalen a ₡" + _CompraDolares.ToString("N0");
+                    tbDolarToColones.Text = "Equivalen a";
+                    tbSumaDolarToColones.Text = "₡" + _CompraDolares.ToString("N0");
                     tbDolarToColones.Visibility = Visibility.Visible;
+                    tbSumaDolarToColones.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    tbDolarToColones.Visibility = Visibility.Hidden;
+                    tbDolarToColones.Visibility = Visibility.Collapsed;
+                    tbSumaDolarToColones.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception ex)
@@ -365,7 +367,7 @@ namespace Sistema_Mercadito.Pages
 
             try
             {
-                _vuelto = decimal.Parse(tbVuelto.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
                 if (_vuelto < 0)
                 {
                     MessageBox.Show("El Vuelto no puede ser inferior a Cero");
@@ -411,7 +413,7 @@ namespace Sistema_Mercadito.Pages
 
             try
             {
-                _vuelto = decimal.Parse(tbVuelto.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
                 if (_vuelto < 0)
                 {
                     MessageBox.Show("El Vuelto no puede ser inferior a Cero");
@@ -457,7 +459,7 @@ namespace Sistema_Mercadito.Pages
 
             try
             {
-                _vuelto = decimal.Parse(tbVuelto.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
                 if (_vuelto < 0)
                 {
                     MessageBox.Show("El Vuelto no puede ser inferior a Cero");
@@ -504,7 +506,7 @@ namespace Sistema_Mercadito.Pages
 
             try
             {
-                _vuelto = decimal.Parse(tbVuelto.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
                 if (_vuelto < 0)
                 {
                     MessageBox.Show("El Vuelto no puede ser inferior a Cero");
@@ -551,7 +553,7 @@ namespace Sistema_Mercadito.Pages
 
             try
             {
-                _vuelto = decimal.Parse(tbVuelto.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
                 if (_vuelto < 0)
                 {
                     MessageBox.Show("El Vuelto no puede ser inferior a Cero");
@@ -591,7 +593,7 @@ namespace Sistema_Mercadito.Pages
             txtSinpe.Text = Math.Truncate(SharedResources._Sinpe).ToString("N0");
             txtTipoCambio.Text = Math.Truncate(SharedResources._TipoCambio).ToString("N0");
             txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
-            tbVuelto.Text = Math.Truncate(SharedResources._Vuelto).ToString("N0");
+            tbVuelto.Content = Math.Truncate(SharedResources._Vuelto).ToString("N0");
             tbfechaAntigua.Text = SharedResources._FechaFormateada.ToString();
         }
 

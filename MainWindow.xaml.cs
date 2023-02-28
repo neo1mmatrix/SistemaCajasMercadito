@@ -313,10 +313,11 @@ namespace Sistema_Mercadito
 
         private void VistaVenta()
         {
-            fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
             VentasCajas vc = new VentasCajas();
+            fContainer.Content = vc;
             //Controla los campos de texto
-            vc.tbTitulo.Text = "Consulta de Venta";
+            vc.tbTitulo.Text = "Venta";
             vc.txtColones.IsEnabled = true;
             vc.txtDolares.IsEnabled = true;
             vc.txtVenta.IsEnabled = true;
@@ -325,13 +326,15 @@ namespace Sistema_Mercadito
             vc.txtTipoCambio.IsEnabled = true;
             vc._NuevaVenta = true;
             // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Collapsed;
-            vc.btnRegresar.Visibility = Visibility.Visible;
+            vc.btnPagar.Visibility = Visibility.Visible;
+            vc.btnRegresar.Visibility = Visibility.Collapsed;
             vc.btnEliminar.Visibility = Visibility.Collapsed;
             vc.btnActualizar.Visibility = Visibility.Collapsed;
             //Controla el campo de la fecha
             vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Collapsed;
+            vc.tbfecha.Visibility = Visibility.Visible;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Visible;
         }
     }
 }

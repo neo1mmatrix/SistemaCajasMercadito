@@ -52,6 +52,9 @@ namespace Sistema_Mercadito.Pages
             //Controla el campo de la fecha
             vc.tbfechaAntigua.Visibility = Visibility.Visible;
             vc.tbfecha.Visibility = Visibility.Collapsed;
+            vc.tbfechaHora.Visibility = Visibility.Collapsed;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
 
         private void Actualizar(object sender, RoutedEventArgs e)
@@ -78,6 +81,9 @@ namespace Sistema_Mercadito.Pages
             //Controla el campo de la fecha
             vc.tbfechaAntigua.Visibility = Visibility.Visible;
             vc.tbfecha.Visibility = Visibility.Collapsed;
+            vc.tbfechaHora.Visibility = Visibility.Collapsed;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
 
         private void Eliminar(object sender, RoutedEventArgs e)
@@ -106,7 +112,10 @@ namespace Sistema_Mercadito.Pages
             //Controla el campo de la fecha
             vc.tbfechaAntigua.Visibility = Visibility.Visible;
             vc.tbfecha.Visibility = Visibility.Collapsed;
+            vc.tbfechaHora.Visibility = Visibility.Collapsed;
             vc.Visibility = Visibility.Visible;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
 
         private void ConsultaVentaDia()
