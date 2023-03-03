@@ -18,6 +18,7 @@
 
         <Grid Background="Transparent">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="15" />
                 <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -29,10 +30,12 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition MaxWidth="15" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition MaxHeight="15" />
+                <RowDefinition Height="*" />
+                <RowDefinition MaxHeight="5" />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -44,21 +47,19 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition MaxHeight="15" />
             </Grid.RowDefinitions>
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="10"
+                Height="30"
                 Text="Reporte de Ventas" />
 
             <DataGrid
                 x:Name="GridDatos"
                 Grid.Row="5"
-                Grid.RowSpan="6"
+                Grid.RowSpan="7"
                 Grid.Column="1"
                 Grid.ColumnSpan="11"
                 VerticalAlignment="Center"
@@ -91,7 +92,8 @@
                                         Background="#20B2AA"
                                         BorderBrush="Transparent"
                                         Click="Consultar"
-                                        CommandParameter="{Binding IdVenta}">
+                                        CommandParameter="{Binding IdVenta}"
+                                        Style="{DynamicResource ButtonGrid}">
                                         <Image Height="30" Source="/Resources/search.png" />
                                     </Button>
                                     <Button

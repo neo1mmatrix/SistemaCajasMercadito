@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Sistema_Mercadito.Capa_de_Datos;
 
 namespace Sistema_Mercadito
 {
@@ -18,6 +19,8 @@ namespace Sistema_Mercadito
 
     public partial class MainWindow : Window
     {
+        private readonly CD_Conexion objetoSql = new CD_Conexion();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -262,33 +265,46 @@ namespace Sistema_Mercadito
 
         private void checkOpenCasher()
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["SistemaMercadito"].ConnectionString))
+            objetoSql.ConsultaCajaAbierta();
+
+            if (SharedResources._idCajaAbierta > 0)
             {
-                connection.Open();
-
-                string sql = "SELECT idCajaRegist FROM TbCajaRegist WHERE IsOpen = 1";
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@IsOpen", "1");
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            SharedResources._idCajaAbierta = reader.GetInt32(0);
-                            _CajaAbierta = true;
-                            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
-                            VistaVenta();
-                            btnDashboard.Visibility = Visibility.Hidden;
-                        }
-                        else
-                        {
-                            fContainer.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
-                        }
-                    }
-                }
+                _CajaAbierta = true;
+                //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                VistaVenta();
+                btnDashboard.Visibility = Visibility.Hidden;
             }
+            else
+            {
+                fContainer.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+            }
+            //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["SistemaMercadito"].ConnectionString))
+            //{
+            //    connection.Open();
+
+            //    string sql = "SELECT idCajaRegist FROM TbCajaRegist WHERE IsOpen = 1";
+
+            //    using (SqlCommand command = new SqlCommand(sql, connection))
+            //    {
+            //        command.Parameters.AddWithValue("@IsOpen", "1");
+
+            //        using (SqlDataReader reader = command.ExecuteReader())
+            //        {
+            //            if (reader.Read())
+            //            {
+            //                SharedResources._idCajaAbierta = reader.GetInt32(0);
+            //                _CajaAbierta = true;
+            //                //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+            //                VistaVenta();
+            //                btnDashboard.Visibility = Visibility.Hidden;
+            //            }
+            //            else
+            //            {
+            //                fContainer.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private void ClickReporte(object sender, RoutedEventArgs e)
@@ -335,6 +351,17 @@ namespace Sistema_Mercadito
             vc.tbfecha.Visibility = Visibility.Visible;
             //Controla los atajos
             vc.gridAtajos.Visibility = Visibility.Visible;
+        }
+
+        private void VistaCierreCajas()
+        {
+            CierreCajas cc = new CierreCajas();
+            fContainer.Content = cc;
+        }
+
+        private void btnCierreCaja_Click(object sender, RoutedEventArgs e)
+        {
+            VistaCierreCajas();
         }
     }
 }

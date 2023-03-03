@@ -18,109 +18,52 @@ namespace Sistema_Mercadito.Pages
     /// </summary>
     public partial class VentasCajas : Page
     {
-        private Boolean _ValoresCargados = false;
-        private decimal _Venta = 0;
-        private decimal _Colones = 0;
-        private decimal _Dolares = 0;
-        private decimal _Sinpe = 0;
-        private decimal _Tarjeta = 0;
-        private decimal _TipoCambio = 0;
-        private decimal _Vuelto = 0;
-        private decimal _CompraDolares = 0;
         public int _idCajaAbierta = 0;
         public decimal _MontoPagoDolares = 0;
         public bool _NuevaVenta = true;
-
         private readonly CD_Conexion objetoSql = new CD_Conexion();
+        private decimal _Colones = 0;
+        private decimal _CompraDolares = 0;
 
         // Obtener el día de la semana actual y traducirlo al español
         private string _diaSemana = "";
 
+        private decimal _Dolares = 0;
         private string _mesActual = "";
+        private decimal _Sinpe = 0;
+        private decimal _Tarjeta = 0;
+        private decimal _TipoCambio = 0;
+        private Boolean _ValoresCargados = false;
+        private decimal _Venta = 0;
+        private decimal _Vuelto = 0;
 
-        public VentasCajas()
+        private Dictionary<int, string> mesesEnEspanol = new Dictionary<int, string>()
         {
-            InitializeComponent();
-            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
-            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
-            _mesActual = mesesEnEspanol[DateTime.Now.Month];
-            _diaSemana += " " + _mesActual;
-            FechayHora();
-            Inicio();
-        }
+            { 1, "Enero" },
+            { 2, "Febrero" },
+            { 3, "Marzo" },
+            { 4, "Abril" },
+            { 5, "Mayo" },
+            { 6, "Junio" },
+            { 7, "Julio" },
+            { 8, "Agosto" },
+            { 9, "Septiembre" },
+            { 10, "Octubre" },
+            { 11, "Noviembre" },
+            { 12, "Diciembre" }
+        };
 
-        private void Inicio()
+        // Crear un diccionario de traducción de días de la semana
+        private Dictionary<DayOfWeek, string> traduccionDias = new Dictionary<DayOfWeek, string>()
         {
-            _ValoresCargados = false;
-            txtVenta.Text = "0";
-            txtColones.Text = "0";
-            txtDolares.Text = "0";
-            txtTipoCambio.Text = "0";
-            txtSinpe.Text = "0";
-            txtTarjeta.Text = "0";
-            _ValoresCargados = true;
-        }
-
-        private void SumaDinero()
-        {
-            try
-            {
-                _Venta = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Colones = decimal.Parse(txtColones.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Dolares = decimal.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Sinpe = decimal.Parse(txtSinpe.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Tarjeta = decimal.Parse(txtTarjeta.Text, System.Globalization.NumberStyles.AllowThousands);
-                _TipoCambio = decimal.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands);
-
-                _Vuelto = 0;
-                _CompraDolares = _Dolares * _TipoCambio;
-                _MontoPagoDolares = _CompraDolares;
-                _Vuelto = (_Colones + _CompraDolares + _Sinpe + _Tarjeta) - _Venta;
-
-                if (_Vuelto < 0)
-                {
-                    tbVuelto.Foreground = new SolidColorBrush(Colors.Red);
-                    tbVuelto.Content = _Vuelto.ToString("N0");
-                }
-                else
-                {
-                    tbVuelto.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#ddc77a"));
-                    tbVuelto.Content = _Vuelto.ToString("N0");
-                }
-
-                if (int.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands) > 0 && int.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands) == 0)
-                {
-                    tbAdvertencia.Text = "El Tipo de Cambio del Dolar no Puede ser Cero";
-                    tbAdvertencia.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    tbAdvertencia.Visibility = Visibility.Collapsed;
-                }
-
-                if (_CompraDolares > 0)
-                {
-                    tbDolarToColones.Text = "Equivalen a";
-                    tbSumaDolarToColones.Text = "₡" + _CompraDolares.ToString("N0");
-                    tbDolarToColones.Visibility = Visibility.Visible;
-                    tbSumaDolarToColones.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    tbDolarToColones.Visibility = Visibility.Collapsed;
-                    tbSumaDolarToColones.Visibility = Visibility.Collapsed;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void VerificaMonto()
-        {
-            //
-        }
+            { DayOfWeek.Sunday, "Domingo" },
+            { DayOfWeek.Monday, "Lunes" },
+            { DayOfWeek.Tuesday, "Martes" },
+            { DayOfWeek.Wednesday, "Miércoles" },
+            { DayOfWeek.Thursday, "Jueves" },
+            { DayOfWeek.Friday, "Viernes" },
+            { DayOfWeek.Saturday, "Sábado" }
+        };
 
         #region Controles de Eventos
 
@@ -169,15 +112,98 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
+        private void btnActualizarClick(object sender, RoutedEventArgs e)
+        {
+            decimal _vuelto = 0;
+
+            try
+            {
+                _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                if (_vuelto < 0)
+                {
+                    MessageBox.Show("El Vuelto no puede ser inferior a Cero");
+                }
+                else if (_Venta <= 0)
+                {
+                    MessageBox.Show("El Monto a Cancelar debe ser mayor a Cero");
+                }
+                else
+                {
+                    SharedResources._Venta = _Venta;
+                    SharedResources._Efectivo = _Colones;
+                    SharedResources._Sinpe = _Sinpe;
+                    SharedResources._Dolares = _Dolares;
+                    SharedResources._Tarjeta = _Tarjeta;
+                    SharedResources._Vuelto = _Vuelto;
+
+                    objetoSql.ActualizarVenta();
+                    LimpiarCampos();
+                    MessageBox.Show("Los Datos han sido Actualizados correctamente");
+                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                Clipboard.SetText(ex.ToString());
+            }
+        }
+
+        private void btnPagarClick(object sender, RoutedEventArgs e)
+        {
+            PagoDesglosado();
+        }
+
+        private void ColonesGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
+        }
+
+        private void Eliminar_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtElimarMotivo.Text.Length > 0)
+            {
+                MessageBoxResult result = MessageBox.Show("¿Está seguro de que desea borrar esta venta?", "Advertencia", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    objetoSql.EliminarVenta(txtElimarMotivo.Text);
+                    LimpiarCampos();
+                    MessageBox.Show("Los Datos han sido Borrados correctamente");
+                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+        }
+
+        private void InitializedVariables(object sender, EventArgs e)
+        {
+        }
+
+        private void loaded(object sender, RoutedEventArgs e)
+        {
+        }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]");
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        private void RegresarClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+        }
+
         private void SeleccionaTextoClick(object sender, MouseButtonEventArgs e)
         {
             ((TextBox)sender).SelectAll();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Obtener la hora actual y actualizar el contenido del Label
+            tbfecha.Text = _diaSemana;
+            tbfechaHora.Text = DateTime.Now.ToString("HH:mm:ss");
         }
 
         // SELECCIONA TODO EL TEXTO CUANDO EL CAMPO
@@ -186,27 +212,6 @@ namespace Sistema_Mercadito.Pages
         {
             TextBox textBox = (TextBox)sender;
             textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
-        }
-
-        private void txtTextChangedMonto(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                decimal _monto = 0;
-                if (txtVenta.Text.Length > 0)
-                {
-                    _monto = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
-                    txtColones.Text = _monto.ToString("N0");
-                }
-                else
-                {
-                    txtColones.Text = _monto.ToString("N0");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
         }
 
         private void txtLostFocus(object sender, RoutedEventArgs e)
@@ -230,14 +235,6 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void txtTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (((TextBox)sender).Text.Length > 0 && _ValoresCargados && txtVenta.Text.Length > 0)
-            {
-                SumaDinero();
-            }
-        }
-
         //EVITA QUE CAPTURE EL ESPACIO EN EL CAMPO NUMERICO, EJEM: "2 4 555"
         private void txtPreviewKeyDownEvent(object sender, KeyEventArgs e)
         {
@@ -247,75 +244,59 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void btnPagarClick(object sender, RoutedEventArgs e)
+        private void txtTextChanged(object sender, TextChangedEventArgs e)
         {
-            PagoDesglosado();
-            //    If txtDetalle.Text = "" Then
-            //    txtDetalle.Text = "Venta"
-            //End If
-
-            //Try
-            //    nudColones.Value = nudColones.Value
-
-            //    'Si el precio del dolar es cero
-            //    If nudPrecioDolar.Value = 0 And nudDolares.Value > 0 Then
-            //        MsgBox("El Tipo de cambio del dolar no puede ser CERO, digita el tipo de cambio",, "ADVERTENCIA")
-            //        'Si el vuelto es menor a cero
-
-            //    ElseIf CInt(txtMonto.Text) > 0 Then
-            //        If nudVuelto.Value < 0 Then
-            //            MsgBox("Hacen falta " & nudVuelto.Value * -1 & " Colones",, "Advertencia!")
-            //        Else
-            //            Fr_Pantalla_Mensaje.lblPagoCon.Text = "Pago Con: ₡" & FormatNumber(nudColones.Value)
-            //            If _MedioPago = "" Then
-            //                _MedioPago = "Medio Pago: Efectivo"
-            //            End If
-            //            Fr_Pantalla_Mensaje.lblMedioPago.Text = _MedioPago
-            //            Fr_Pantalla_Mensaje.lblPago.Text = "Monto: ₡" & FormatNumber(txtMonto.Text)
-            //            If nudDolares.Value > 0 Then
-            //                Fr_Pantalla_Mensaje.lblDolares.Text = "Dolares Recibidos: $" & FormatNumber(nudDolares.Value)
-            //            Else
-            //                Fr_Pantalla_Mensaje.lblDolares.Visible = False
-            //            End If
-            //            IngresoDinero()
-            //            If CInt(txtMonto.Text) > 20000 And txtDetalle.Text = "Venta" Then
-
-            //                _MensajeTelegram = "________<i>" & My.Settings.NombreCaja & "</i>_______"
-            //                _MensajeTelegram += _saltoLinea
-            //                _MensajeTelegram += "<i>Ingreso de Dinero: </i> " & "<b>** " & FormatNumber(txtMonto.Text) & " **</b>"
-            //                BwIngresoDinero.RunWorkerAsync()
-            //            End If
-            //            _MD_MontoVuelto = nudVuelto.Value
-            //            Fr_Pantalla_Mensaje.Show()
-            //            clearboxes()
-            //            'Comprueba monto de dinero en cajas
-            //            BwMontoDineroCajas.RunWorkerAsync()
-            //        End If
-            //    Else
-            //        MsgBox("Ingrese el monto a pagarse")
-            //    End If
-            //Catch ex As Exception
-            //    MsgBox(ex.ToString)
-            //End Try
+            if (((TextBox)sender).Text.Length > 0 && _ValoresCargados && txtVenta.Text.Length > 0)
+            {
+                SumaDinero();
+            }
         }
 
-        private void ColonesGotFocus(object sender, RoutedEventArgs e)
+        private void txtTextChangedMonto(object sender, TextChangedEventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            // Obtener la hora actual y actualizar el contenido del Label
-            tbfecha.Text = _diaSemana;
-            tbfechaHora.Text = DateTime.Now.ToString("HH:mm:ss");
+            try
+            {
+                decimal _monto = 0;
+                if (txtVenta.Text.Length > 0)
+                {
+                    _monto = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
+                    txtColones.Text = _monto.ToString("N0");
+                }
+                else
+                {
+                    txtColones.Text = _monto.ToString("N0");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         #endregion Controles de Eventos
 
-        private void loaded(object sender, RoutedEventArgs e)
+        public VentasCajas()
         {
+            InitializeComponent();
+            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
+            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
+            _mesActual = mesesEnEspanol[DateTime.Now.Month];
+            _diaSemana += " " + _mesActual;
+            FechayHora();
+            Inicio();
+        }
+
+        public void Consulta()
+        {
+            objetoSql.ConsultaVentaRealizada();
+            txtVenta.Text = Math.Truncate(SharedResources._Venta).ToString("N0");
+            txtColones.Text = Math.Truncate(SharedResources._Efectivo).ToString("N0");
+            txtDolares.Text = Math.Truncate(SharedResources._Dolares).ToString("N0");
+            txtSinpe.Text = Math.Truncate(SharedResources._Sinpe).ToString("N0");
+            txtTipoCambio.Text = Math.Truncate(SharedResources._TipoCambio).ToString("N0");
+            txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
+            tbVuelto.Content = Math.Truncate(SharedResources._Vuelto).ToString("N0");
+            tbfechaAntigua.Text = SharedResources._FechaFormateada.ToString();
         }
 
         private void FechayHora()
@@ -333,33 +314,32 @@ namespace Sistema_Mercadito.Pages
             // Controlador de eventos para el evento Tick del DispatcherTimer
         }
 
-        // Crear un diccionario de traducción de días de la semana
-        private Dictionary<DayOfWeek, string> traduccionDias = new Dictionary<DayOfWeek, string>()
+        private void Inicio()
         {
-            { DayOfWeek.Sunday, "Domingo" },
-            { DayOfWeek.Monday, "Lunes" },
-            { DayOfWeek.Tuesday, "Martes" },
-            { DayOfWeek.Wednesday, "Miércoles" },
-            { DayOfWeek.Thursday, "Jueves" },
-            { DayOfWeek.Friday, "Viernes" },
-            { DayOfWeek.Saturday, "Sábado" }
-        };
+            _ValoresCargados = false;
+            txtVenta.Text = "0";
+            txtColones.Text = "0";
+            txtDolares.Text = "0";
+            txtTipoCambio.Text = "0";
+            txtSinpe.Text = "0";
+            txtTarjeta.Text = "0";
+            _ValoresCargados = true;
+        }
 
-        private Dictionary<int, string> mesesEnEspanol = new Dictionary<int, string>()
+        private void LimpiarCampos()
         {
-            { 1, "Enero" },
-            { 2, "Febrero" },
-            { 3, "Marzo" },
-            { 4, "Abril" },
-            { 5, "Mayo" },
-            { 6, "Junio" },
-            { 7, "Julio" },
-            { 8, "Agosto" },
-            { 9, "Septiembre" },
-            { 10, "Octubre" },
-            { 11, "Noviembre" },
-            { 12, "Diciembre" }
-        };
+            SharedResources._idVenta = 0;
+            SharedResources._MontoPagar = 0;
+            SharedResources._Efectivo = 0;
+            SharedResources._Dolares = 0;
+            SharedResources._Sinpe = 0;
+            SharedResources._TipoCambio = 0;
+            SharedResources._Tarjeta = 0;
+            SharedResources._Vuelto = 0;
+            SharedResources._FechaFormateada = "";
+            SharedResources._MontoPagoDolares = 0;
+            SharedResources._Venta = 0;
+        }
 
         private void PagoDesglosado()
         {
@@ -551,91 +531,65 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void btnActualizarClick(object sender, RoutedEventArgs e)
+        private void SumaDinero()
         {
-            decimal _vuelto = 0;
-
             try
             {
-                _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
-                if (_vuelto < 0)
+                _Venta = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Colones = decimal.Parse(txtColones.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Dolares = decimal.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Sinpe = decimal.Parse(txtSinpe.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Tarjeta = decimal.Parse(txtTarjeta.Text, System.Globalization.NumberStyles.AllowThousands);
+                _TipoCambio = decimal.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands);
+
+                _Vuelto = 0;
+                _CompraDolares = _Dolares * _TipoCambio;
+                _MontoPagoDolares = _CompraDolares;
+                _Vuelto = (_Colones + _CompraDolares + _Sinpe + _Tarjeta) - _Venta;
+
+                if (_Vuelto < 0)
                 {
-                    MessageBox.Show("El Vuelto no puede ser inferior a Cero");
-                }
-                else if (_Venta <= 0)
-                {
-                    MessageBox.Show("El Monto a Cancelar debe ser mayor a Cero");
+                    tbVuelto.Foreground = new SolidColorBrush(Colors.Crimson);
+                    tbVuelto.Content = _Vuelto.ToString("N0");
                 }
                 else
                 {
-                    SharedResources._Venta = _Venta;
-                    SharedResources._Efectivo = _Colones;
-                    SharedResources._Sinpe = _Sinpe;
-                    SharedResources._Dolares = _Dolares;
-                    SharedResources._Tarjeta = _Tarjeta;
-                    SharedResources._Vuelto = _Vuelto;
+                    tbVuelto.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#ddc77a"));
+                    tbVuelto.Content = _Vuelto.ToString("N0");
+                }
 
-                    objetoSql.ActualizarVenta();
-                    LimpiarCampos();
-                    MessageBox.Show("Los Datos han sido Actualizados correctamente");
-                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                if (int.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands) > 0 && int.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands) == 0)
+                {
+                    tbAdvertencia.Text = "El Tipo de Cambio del Dolar no Puede ser Cero";
+                    tbAdvertencia.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    tbAdvertencia.Visibility = Visibility.Collapsed;
+                }
+
+                if (_CompraDolares > 0)
+                {
+                    tbDolarToColones.Text = "Equivalen a";
+                    tbSumaDolarToColones.Text = "₡" + _CompraDolares.ToString("N0");
+                    tbDolarToColones.Visibility = Visibility.Visible;
+                    tbSumaDolarToColones.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    tbDolarToColones.Visibility = Visibility.Collapsed;
+                    tbSumaDolarToColones.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-                Clipboard.SetText(ex.ToString());
             }
         }
 
-        public void Consulta()
+        private void VerificaMonto()
         {
-            objetoSql.ConsultaVentaRealizada();
-            txtVenta.Text = Math.Truncate(SharedResources._Venta).ToString("N0");
-            txtColones.Text = Math.Truncate(SharedResources._Efectivo).ToString("N0");
-            txtDolares.Text = Math.Truncate(SharedResources._Dolares).ToString("N0");
-            txtSinpe.Text = Math.Truncate(SharedResources._Sinpe).ToString("N0");
-            txtTipoCambio.Text = Math.Truncate(SharedResources._TipoCambio).ToString("N0");
-            txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
-            tbVuelto.Content = Math.Truncate(SharedResources._Vuelto).ToString("N0");
-            tbfechaAntigua.Text = SharedResources._FechaFormateada.ToString();
-        }
-
-        private void LimpiarCampos()
-        {
-            SharedResources._idVenta = 0;
-            SharedResources._MontoPagar = 0;
-            SharedResources._Efectivo = 0;
-            SharedResources._Dolares = 0;
-            SharedResources._Sinpe = 0;
-            SharedResources._TipoCambio = 0;
-            SharedResources._Tarjeta = 0;
-            SharedResources._Vuelto = 0;
-            SharedResources._FechaFormateada = "";
-        }
-
-        private void RegresarClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
-        }
-
-        private void Eliminar_Click(object sender, RoutedEventArgs e)
-        {
-            if (txtElimarMotivo.Text.Length > 0)
-            {
-                MessageBoxResult result = MessageBox.Show("¿Está seguro de que desea borrar esta venta?", "Advertencia", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes)
-                {
-                    objetoSql.EliminarVenta(txtElimarMotivo.Text);
-                    LimpiarCampos();
-                    MessageBox.Show("Los Datos han sido Borrados correctamente");
-                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
-                }
-            }
-        }
-
-        private void InitializedVariables(object sender, EventArgs e)
-        {
+            //
         }
 
         private void VistaVuelto()

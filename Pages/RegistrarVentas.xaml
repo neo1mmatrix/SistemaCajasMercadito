@@ -159,15 +159,27 @@
                 Grid.ColumnSpan="7"
                 Background="#3f475b"
                 CornerRadius="5">
-                <Label
-                    x:Name="tbVuelto"
-                    HorizontalContentAlignment="Right"
-                    VerticalContentAlignment="Center"
-                    Content="0"
-                    FontSize="22"
-                    FontWeight="Bold"
-                    Foreground="#ddc77a"
-                    KeyDown="AtajoTeclado" />
+                <Grid>
+
+                    <Label
+                        x:Name="tbVuelto"
+                        HorizontalContentAlignment="Right"
+                        VerticalContentAlignment="Center"
+                        Content="0"
+                        FontSize="22"
+                        FontWeight="Bold"
+                        Foreground="Wheat"
+                        KeyDown="AtajoTeclado">
+                        <Label.Effect>
+                            <DropShadowEffect
+                                BlurRadius="1"
+                                Direction="150"
+                                Opacity="1"
+                                ShadowDepth="2"
+                                Color="#FF22307D" />
+                        </Label.Effect>
+                    </Label>
+                </Grid>
             </Border>
 
             <TextBlock
@@ -305,6 +317,7 @@
                 Grid.Row="8"
                 Grid.Column="9"
                 Grid.ColumnSpan="2"
+                FontWeight="Bold"
                 Foreground="#175873"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
@@ -322,6 +335,7 @@
                 Grid.Row="10"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
+                FontWeight="Bold"
                 Foreground="#341948"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
@@ -338,6 +352,7 @@
                 Grid.Row="10"
                 Grid.Column="9"
                 Grid.ColumnSpan="2"
+                FontWeight="Bold"
                 Foreground="#341948"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
@@ -354,6 +369,7 @@
                 Grid.Row="8"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
+                FontWeight="Bold"
                 Foreground="#175873"
                 GotFocus="ColonesGotFocus"
                 KeyDown="AtajoTeclado"
@@ -436,14 +452,13 @@
                 BorderThickness="4"
                 CornerRadius="3" />
             <Frame
-                    Name="fContainer"
-                    Grid.Row="0"
-                    Grid.RowSpan="22"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="13"
-                    Margin="7"
-
-                    NavigationUIVisibility="Hidden" />
+                Name="fContainer"
+                Grid.Row="0"
+                Grid.RowSpan="22"
+                Grid.Column="0"
+                Grid.ColumnSpan="13"
+                Margin="7"
+                NavigationUIVisibility="Hidden" />
         </Grid>
     </Border>
 </Page>

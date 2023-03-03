@@ -156,6 +156,7 @@
                         </Button>
                         <Button
                             x:Name="btnSecurity"
+                            Click="btnCierreCaja_Click"
                             MouseEnter="btnSecurity_MouseEnter"
                             MouseLeave="btnSecurity_MouseLeave"
                             Style="{DynamicResource PopupButtonStyle}">
