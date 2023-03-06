@@ -49,5 +49,20 @@ namespace Sistema_Mercadito.Pages
             _MontoPagoDolares = 0;
             _MontoPagar = 0;
         }
+
+        #region Configuracion
+
+        public static string _CfgNombreEmpresa { get; set; }
+        public static string _CfgEmail { get; set; }
+        public static string _CfgPrinterName { get; set; }
+        public static string _CfgToken { get; set; }
+        public static string _CfgChatid { get; set; }
+        public static int _CfgPrinterLong { get; set; }
+        public static int _CfgPrinterFontSize { get; set; }
+        public static int _CfgPrinterOpenCasher { get; set; }
+        public static bool _CfgEnviaTelegram { get; set; }
+        public static int _CfgId { get; set; }
+
+        #endregion Configuracion
     }
 }

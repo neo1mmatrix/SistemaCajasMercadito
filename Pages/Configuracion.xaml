@@ -1,13 +1,160 @@
-﻿<Page x:Class="Sistema_Mercadito.Pages.Configuracion"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
-      mc:Ignorable="d"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Configuracion">
+﻿<Page
+    x:Class="Sistema_Mercadito.Pages.Configuracion"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Configuracion"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Border Background="AntiqueWhite">
 
-    <Grid>
-    </Grid>
+        <Grid>
+            <!--#region COLS & ROWS-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region TEXTBLOCKS-->
+            <TextBlock
+            Grid.Row="3"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            FontSize="18"
+            Text="Impresora: " />
+            <TextBlock
+            Grid.Row="5"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            FontSize="18"
+            Text="Tamaño de Letra: " />
+            <TextBlock
+            Grid.Row="7"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            FontSize="18"
+            Text="Longitud de Impresion: " />
+            <TextBlock
+            Grid.Row="9"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            FontSize="18"
+            Text="Nombre Empresa: " />
+            <TextBlock
+            Grid.Row="11"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            FontSize="18"
+            Text="Email: " />
+            <TextBlock
+            Grid.Row="1"
+            Grid.Column="2"
+            Grid.ColumnSpan="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="24"
+            Text="Configuracion de Impresora" />
+            <!--#endregion-->
+            <!--#region COMBOBOX-->
+            <ComboBox
+            x:Name="cbImpresoras"
+            Grid.Row="3"
+            Grid.Column="2"
+            Grid.ColumnSpan="5"
+            Margin="0,5,0,5"
+            Height="40"
+            SelectedItem="Seleccione Una Impresora">
+                <ComboBoxItem Content="Seleccione Una Impresora" />
+            </ComboBox>
+            <!--#endregion-->
+            <!--#region TEXTBOX-->
+            <TextBox
+            x:Name="txtTamanoLetra"
+            Grid.Row="5"
+            Grid.Column="2"
+            Grid.ColumnSpan="1"
+            Width="80"
+            VerticalAlignment="Center"
+            Height="30"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center" />
+            <TextBox
+            x:Name="txtLongitudImpresion"
+            Grid.Row="7"
+            Grid.Column="2"
+            Height="30"
+            VerticalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Width="80"
+            Grid.ColumnSpan="1" />
+            <TextBox
+            x:Name="txtNombreEmpresa"
+            Grid.Row="9"
+            Grid.Column="2"
+            Grid.ColumnSpan="3"
+            VerticalAlignment="Center"
+            Height="30"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center" />
+            <TextBox
+            x:Name="txtEmail"
+            Grid.Row="11"
+            Grid.Column="2"
+            Grid.ColumnSpan="3"
+            VerticalAlignment="Center"
+            Height="30"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center" />
+            <!--#endregion-->
+            <!--#region BUTTONS-->
+            <Button
+            x:Name="btnGuardar"
+            Grid.Row="15"
+            Grid.Column="6"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Click="btnGuardar_Click"
+            Content="Guardar" />
+            <Button
+            x:Name="btnCerrar"
+            Grid.Row="15"
+            Grid.Column="4"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Click="btnCerrar_Click"
+            Content="Cerrar" />
+            <!--#endregion-->
+        </Grid>
+    </Border>
 </Page>

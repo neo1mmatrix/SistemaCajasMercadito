@@ -369,5 +369,111 @@ namespace Sistema_Mercadito.Capa_de_Datos
         }
 
         #endregion AperturaCajas
+
+        #region Configuracion
+
+        public bool GuardarConfiguracion(int printerLong,
+                                int printerFontSize,
+                                string printerName,
+                                string empresaNombre,
+                                string email)
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "SP_Guardar_Config",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                //Registra los datos de Impresora
+                com.Parameters.AddWithValue("@PrinterName", printerName);
+                com.Parameters.AddWithValue("@PrinterFontSize", printerFontSize);
+                com.Parameters.AddWithValue("@PrinterLong", printerLong);
+                //com.Parameters.AddWithValue("@PrinterOpenCasher", printerOpenCasher);
+
+                //Registra Datos de la Emmpresa
+                com.Parameters.AddWithValue("@NombreEmpresa", empresaNombre);
+                com.Parameters.AddWithValue("@Email", email);
+
+                //Ejectura el procedimiento almacenado
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+
+                CerrarConexion();
+                resultado = true;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            return resultado;
+        }
+
+        public void ConsultaConfiguracion()
+        {
+            SqlDataReader lector = null;
+            try
+            {
+                // Crear el comando que ejecutará el procedimiento almacenado
+                SqlCommand cmd = new SqlCommand("SP_Consulta_Config", AbrirConexion());
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                // Agregar el parámetro de entrada
+                cmd.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idVenta;
+
+                // Crear un objeto SqlDataReader para leer los resultados de la consulta
+
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                while (lector.Read())
+                {
+                    SharedResources._CfgId = lector.GetInt32(0);
+                    SharedResources._CfgPrinterName = lector.GetString(1);
+                    SharedResources._CfgPrinterLong = lector.GetInt32(2);
+                    SharedResources._CfgPrinterFontSize = lector.GetInt32(3);
+                    SharedResources._CfgNombreEmpresa = lector.GetString(4);
+                    SharedResources._CfgEmail = lector.GetString(5);
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                if (lector != null)
+                {
+                    lector.Close();
+                }
+
+                CerrarConexion();
+            }
+        }
+
+        #endregion Configuracion
     }
 }

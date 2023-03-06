@@ -382,6 +382,14 @@
                 VerticalAlignment="Center"
                 Click="btnIniciar_Click"
                 Content="Iniciar" />
+            <Frame
+                    Name="fContainer"
+                    Margin="20"
+                Grid.Column="0"
+                Grid.Row="0"
+                Grid.ColumnSpan="12"
+                Grid.RowSpan="18"
+                    NavigationUIVisibility="Hidden" />
         </Grid>
     </Border>
 </Page>

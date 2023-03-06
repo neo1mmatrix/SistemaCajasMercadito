@@ -23,6 +23,7 @@ namespace Sistema_Mercadito.Pages
         {
             InitializeComponent();
             CargarValores();
+            CheckOpenCasher();
         }
 
         // CARGA LOS CAMPOS  DE TEXTO
@@ -90,52 +91,6 @@ namespace Sistema_Mercadito.Pages
                     objetoSql.ConsultaCajaAbierta();
                     NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
                 }
-                //if (_montoInicio > 0)
-                //{
-                //    con.Open();
-                //    string sql = $"Insert into ";
-
-                //    sql = $"{sql}TbCajaRegist ";
-                //    sql = $"{sql}(FechaAbierta, MontoApertura, IsOpen, Activo, ";
-                //    sql = $"{sql}Billete20Mil, Billete10Mil, BIllete5Mil, Billete2Mil, Billete1Mil, ";
-                //    sql = $"{sql}Moneda500, Moneda100, Moneda50, Moneda25, Moneda10, Moneda5) ";
-                //    sql = $"{sql}Values ";
-                //    sql = $"{sql}(@FechaAbierta, @MontoApertura, @IsOpen, @Activo, ";
-                //    sql = $"{sql}@Billete20Mil, @Billete10Mil, @BIllete5Mil, @Billete2Mil, @Billete1Mil, ";
-                //    sql = $"{sql}@Moneda500, @Moneda100, @Moneda50, @Moneda25, @Moneda10, @Moneda5)";
-
-                //    SqlCommand com = new SqlCommand(sql, con);
-                //    //REGISTRA LOS DATOS PRINCIPALES
-                //    com.Parameters.Add("@FechaAbierta", SqlDbType.DateTime).Value = _fecha;
-                //    com.Parameters.Add("@MontoApertura", SqlDbType.Int).Value = _montoInicio;
-                //    com.Parameters.Add("@IsOpen", SqlDbType.Int).Value = _isOpen;
-                //    com.Parameters.Add("@Activo", SqlDbType.Int).Value = _activo;
-
-                //    //REGISTRA LA CANTIDAD DE BILLETES
-                //    com.Parameters.Add("@Billete20Mil", SqlDbType.Int).Value = _billetes20Mil;
-                //    com.Parameters.Add("@Billete10Mil", SqlDbType.Int).Value = _billetes10Mil;
-                //    com.Parameters.Add("@BIllete5Mil", SqlDbType.Int).Value = _billetes5Mil;
-                //    com.Parameters.Add("@Billete2Mil", SqlDbType.Int).Value = _billetes2Mil;
-                //    com.Parameters.Add("@Billete1Mil", SqlDbType.Int).Value = _billetes1Mil;
-
-                //    //REGISTRA LAS MONEDAS
-                //    com.Parameters.Add("@Moneda500", SqlDbType.Int).Value = _monedas500;
-                //    com.Parameters.Add("@Moneda100", SqlDbType.Int).Value = _monedas100;
-                //    com.Parameters.Add("@Moneda50", SqlDbType.Int).Value = _monedas50;
-                //    com.Parameters.Add("@Moneda25", SqlDbType.Int).Value = _monedas25;
-                //    com.Parameters.Add("@Moneda10", SqlDbType.Int).Value = _monedas10;
-                //    com.Parameters.Add("@Moneda5", SqlDbType.Int).Value = _monedas5;
-
-                //    com.ExecuteNonQuery();
-                //    con.Close();
-
-                //    MessageBox.Show("Bienvenido");
-                //    NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
-                ////}
-                //    else
-                //    {
-                //        MessageBox.Show("Ingrese un Monto de Dinero Para Abrir Cajas...");
-                //    }
             }
             catch (Exception ex)
             {
@@ -333,5 +288,15 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Controles de Eventos
+
+        private void CheckOpenCasher()
+        {
+            objetoSql.ConsultaCajaAbierta();
+            if (SharedResources._idCajaAbierta > 0)
+            {
+                objetoSql.ConsultaCajaAbierta();
+                NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+            }
+        }
     }
 }
