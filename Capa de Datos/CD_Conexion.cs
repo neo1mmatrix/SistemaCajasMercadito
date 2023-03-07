@@ -424,17 +424,13 @@ namespace Sistema_Mercadito.Capa_de_Datos
 
         public void ConsultaConfiguracion()
         {
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
             SqlDataReader lector = null;
             try
             {
                 // Crear el comando que ejecutará el procedimiento almacenado
                 SqlCommand cmd = new SqlCommand("SP_Consulta_Config", AbrirConexion());
                 cmd.CommandType = CommandType.StoredProcedure;
-
-                // Agregar el parámetro de entrada
-                cmd.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idVenta;
-
-                // Crear un objeto SqlDataReader para leer los resultados de la consulta
 
                 // Ejecutar el comando y obtener el lector de datos
                 lector = cmd.ExecuteReader();

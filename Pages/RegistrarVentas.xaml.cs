@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ImprimirTiquetes;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -181,6 +182,9 @@ namespace Sistema_Mercadito.Pages
 
         private void loaded(object sender, RoutedEventArgs e)
         {
+            ImprimeFactura._PrinterName = SharedResources._CfgPrinterName;
+            ImprimeFactura._PrinterLong = SharedResources._CfgPrinterLong;
+            ImprimeFactura._PrinterFontSize = SharedResources._CfgPrinterFontSize;
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -381,6 +385,7 @@ namespace Sistema_Mercadito.Pages
                                             (float)_TipoCambio,
                                             _MontoPagoDolares);
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
+                    AbirCaja();
                     Inicio();
                 }
             }
@@ -426,7 +431,9 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             0,
                                             _MontoPagoDolares);
+
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
+                    AbirCaja();
                     Inicio();
                 }
             }
@@ -597,6 +604,71 @@ namespace Sistema_Mercadito.Pages
             //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
             MensajeVueltoCliente mvc = new MensajeVueltoCliente();
             fContainer.Content = mvc;
+        }
+
+        private void AbirCaja()
+        {
+            if (SharedResources._Efectivo > 0 && SharedResources._Dolares > 0)
+            {
+                ImprimeFactura.StartPrint();
+
+                //IMPRIME LA VENTA REALIZADA
+                ImprimeFactura.Println("Venta");
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (5 + SharedResources._MontoPagar.ToString("N2").Length), '.'));
+                ImprimeFactura.Print(SharedResources._MontoPagar.ToString("N2"));
+
+                //EFECTIVO
+                ImprimeFactura.Println("Efectivo");
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (8 + SharedResources._Efectivo.ToString("N2").Length), '.'));
+                ImprimeFactura.Print(SharedResources._Efectivo.ToString("N2"));
+
+                //DOLARES
+                ImprimeFactura.Println("Dolares");
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + SharedResources._Dolares.ToString("N2").Length), '.'));
+                ImprimeFactura.Print(SharedResources._Dolares.ToString("N2"));
+
+                //TIPO DE CAMBIO
+                ImprimeFactura.Println("Tipo de Cambio");
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (14 + SharedResources._TipoCambio.ToString("N2").Length), '.'));
+                ImprimeFactura.Print(SharedResources._TipoCambio.ToString("N2"));
+
+                //SINPE
+                if (SharedResources._Sinpe > 0)
+                {
+                    ImprimeFactura.Println("Sinpe");
+                    ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (5 + SharedResources._Sinpe.ToString("N2").Length), '.'));
+                    ImprimeFactura.Print(SharedResources._Sinpe.ToString("N2"));
+                }
+
+                //TARJETA
+                if (SharedResources._Tarjeta > 0)
+                {
+                    ImprimeFactura.Println("Tarjeta");
+                    ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + SharedResources._Tarjeta.ToString("N2").Length), '.'));
+                    ImprimeFactura.Print(SharedResources._Tarjeta.ToString("N2"));
+                }
+
+                //Equivalen a "COLONES"
+                ImprimeFactura.Println("Equivalen a");
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (11 + (SharedResources._Dolares * SharedResources._TipoCambio).ToString("N2").Length), '.'));
+                ImprimeFactura.Print((SharedResources._Dolares * SharedResources._TipoCambio).ToString("N2"));
+
+                //VUELTO A ENTREGAR
+                ImprimeFactura.PrintDashes();
+                string _vuelto = "Vuelto: " + SharedResources._Vuelto.ToString("N2");
+                ImprimeFactura.PrintVuelto(_vuelto);
+                ImprimeFactura.PrintDashes();
+
+                //TERMINA LA IMPRESION
+                ImprimeFactura.PrintFooterBn();
+                ImprimeFactura.EndPrint();
+            }
+            else
+            {
+                ImprimeFactura.StartPrint();
+                ImprimeFactura.PrintOpenCasher();
+                ImprimeFactura.EndPrint();
+            }
         }
     }
 }

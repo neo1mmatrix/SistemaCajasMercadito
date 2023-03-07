@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sistema Mercadito", "Sistema Mercadito.csproj", "{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ImprimirTiquetes", "..\ImprimirTiquetes\ImprimirTiquetes.vbproj", "{E3A2830C-160B-45B8-915B-C9CADDD0B311}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3A2830C-160B-45B8-915B-C9CADDD0B311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3A2830C-160B-45B8-915B-C9CADDD0B311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3A2830C-160B-45B8-915B-C9CADDD0B311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3A2830C-160B-45B8-915B-C9CADDD0B311}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

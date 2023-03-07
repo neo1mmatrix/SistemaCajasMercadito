@@ -239,5 +239,11 @@
   <ItemGroup>
     <Resource Include="Resources\pencil.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImprimirTiquetes\ImprimirTiquetes.vbproj">
+      <Project>{e3a2830c-160b-45b8-915b-c9caddd0b311}</Project>
+      <Name>ImprimirTiquetes</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
