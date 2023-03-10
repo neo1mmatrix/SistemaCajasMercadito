@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -23,7 +24,7 @@ namespace Sistema_Mercadito.Pages
         {
             InitializeComponent();
             CargarValores();
-            CheckOpenCasher();
+            //CheckOpenCasher();
         }
 
         // CARGA LOS CAMPOS  DE TEXTO
@@ -89,6 +90,7 @@ namespace Sistema_Mercadito.Pages
                 {
                     MessageBox.Show("Bienvenido");
                     objetoSql.ConsultaCajaAbierta();
+
                     NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
                 }
             }
@@ -294,8 +296,17 @@ namespace Sistema_Mercadito.Pages
             objetoSql.ConsultaCajaAbierta();
             if (SharedResources._idCajaAbierta > 0)
             {
-                objetoSql.ConsultaCajaAbierta();
-                NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                try
+                {
+                    objetoSql.ConsultaCajaAbierta();
+                    NavigationService navigationService = NavigationService.GetNavigationService(this);
+                    navigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                    //NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
             }
         }
     }

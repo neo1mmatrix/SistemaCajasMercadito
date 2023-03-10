@@ -78,6 +78,7 @@
                             Click="btnDashboard_Click"
                             MouseEnter="btnDashboard_MouseEnter"
                             MouseLeave="btnDashboard_MouseLeave"
+                            Visibility="Collapsed"
                             Style="{DynamicResource PopupButtonStyle}">
                             <ctls:MenuItem
                                 VerticalAlignment="Center"

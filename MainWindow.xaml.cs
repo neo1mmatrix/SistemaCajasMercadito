@@ -33,7 +33,7 @@ namespace Sistema_Mercadito
 
         private void checkDatabaseFirstConfig()
         {
-            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["SistemaMercadito"].ConnectionString);
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["SistemaMercadito"].ConnectionString + ";Password=Est26r5");
             conn.Open();
             SqlCommand comm = new SqlCommand("SELECT COUNT(*) FROM TbConfig", conn);
             Int32 count = (Int32)comm.ExecuteScalar();
@@ -284,7 +284,7 @@ namespace Sistema_Mercadito
 
         private void ClickReporte(object sender, RoutedEventArgs e)
         {
-            if (_CajaAbierta == true)
+            if (SharedResources._idCajaAbierta > 0)
             {
                 fContainer.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
             }

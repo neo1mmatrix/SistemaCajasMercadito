@@ -1,16 +1,21 @@
 ﻿using Sistema_Mercadito.Pages;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.Remoting;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Media3D;
 
 namespace Sistema_Mercadito.Capa_de_Datos
 {
     public class CD_Conexion
     {
-        private readonly SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SistemaMercadito"].ConnectionString);
+        private readonly SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SistemaMercadito"].ConnectionString + ";Password=Est26r5");
 
         #region Procedimientos de Conexion
 
@@ -95,10 +100,17 @@ namespace Sistema_Mercadito.Capa_de_Datos
                     SharedResources._MontoPagoDolares = lector.GetDecimal(8);
                 }
             }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
             catch (Exception ex)
             {
-                // Manejar cualquier error que pueda ocurrir durante la ejecución del procedimiento almacenado
-                MessageBox.Show(ex.ToString());
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
             }
             finally
             {
@@ -183,6 +195,72 @@ namespace Sistema_Mercadito.Capa_de_Datos
 
         #region Cierre de Cajas
 
+        public void ConsultaCaja()
+        {
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("SP_Consulta_Caja", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                while (lector.Read())
+                {
+                    SharedResources._FechaCajaAbierta = lector.GetDateTime(0);
+                    //La venta global
+                    SharedResources._Venta = lector.GetDecimal(1);
+                    //La venta por categoria de pago
+                    SharedResources._Efectivo = lector.GetDecimal(2);
+                    SharedResources._Dolares = lector.GetDecimal(3);
+                    SharedResources._Tarjeta = lector.GetDecimal(4);
+                    SharedResources._Sinpe = lector.GetDecimal(5);
+                    SharedResources._MontoInicioCajas = lector.GetDecimal(6);
+                    //Monto de efectivo en cajas
+                    SharedResources._MontoSaldoCajas = lector.GetDecimal(7);
+                    //Monto de dinero por cambio de dolares
+                    SharedResources._MontoPagoDolares = lector.GetDecimal(8);
+                    //Monto por el pago de servicios
+                    SharedResources._MontoPagoServicios = lector.GetDecimal(9);
+                    //Montos por retiros
+                    SharedResources._MontoRetiroColones = lector.GetDecimal(10);
+                    SharedResources._MontoRetiroDolares = lector.GetDecimal(11);
+                    //Fecha del cierre
+                    SharedResources._FechaCajaCierre = lector.GetDateTime(12);
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                if (lector != null)
+                {
+                    lector.Close();
+                }
+
+                CerrarConexion();
+            }
+        }
+
         public void CierreCaja()
         {
             SqlCommand com = new SqlCommand
@@ -235,8 +313,9 @@ namespace Sistema_Mercadito.Capa_de_Datos
                         SharedResources._Sinpe = lector.GetDecimal(3);
                         SharedResources._Tarjeta = lector.GetDecimal(4);
                         SharedResources._MontoPagoDolares = lector.GetDecimal(5);
+                        SharedResources._MontoVueltosCambio = lector.GetDecimal(6);
+
                         resultado = "Continuar";
-                        SharedResources._MontoSaldoCajas = SharedResources._Efectivo - SharedResources._MontoPagoDolares;
                     }
                     else
                     {
@@ -244,11 +323,19 @@ namespace Sistema_Mercadito.Capa_de_Datos
                         resultado = "Error";
                     }
                 }
+                SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
             }
             catch (Exception ex)
             {
-                // Manejar cualquier error que pueda ocurrir durante la ejecución del procedimiento almacenado
-                MessageBox.Show(ex.ToString());
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
             }
             finally
             {
@@ -260,6 +347,146 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 CerrarConexion();
             }
             return resultado;
+        }
+
+        public void SEL_REPORTE_VENTAS(int pId,
+                                       ref string pVentaTotal,
+                                       ref string pSaldoColones,
+                                       ref string pSaldoDolares,
+                                       ref string pRetiroColones,
+                                       ref string pRetiroDolares,
+                                       ref string pVentaColones,
+                                       ref string pVentaDolares,
+                                       ref string pFechaOpen,
+                                       ref string pFechaClose,
+                                       ref string pTotalColones,
+                                       ref string pTotalDolares
+                                       )
+        {
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("SEL_REPORTE_VENTAS", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idVenta;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                if (lector.HasRows)
+                {
+                    while (lector.Read())
+                    {
+                        pVentaTotal = lector.GetDecimal(0).ToString("N2");
+                        pSaldoColones = lector.GetDecimal(1).ToString("N2");
+                        pSaldoDolares = lector.GetDecimal(2).ToString("N2");
+                        pRetiroColones = lector.GetDecimal(3).ToString("N2");
+                        pRetiroDolares = lector.GetDecimal(4).ToString("N2");
+                        pVentaColones = lector.GetDecimal(5).ToString("N2");
+                        pVentaDolares = lector.GetDecimal(6).ToString("N2");
+                        pFechaOpen = lector.GetDateTime(7).ToString("dddd/MM/yyyy HH:mm");
+                        pFechaClose = lector.GetDateTime(8).ToString("dddd/MM/yyyy HH:mm");
+
+                        pTotalColones = lector.GetDecimal(9).ToString("N2");
+                        pTotalDolares = lector.GetDecimal(10).ToString("N2");
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                lector?.Close();
+                CerrarConexion();
+            }
+        }
+
+        public void SEL_REPORTE_DETALLE_VENTAS(int pId, ref string pDetalles)
+        {
+            StringBuilder _detalleBuilder = new StringBuilder();
+            string _montoVenta = "";
+            string _montoEfectivo = "";
+            string _montoDolares = "";
+            string _montoTarjeta = "";
+            string _montoSinpe = "";
+            string _fechaYhora;
+
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("SP_Reporte_Detalle_Ventas", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                if (lector.HasRows)
+                {
+                    while (lector.Read())
+                    {
+                        _montoVenta = lector.GetDecimal(0).ToString("N2");
+                        _montoEfectivo = lector.GetDecimal(1).ToString("N2");
+                        _montoDolares = lector.GetDecimal(2).ToString("N2");
+                        _montoTarjeta = lector.GetDecimal(3).ToString("N2");
+                        _montoSinpe = lector.GetDecimal(4).ToString("N2");
+                        _fechaYhora = lector.GetDateTime(5).ToString("HH:mm");
+
+                        _detalleBuilder.Append($"<tr>");
+                        _detalleBuilder.Append($"<td style=\"text-align: center; border: 1px solid #59656F;\">{_fechaYhora}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: blue; border: 1px solid blue;\" >{_montoVenta}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; color: #511F73; border: 1px solid #511F73;\">{_montoEfectivo}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; color: #26A699; border: 1px solid #26A699;\">{_montoDolares}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; color: #F29727; border: 1px solid #F29727;\">{_montoTarjeta}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoSinpe}</td>");
+                        _detalleBuilder.Append($"</tr>");
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error en la consulta sql, más info en el log");
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error, más info en el log");
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                lector?.Close();
+                CerrarConexion();
+            }
+            pDetalles = _detalleBuilder.ToString();
         }
 
         #endregion Cierre de Cajas
@@ -307,7 +534,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 com.ExecuteNonQuery();
                 com.Parameters.Clear();
 
-                SharedResources._MontoSaldoCajas = SharedResources._Efectivo - SharedResources._MontoPagoDolares;
+                SharedResources._MontoSaldoCajas = SharedResources._Efectivo;
                 CerrarConexion();
                 resultado = true;
             }
@@ -348,13 +575,22 @@ namespace Sistema_Mercadito.Capa_de_Datos
                     if (!lector.IsDBNull(0))
                     {
                         SharedResources._idCajaAbierta = lector.GetInt32(0);
+                        SharedResources._MontoSaldoCajas = lector.GetDecimal(1);
+                        SharedResources._MontoInicioCajas = lector.GetDecimal(1);
                     }
                 }
             }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
             catch (Exception ex)
             {
-                // Manejar cualquier error que pueda ocurrir durante la ejecución del procedimiento almacenado
-                MessageBox.Show(ex.ToString());
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
             }
             finally
             {

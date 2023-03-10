@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -23,6 +24,16 @@ namespace Sistema_Mercadito.Pages
         public static string _FechaFormateada { get; set; }
         public static decimal _MontoPagoDolares { get; set; }
         public static decimal _MontoSaldoCajas { get; set; }
+
+        public static DateTime _FechaCajaAbierta { get; set; }
+        public static DateTime _FechaCajaCierre { get; set; }
+        public static decimal _MontoPagoServicios { get; set; }
+        public static decimal _MontoCompraDolares { get; set; }
+
+        public static decimal _MontoRetiroColones { get; set; }
+        public static decimal _MontoRetiroDolares { get; set; }
+        public static decimal _MontoInicioCajas { get; set; }
+        public static decimal _MontoVueltosCambio { get; set; }
 
         public static void ManejoErrores(string error)
         {

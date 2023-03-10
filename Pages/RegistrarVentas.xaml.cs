@@ -608,7 +608,7 @@ namespace Sistema_Mercadito.Pages
 
         private void AbirCaja()
         {
-            if (SharedResources._Efectivo > 0 && SharedResources._Dolares > 0)
+            if (SharedResources._Dolares > 0)
             {
                 ImprimeFactura.StartPrint();
 

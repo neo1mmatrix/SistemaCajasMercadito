@@ -171,6 +171,7 @@ namespace Sistema_Mercadito.Pages
         private void CargaDatosLoaded(object sender, RoutedEventArgs e)
         {
             Inicio();
+            btnAceptar.Focus();
         }
     }
 }

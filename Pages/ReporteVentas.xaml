@@ -19,50 +19,56 @@
         <Grid Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="15" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition />
+                <ColumnDefinition Width="15" />
                 <ColumnDefinition />
+                <ColumnDefinition Width="15" />
                 <ColumnDefinition />
+                <ColumnDefinition Width="15" />
                 <ColumnDefinition />
+                <ColumnDefinition Width="15" />
                 <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition MaxWidth="15" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition MaxWidth="10" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition MaxHeight="15" />
-                <RowDefinition Height="*" />
+                <RowDefinition MaxHeight="10" />
+                <RowDefinition Height="55" />
+                <RowDefinition MaxHeight="5" />
+                <RowDefinition MaxHeight="40" />
                 <RowDefinition MaxHeight="5" />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition MaxHeight="15" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="20" />
+                <RowDefinition MaxHeight="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition MaxHeight="10" />
             </Grid.RowDefinitions>
-            <TextBlock
+            <Border
                 Grid.Row="1"
                 Grid.Column="1"
-                Grid.ColumnSpan="10"
-                Height="30"
-                Text="Reporte de Ventas" />
+                Grid.ColumnSpan="11"
+                Height="50"
+                Background="#706b6d"
+                CornerRadius="20">
+                <TextBlock
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Text="Reporte de Ventas" />
+            </Border>
 
             <DataGrid
                 x:Name="GridDatos"
                 Grid.Row="5"
-                Grid.RowSpan="7"
+                Grid.RowSpan="5"
                 Grid.Column="1"
                 Grid.ColumnSpan="11"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 VerticalContentAlignment="Center"
                 AutoGenerateColumns="False"
                 Background="#4A4458"
@@ -187,38 +193,114 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Button
-                x:Name="btnColones"
+            <StackPanel
                 Grid.Row="3"
                 Grid.Column="1"
-                Grid.ColumnSpan="2"
-                Click="btnColonClick"
-                Content="Colones"
-                Style="{DynamicResource ButtonReporte}" />
+                Grid.ColumnSpan="9"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="btnColones"
+                    Click="btnColonClick"
+                    Content="Colones"
+                    Style="{DynamicResource ButtonReporte}" />
+
+                <Button
+                    x:Name="btnTarjeta"
+                    Content="Tarjeta"
+                    Style="{DynamicResource ButtonReporte}" />
+
+                <Button
+                    x:Name="btnDolares"
+                    Content="Dolares"
+                    Style="{DynamicResource ButtonReporte}" />
+
+                <Button
+                    x:Name="btnSinpe"
+                    Content="Sinpe"
+                    Style="{DynamicResource ButtonReporte}" />
+            </StackPanel>
 
             <Button
-                x:Name="btnTarjeta"
-                Grid.Row="3"
-                Grid.Column="4"
-                Grid.ColumnSpan="2"
-                Content="Tarjeta"
-                Style="{DynamicResource ButtonReporte}" />
-
-            <Button
-                x:Name="btnDolares"
-                Grid.Row="3"
-                Grid.Column="7"
-                Grid.ColumnSpan="2"
-                Content="Dolares"
-                Style="{DynamicResource ButtonReporte}" />
-
-            <Button
-                x:Name="btnSinpe"
+                x:Name="btnCerrarCajas"
                 Grid.Row="3"
                 Grid.Column="10"
                 Grid.ColumnSpan="2"
-                Content="Sinpe"
+                Click="btnCerrarCaja_Click"
+                Content="Cerrar Cajas"
+                HorizontalAlignment="Right"
                 Style="{DynamicResource ButtonReporte}" />
+
+            <TextBlock
+                x:Name="lbVenta"
+                Grid.Row="11"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                FontSize="15"
+                Text="VENTA" />
+            <TextBlock
+                x:Name="lbColones"
+                Grid.Row="11"
+                Grid.Column="4"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                FontSize="15"
+                Text="COLONES" />
+            <TextBlock
+                x:Name="lbDolares"
+                Grid.Row="11"
+                Grid.Column="6"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                FontSize="15"
+                Text="DOLARES" />
+            <TextBlock
+                x:Name="lbTarjeta"
+                Grid.Row="11"
+                Grid.Column="8"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                FontSize="15"
+                Text="TARJETA" />
+            <TextBlock
+                x:Name="lbSinpe"
+                Grid.Row="11"
+                Grid.Column="10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                FontSize="15"
+                Text="SINPE" />
+
+            <TextBlock
+                x:Name="txtVenta"
+                Grid.Row="13"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                Text="VENTA" />
+            <TextBlock
+                x:Name="txtColones"
+                Grid.Row="13"
+                Grid.Column="4"
+                HorizontalAlignment="Right"
+                Text="COLONES" />
+            <TextBlock
+                x:Name="txtDolares"
+                Grid.Row="13"
+                Grid.Column="6"
+                HorizontalAlignment="Right"
+                Text="DOLARES" />
+            <TextBlock
+                x:Name="txtTarjeta"
+                Grid.Row="13"
+                Grid.Column="8"
+                HorizontalAlignment="Right"
+                Text="TARJETA" />
+            <TextBlock
+                x:Name="txtSinpe"
+                Grid.Row="13"
+                Grid.Column="10"
+                HorizontalAlignment="Right"
+                Text="SINPE" />
 
             <Frame
                 x:Name="FrameReporte"
