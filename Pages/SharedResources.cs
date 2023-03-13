@@ -61,6 +61,21 @@ namespace Sistema_Mercadito.Pages
             _MontoPagar = 0;
         }
 
+        public static void LimpiaVariablesVentas()
+        {
+            _Venta = 0;
+            _Efectivo = 0;
+            _Sinpe = 0;
+            _Dolares = 0;
+            _Tarjeta = 0;
+            _MontoPagar = 0;
+            _Vuelto = 0;
+            _TipoCambio = 0;
+            _MontoSaldoCajas = 0;
+            _MontoPagoDolares = 0;
+            _MontoPagar = 0;
+        }
+
         #region Configuracion
 
         public static string _CfgNombreEmpresa { get; set; }

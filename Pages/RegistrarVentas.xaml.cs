@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using ImprimirTiquetes;
+using System.Threading;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -71,44 +72,22 @@ namespace Sistema_Mercadito.Pages
         //EVENTO KEYDOWN
         private void AtajoTeclado(object sender, KeyEventArgs e)
         {
-            if (_NuevaVenta)
+            if (btnPagar.Visibility == Visibility.Visible)
             {
                 //Monto en EFECTIVO
-                if (e.Key == Key.F1)
+                if (e.Key == Key.F1 && _NuevaVenta)
                 {
                     PagoEfectivo();
                 }
                 //Monto en Sinpe
-                if (e.Key == Key.F5)
+                if (e.Key == Key.F5 && _NuevaVenta)
                 {
                     PagoSinpe();
                 }
                 //Monto en Tarjeta
-                if (e.Key == Key.F12)
+                if (e.Key == Key.F12 && _NuevaVenta)
                 {
                     PagoTarjeta();
-                }
-                if (e.Key == Key.Enter)
-                {
-                    try
-                    {
-                        decimal _monto = 0;
-                        if (((TextBox)sender).Text.Length == 0)
-                        {
-                            ((TextBox)sender).Text = _monto.ToString("N0");
-                        }
-                        else
-                        {
-                            _monto = decimal.Parse(((TextBox)sender).Text, System.Globalization.NumberStyles.AllowThousands);
-                            ((TextBox)sender).Text = _monto.ToString("N0");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Crear la cadena de registro de error
-                        string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
-                        SharedResources.ManejoErrores(logMessage);
-                    }
                 }
             }
         }
@@ -185,6 +164,8 @@ namespace Sistema_Mercadito.Pages
             ImprimeFactura._PrinterName = SharedResources._CfgPrinterName;
             ImprimeFactura._PrinterLong = SharedResources._CfgPrinterLong;
             ImprimeFactura._PrinterFontSize = SharedResources._CfgPrinterFontSize;
+            txtVenta.Focus();
+            txtVenta.SelectAll();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -287,6 +268,7 @@ namespace Sistema_Mercadito.Pages
             _mesActual = mesesEnEspanol[DateTime.Now.Month];
             _diaSemana += " " + _mesActual;
             FechayHora();
+            SharedResources.LimpiaVariablesVentas();
             Inicio();
         }
 
@@ -316,6 +298,8 @@ namespace Sistema_Mercadito.Pages
             timer.Start();
 
             // Controlador de eventos para el evento Tick del DispatcherTimer
+            tbfecha.Visibility = Visibility.Visible;
+            tbfechaHora.Visibility = Visibility.Visible;
         }
 
         private void Inicio()
@@ -327,6 +311,7 @@ namespace Sistema_Mercadito.Pages
             txtTipoCambio.Text = "0";
             txtSinpe.Text = "0";
             txtTarjeta.Text = "0";
+            _NuevaVenta = true;
             _ValoresCargados = true;
         }
 
@@ -345,6 +330,8 @@ namespace Sistema_Mercadito.Pages
             SharedResources._Venta = 0;
         }
 
+        #region Pagos
+
         private void PagoDesglosado()
         {
             decimal _vuelto = 0;
@@ -362,6 +349,7 @@ namespace Sistema_Mercadito.Pages
                 }
                 else
                 {
+                    _NuevaVenta = false;
                     SharedResources._MontoPagar = _Venta;
                     SharedResources._Efectivo = _Colones;
                     SharedResources._Sinpe = _Sinpe;
@@ -385,8 +373,11 @@ namespace Sistema_Mercadito.Pages
                                             (float)_TipoCambio,
                                             _MontoPagoDolares);
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
+                    Thread hilo = new Thread(new ThreadStart(AbirCaja));
+                    // LimpiarCampos();
+                    hilo.Start();
                     AbirCaja();
-                    Inicio();
+                    //Inicio();
                 }
             }
             catch (Exception ex)
@@ -411,15 +402,15 @@ namespace Sistema_Mercadito.Pages
                 {
                     MessageBox.Show("El Monto a Cancelar debe ser mayor a Cero");
                 }
-                else
+                else if (_NuevaVenta)
                 {
+                    _NuevaVenta = false;
                     SharedResources._MontoPagar = _Venta;
                     SharedResources._Efectivo = _Venta;
                     SharedResources._Sinpe = 0;
                     SharedResources._Dolares = 0;
                     SharedResources._Tarjeta = 0;
                     SharedResources._Vuelto = 0;
-                    NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
@@ -432,9 +423,15 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             _MontoPagoDolares);
 
+                    VistaVuelto();
+
+                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
-                    AbirCaja();
-                    Inicio();
+                    // LimpiarCampos();
+                    Thread hilo = new Thread(new ThreadStart(AbirCaja));
+                    hilo.Start();
+                    //AbirCaja();
+                    // Inicio();
                 }
             }
             catch (Exception ex)
@@ -461,6 +458,7 @@ namespace Sistema_Mercadito.Pages
                 }
                 else
                 {
+                    _NuevaVenta = false;
                     _Sinpe = _Venta;
                     SharedResources._MontoPagar = _Venta;
                     SharedResources._Efectivo = 0;
@@ -468,7 +466,6 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._Dolares = 0;
                     SharedResources._Tarjeta = 0;
                     SharedResources._Vuelto = 0;
-                    NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
@@ -480,8 +477,11 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             0,
                                             _MontoPagoDolares);
+                    VistaVuelto();
+                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
-                    Inicio();
+                    // LimpiarCampos();
+                    //Inicio();
                 }
             }
             catch (Exception ex)
@@ -508,6 +508,7 @@ namespace Sistema_Mercadito.Pages
                 }
                 else
                 {
+                    _NuevaVenta = false;
                     _Tarjeta = _Venta;
                     SharedResources._MontoPagar = _Venta;
                     SharedResources._Efectivo = 0;
@@ -515,7 +516,6 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._Dolares = 0;
                     SharedResources._Tarjeta = _Tarjeta;
                     SharedResources._Vuelto = 0;
-                    NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
@@ -527,8 +527,11 @@ namespace Sistema_Mercadito.Pages
                                             _Venta, //Tarjeta
                                             0,
                                             _MontoPagoDolares);
+                    VistaVuelto();
+                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
-                    Inicio();
+                    // LimpiarCampos();
+                    //Inicio();
                 }
             }
             catch (Exception ex)
@@ -537,6 +540,8 @@ namespace Sistema_Mercadito.Pages
                 Clipboard.SetText(ex.ToString());
             }
         }
+
+        #endregion Pagos
 
         private void SumaDinero()
         {
@@ -667,7 +672,24 @@ namespace Sistema_Mercadito.Pages
             {
                 ImprimeFactura.StartPrint();
                 ImprimeFactura.PrintOpenCasher();
-                ImprimeFactura.EndPrint();
+                ImprimeFactura.EndPrintDrawer();
+            }
+        }
+
+        private void Border_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+        }
+
+        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Key == Key.F5) && this.IsLoaded)
+            {
+                // Obtener acceso al control que tiene el evento KeyDown
+                TextBox miTextBox = this.txtVenta;
+
+                // Llamar al evento KeyDown
+                AtajoTeclado(txtVenta, e);
+                e.Handled = true;
             }
         }
     }

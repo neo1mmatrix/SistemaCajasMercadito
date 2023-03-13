@@ -64,7 +64,8 @@
                             Click="btnHome_Click"
                             MouseEnter="btnHome_MouseEnter"
                             MouseLeave="btnHome_MouseLeave"
-                            Style="{DynamicResource PopupButtonStyle}">
+                            Style="{DynamicResource PopupButtonStyle}"
+                            Visibility="Collapsed">
                             <ctls:MenuItem
                                 VerticalAlignment="Center"
                                 GroupName="MenuItem"
@@ -78,8 +79,8 @@
                             Click="btnDashboard_Click"
                             MouseEnter="btnDashboard_MouseEnter"
                             MouseLeave="btnDashboard_MouseLeave"
-                            Visibility="Collapsed"
-                            Style="{DynamicResource PopupButtonStyle}">
+                            Style="{DynamicResource PopupButtonStyle}"
+                            Visibility="Collapsed">
                             <ctls:MenuItem
                                 VerticalAlignment="Center"
                                 GroupName="MenuItem"
@@ -89,24 +90,19 @@
                                 Text="Cajas" />
                         </Button>
                         <Button
-                            x:Name="btnProducts"
-                            Click="btnProducts_Click"
-                            MouseEnter="btnProducts_MouseEnter"
-                            MouseLeave="btnProducts_MouseLeave"
+                            x:Name="btnCajas"
+                            Click="btnCajas_Click"
+                            MouseEnter="btnCajas_MouseEnter"
+                            MouseLeave="btnCajas_MouseLeave"
                             Style="{DynamicResource PopupButtonStyle}">
-                            <ctls:MenuItem
-                                VerticalAlignment="Center"
-                                GroupName="MenuItem"
-                                Icon="{DynamicResource products}"
-                                IconWidth="16"
-                                IndicatorBrush="{DynamicResource PrimaryBlueColor}"
-                                Text="Productos" />
+                            <Image Height="30" Source="/Resources/sale-tag.png" />
                         </Button>
                         <Button
                             x:Name="btnProductStock"
                             MouseEnter="btnProductStock_MouseEnter"
                             MouseLeave="btnProductStock_MouseLeave"
-                            Style="{DynamicResource PopupButtonStyle}">
+                            Style="{DynamicResource PopupButtonStyle}"
+                            Visibility="Collapsed">
                             <ctls:MenuItem
                                 VerticalAlignment="Center"
                                 GroupName="MenuItem"
@@ -119,48 +115,41 @@
                             x:Name="btnOrderList"
                             MouseEnter="btnOrderList_MouseEnter"
                             MouseLeave="btnOrderList_MouseLeave"
-                            Style="{DynamicResource PopupButtonStyle}">
+                            Style="{DynamicResource PopupButtonStyle}"
+                            Visibility="Collapsed">
                             <ctls:MenuItem
                                 VerticalAlignment="Center"
                                 GroupName="MenuItem"
-                                Icon="{DynamicResource email}"
+                                Icon="{DynamicResource test}"
                                 IconWidth="16"
                                 IndicatorBrush="{DynamicResource PrimaryBlueColor}"
-                                Text="Facturación" />
+                                Text="Facturación"
+                                Visibility="Collapsed" />
                         </Button>
                         <Button
                             x:Name="btnReporte"
                             Click="ClickReporte"
-                            MouseEnter="btnBilling_MouseEnter"
-                            MouseLeave="btnBilling_MouseLeave"
+                            MouseEnter="btnReporte_MouseEnter"
+                            MouseLeave="btnReporte_MouseLeave"
                             Style="{DynamicResource PopupButtonStyle}">
-                            <ctls:MenuItem
-                                VerticalAlignment="Center"
-                                GroupName="MenuItem"
-                                Icon="{DynamicResource billing}"
-                                IconWidth="16"
-                                IndicatorBrush="{DynamicResource PrimaryBlueColor}"
-                                Text="Retiros" />
+                            <Image Height="30" Source="/Resources/report.png" />
                         </Button>
                         <Button
-                            x:Name="btnPointOfSale"
-                            MouseEnter="btnPointOfSale_MouseEnter"
-                            MouseLeave="btnPointOfSale_MouseLeave"
+                            x:Name="btnCompraDolares"
+                            Click="btnCompraDolares_click"
+                            MouseEnter="btnCompraDolares_MouseEnter"
+                            MouseLeave="btnCompraDolares_MouseLeave"
                             Style="{DynamicResource PopupButtonStyle}">
-                            <ctls:MenuItem
-                                VerticalAlignment="Center"
-                                GroupName="MenuItem"
-                                Icon="{DynamicResource car}"
-                                IconWidth="16"
-                                IndicatorBrush="{DynamicResource PrimaryBlueColor}"
-                                Text="Punto de Ventas" />
+                            <Image Height="30" Source="/Resources/money-exchange.png" />
                         </Button>
                         <Button
                             x:Name="btnSecurity"
                             Click="btnCierreCaja_Click"
                             MouseEnter="btnSecurity_MouseEnter"
                             MouseLeave="btnSecurity_MouseLeave"
-                            Style="{DynamicResource PopupButtonStyle}">
+                            Style="{DynamicResource PopupButtonStyle}"
+                            Visibility="Collapsed">
+
                             <ctls:MenuItem
                                 VerticalAlignment="Center"
                                 GroupName="MenuItem"
@@ -174,13 +163,7 @@
                             MouseEnter="btnSetting_MouseEnter"
                             MouseLeave="btnSetting_MouseLeave"
                             Style="{DynamicResource PopupButtonStyle}">
-                            <ctls:MenuItem
-                                VerticalAlignment="Center"
-                                GroupName="MenuItem"
-                                Icon="{DynamicResource test}"
-                                IconWidth="16"
-                                IndicatorBrush="{DynamicResource PrimaryBlueColor}"
-                                Text="Configuración" />
+                            <Image Height="30" Source="/Resources/maintenance.png" />
                         </Button>
                     </StackPanel>
                     <!--  End: MenuItem  -->

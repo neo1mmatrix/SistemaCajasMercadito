@@ -1,17 +1,17 @@
 ﻿<Page
-    x:Class="Sistema_Mercadito.Pages.VentasCajas"
+    x:Class="Sistema_Mercadito.Pages.RegistrarCompraDolares"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="VentasCajas"
+    Title="RegistrarCompraDolares"
     MinWidth="800"
     MinHeight="450"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontSize="20"
     Foreground="{DynamicResource PrimaryTextColor}"
-    Initialized="InitializedVariables"
     KeyDown="AtajoTeclado"
     Loaded="loaded"
     mc:Ignorable="d">
@@ -55,14 +55,6 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
                 <RowDefinition Height="*" />
-                <RowDefinition Name="anteBorde" Height="10" />
-                <RowDefinition Name="borde" Height="5" />
-                <RowDefinition Name="posBorde" Height="10" />
-                <RowDefinition Name="Advertencia" Height="30" />
-                <RowDefinition Name="linea17" Height="5" />
-                <RowDefinition Name="linea18" Height="*" />
-                <RowDefinition Name="linea19" Height="5" />
-                <RowDefinition Name="linea20" Height="40" />
 
                 <RowDefinition MaxHeight="10" />
             </Grid.RowDefinitions>
@@ -81,13 +73,13 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Border
                     Grid.Row="0"
-                    Width="100"
+                    Width="120"
+                    Height="50"
+                    Margin="10"
                     HorizontalAlignment="Left"
                     Background="#3f475b"
                     BorderBrush="Navy"
@@ -95,39 +87,9 @@
                     CornerRadius="5"
                     Visibility="Visible">
                     <Label
-                        x:Name="lbEfectivo"
+                        x:Name="lbComprar"
                         VerticalAlignment="Center"
-                        Content="F1 = Efectivo"
-                        FontSize="15"
-                        Foreground="White" />
-                </Border>
-                <Border
-                    Grid.Row="1"
-                    Width="104"
-                    HorizontalAlignment="Left"
-                    Background="#3f475b"
-                    BorderBrush="Navy"
-                    BorderThickness="0.5"
-                    CornerRadius="5"
-                    Visibility="Visible">
-                    <Label
-                        VerticalAlignment="Center"
-                        Content="F5 = Sinpe"
-                        FontSize="15"
-                        Foreground="White" />
-                </Border>
-                <Border
-                    Grid.Row="2"
-                    Width="107"
-                    HorizontalAlignment="Left"
-                    Background="#3f475b"
-                    BorderBrush="Navy"
-                    BorderThickness="0.5"
-                    CornerRadius="5"
-                    Visibility="Visible">
-                    <Label
-                        VerticalAlignment="Center"
-                        Content="F12 = Tarjeta"
+                        Content="F1 = Comprar"
                         FontSize="15"
                         Foreground="White" />
                 </Border>
@@ -141,27 +103,23 @@
                 Grid.ColumnSpan="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Text="Venta" />
+                Text="Dólares" />
             <TextBlock
                 Grid.Row="5"
                 Grid.Column="1"
                 Grid.ColumnSpan="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Text="Colones" />
+                Text="Tipo de Cambio" />
+
             <TextBlock
-                Grid.Row="10"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Text="Dolares" />
-            <TextBlock
-                Grid.Row="18"
+                Grid.Row="8"
                 Grid.Column="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Text="Vuelto ₡" />
+                Text="Equivalen a ₡" />
             <Border
-                Grid.Row="18"
+                Grid.Row="8"
                 Grid.Column="3"
                 Grid.ColumnSpan="7"
                 Background="#3f475b"
@@ -169,11 +127,11 @@
                 <Grid>
 
                     <Label
-                        x:Name="tbVuelto"
+                        x:Name="tbMontoEnColones"
                         HorizontalContentAlignment="Right"
                         VerticalContentAlignment="Center"
                         Content="0"
-                        FontSize="22"
+                        FontSize="32"
                         FontWeight="Bold"
                         Foreground="Wheat"
                         KeyDown="AtajoTeclado">
@@ -189,70 +147,25 @@
                 </Grid>
             </Border>
 
-            <TextBlock
-                Grid.Row="10"
-                Grid.Column="7"
-                HorizontalAlignment="Right"
-                Text="Tipo Cambio" />
-            <TextBlock
-                Grid.Row="8"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Text="Sinpe" />
-            <TextBlock
-                Grid.Row="8"
-                Grid.Column="7"
-                HorizontalAlignment="Right"
-                Text="Tarjeta" />
-            <TextBlock
-                x:Name="tbDolarToColones"
-                Grid.Row="12"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Foreground="White"
-                Text="Equivalen a "
-                Visibility="Collapsed" />
-            <TextBlock
-                x:Name="tbSumaDolarToColones"
-                Grid.Row="12"
-                Grid.Column="3"
-                Grid.ColumnSpan="3"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Foreground="SteelBlue"
-                Text="0"
-                Visibility="Collapsed" />
-            <TextBlock
-                x:Name="tbAdvertencia"
-                Grid.Row="16"
-                Grid.Column="3"
-                Grid.ColumnSpan="8"
-                HorizontalAlignment="Left"
-                Foreground="Red"
-                Text="Advertencia"
-                Visibility="Collapsed" />
             <!--#endregion-->
             <!--#region BOTONES-->
             <Button
-                x:Name="btnPagar"
-                Grid.Row="20"
+                x:Name="btnComprar"
+                Grid.Row="10"
                 Grid.Column="3"
                 Grid.ColumnSpan="7"
-                Click="btnPagarClick"
-                Content="Pagar"
+                Click="btnComprar_Click"
+                Content="Comprar Dólares"
                 FontWeight="Bold"
                 Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="7" />
 
             <Button
                 x:Name="btnActualizar"
-                Grid.Row="20"
+                Grid.Row="10"
                 Grid.Column="3"
                 Grid.ColumnSpan="7"
-                Click="btnActualizarClick"
+                Click="btnActualizar_Click"
                 Content="Actualizar"
                 FontWeight="Bold"
                 Foreground="Navy"
@@ -261,10 +174,10 @@
                 Visibility="Collapsed" />
             <Button
                 x:Name="btnEliminar"
-                Grid.Row="20"
+                Grid.Row="10"
                 Grid.Column="3"
                 Grid.ColumnSpan="7"
-                Click="Eliminar_Click"
+                Click="btnEliminar_Click"
                 Content="Eliminar Registro"
                 FontWeight="Bold"
                 Foreground="Crimson"
@@ -275,8 +188,11 @@
                 x:Name="btnRegresar"
                 Grid.Row="1"
                 Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Width="120"
                 Margin="10,5,10,5"
-                Click="RegresarClick"
+                HorizontalAlignment="Left"
+                Click="btnRegresar_Click"
                 Content="Regresar"
                 FontWeight="Bold"
                 Foreground="#005736"
@@ -286,7 +202,7 @@
             <!--#endregion-->
             <!--#region Campos de Texto Montos-->
             <TextBox
-                x:Name="txtVenta"
+                x:Name="txtDolaresRecibidos"
                 Grid.Row="3"
                 Grid.Column="3"
                 Grid.ColumnSpan="7"
@@ -301,15 +217,15 @@
                 PreviewTextInput="NumberValidationTextBox"
                 Style="{DynamicResource TextBoxStyleNumb}"
                 TabIndex="0"
-                TextChanged="txtTextChangedMonto" />
+                TextChanged="txtTextChangedDolaresR" />
             <TextBox
-                x:Name="txtColones"
+                x:Name="txtTipoCambio"
                 Grid.Row="5"
                 Grid.Column="3"
                 Grid.ColumnSpan="7"
                 FontWeight="Bold"
                 Foreground="#116530"
-                GotFocus="ColonesGotFocus"
+                GotFocus="TipoCambioGotFocus"
                 KeyDown="AtajoTeclado"
                 LostFocus="txtLostFocus"
                 MaxLength="15"
@@ -319,86 +235,7 @@
                 Style="{DynamicResource TextBoxStyleNumb}"
                 TabIndex="1"
                 TextChanged="txtTextChanged" />
-            <TextBox
-                x:Name="txtTarjeta"
-                Grid.Row="8"
-                Grid.Column="9"
-                Grid.ColumnSpan="2"
-                FontWeight="Bold"
-                Foreground="#175873"
-                GotFocus="ColonesGotFocus"
-                KeyDown="AtajoTeclado"
-                LostFocus="txtLostFocus"
-                MaxLength="15"
-                PreviewKeyDown="txtPreviewKeyDownEvent"
-                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-                PreviewTextInput="NumberValidationTextBox"
-                Style="{DynamicResource TextBoxStyleNumb}"
-                TabIndex="4"
-                TextChanged="txtTextChanged" />
 
-            <TextBox
-                x:Name="txtDolares"
-                Grid.Row="10"
-                Grid.Column="3"
-                Grid.ColumnSpan="3"
-                FontWeight="Bold"
-                Foreground="#341948"
-                GotFocus="ColonesGotFocus"
-                KeyDown="AtajoTeclado"
-                LostFocus="txtLostFocus"
-                MaxLength="4"
-                PreviewKeyDown="txtPreviewKeyDownEvent"
-                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-                PreviewTextInput="NumberValidationTextBox"
-                Style="{DynamicResource TextBoxStyleNumb}"
-                TabIndex="5"
-                TextChanged="txtTextChanged" />
-            <TextBox
-                x:Name="txtTipoCambio"
-                Grid.Row="10"
-                Grid.Column="9"
-                Grid.ColumnSpan="2"
-                FontWeight="Bold"
-                Foreground="#341948"
-                GotFocus="ColonesGotFocus"
-                KeyDown="AtajoTeclado"
-                LostFocus="txtLostFocus"
-                MaxLength="4"
-                PreviewKeyDown="txtPreviewKeyDownEvent"
-                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-                PreviewTextInput="NumberValidationTextBox"
-                Style="{DynamicResource TextBoxStyleNumb}"
-                TabIndex="6"
-                TextChanged="txtTextChanged" />
-            <TextBox
-                x:Name="txtSinpe"
-                Grid.Row="8"
-                Grid.Column="3"
-                Grid.ColumnSpan="3"
-                FontWeight="Bold"
-                Foreground="#175873"
-                GotFocus="ColonesGotFocus"
-                KeyDown="AtajoTeclado"
-                LostFocus="txtLostFocus"
-                MaxLength="15"
-                PreviewKeyDown="txtPreviewKeyDownEvent"
-                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
-                PreviewTextInput="NumberValidationTextBox"
-                Style="{DynamicResource TextBoxStyleNumb}"
-                TabIndex="2"
-                TextChanged="txtTextChanged" />
-            <TextBox
-                x:Name="txtElimarMotivo"
-                Grid.Row="16"
-                Grid.Column="2"
-                Grid.ColumnSpan="8"
-                Margin="5,0,0,0"
-                MaxLength="500"
-                Style="{DynamicResource TextBoxStyleNumb}"
-                TabIndex="6"
-                TextAlignment="Left"
-                Visibility="Collapsed" />
             <!--#endregion-->
 
             <TextBlock
@@ -438,26 +275,8 @@
                 Grid.ColumnSpan="11"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Text="Ventas" />
-            <TextBlock
-                x:Name="tbEliminarMotivo"
-                Grid.Row="16"
-                Grid.Column="1"
-                Grid.ColumnSpan="1"
-                MaxHeight="60"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Text="Motivo"
-                Visibility="Collapsed" />
+                Text="Compra de Dólares" />
 
-            <Border
-                Grid.Row="7"
-                Grid.RowSpan="5"
-                Grid.Column="1"
-                Grid.ColumnSpan="11"
-                BorderBrush="#919394"
-                BorderThickness="4"
-                CornerRadius="3" />
             <Frame
                 Name="fContainer"
                 Grid.Row="0"

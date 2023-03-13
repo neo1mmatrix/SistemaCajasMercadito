@@ -225,9 +225,9 @@
                 Grid.Row="3"
                 Grid.Column="10"
                 Grid.ColumnSpan="2"
+                HorizontalAlignment="Right"
                 Click="btnCerrarCaja_Click"
                 Content="Cerrar Cajas"
-                HorizontalAlignment="Right"
                 Style="{DynamicResource ButtonReporte}" />
 
             <TextBlock

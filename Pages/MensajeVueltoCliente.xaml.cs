@@ -31,8 +31,35 @@ namespace Sistema_Mercadito.Pages
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
-            LimpiarVariables();
+            SharedResources.LimpiaVariablesVentas();
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            VentasCajas vc = new VentasCajas();
+            fContainer.Content = vc;
+            //Controla los campos de texto
+            vc.tbTitulo.Text = "Venta";
+            vc.txtColones.IsEnabled = true;
+            vc.txtDolares.IsEnabled = true;
+            vc.txtVenta.IsEnabled = true;
+            vc.txtSinpe.IsEnabled = true;
+            vc.txtTarjeta.IsEnabled = true;
+            vc.txtTipoCambio.IsEnabled = true;
+            vc._NuevaVenta = true;
+            // Controla los botones
+            vc.btnPagar.Visibility = Visibility.Visible;
+            vc.btnRegresar.Visibility = Visibility.Collapsed;
+            vc.btnEliminar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            vc.tbfechaAntigua.Visibility = Visibility.Visible;
+            vc.tbfecha.Visibility = Visibility.Visible;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Visible;
+
+            //NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -126,6 +153,7 @@ namespace Sistema_Mercadito.Pages
             }
             tbMontoDolaresaColones.Text = "₡" + SharedResources._MontoPagoDolares.ToString("N2");
             _CargaDatos = true;
+            LimpiarVariables();
         }
 
         private void LimpiarVariables()

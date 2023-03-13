@@ -11,6 +11,7 @@ using System.Text;
 using System;
 using System.Windows.Controls.Primitives;
 using System.Linq;
+using System.Threading;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -132,13 +133,21 @@ namespace Sistema_Mercadito.Pages
             DataTable dtVentas;
             dtVentas = new DataTable();
             objetoSql.ConsultaVentas(ref dtVentas);
-            objetoSql.SumaCierre();
-            txtVenta.Text = SharedResources._Venta.ToString("N2");
-            txtColones.Text = SharedResources._Efectivo.ToString("N2");
-            txtDolares.Text = SharedResources._Dolares.ToString("N2");
-            txtTarjeta.Text = SharedResources._Tarjeta.ToString("N2");
-            txtSinpe.Text = SharedResources._Sinpe.ToString("N2");
-            GridDatos.ItemsSource = dtVentas.DefaultView;
+
+            if (objetoSql.SumaCierre() == "Continuar")
+            {
+                txtVenta.Text = SharedResources._Venta.ToString("N2");
+                txtColones.Text = SharedResources._Efectivo.ToString("N2");
+                txtDolares.Text = SharedResources._Dolares.ToString("N2");
+                txtTarjeta.Text = SharedResources._Tarjeta.ToString("N2");
+                txtSinpe.Text = SharedResources._Sinpe.ToString("N2");
+                GridDatos.ItemsSource = dtVentas.DefaultView;
+            }
+            else
+
+            {
+                VistaVenta();
+            }
         }
 
         private void btnCerrarCaja_Click(object sender, RoutedEventArgs e)
@@ -146,11 +155,36 @@ namespace Sistema_Mercadito.Pages
             objetoSql.SumaCierre();
             objetoSql.CierreCaja();
             objetoSql.ConsultaCaja();
-
-            EnviarCorreo();
+            Thread hilo = new Thread(new ThreadStart(EnviarCorreo));
+            hilo.Start();
             MessageBox.Show("Cierre Correcto");
             SharedResources.LimpiaVariables();
             NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+        }
+
+        public void VistaVenta()
+        {
+            VentasCajas vc = new VentasCajas();
+            FrameReporte.Content = vc;
+            //Controla los campos de texto
+            vc.tbTitulo.Text = "Venta";
+            vc.txtColones.IsEnabled = true;
+            vc.txtDolares.IsEnabled = true;
+            vc.txtVenta.IsEnabled = true;
+            vc.txtSinpe.IsEnabled = true;
+            vc.txtTarjeta.IsEnabled = true;
+            vc.txtTipoCambio.IsEnabled = true;
+            vc._NuevaVenta = true;
+            // Controla los botones
+            vc.btnPagar.Visibility = Visibility.Visible;
+            vc.btnRegresar.Visibility = Visibility.Collapsed;
+            vc.btnEliminar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            vc.tbfechaAntigua.Visibility = Visibility.Visible;
+            vc.tbfecha.Visibility = Visibility.Visible;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Visible;
         }
 
         private void EnviarCorreo()
@@ -263,7 +297,7 @@ namespace Sistema_Mercadito.Pages
 
             #endregion Conclusion de ventas
 
-            EnviarCorreo("esteban26mora@gmail.com", "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
+            EnviarCorreo("dist.mercadito@gmail.com", "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
         }
 
         private void DetallesCorreo(ref string pConsulta)

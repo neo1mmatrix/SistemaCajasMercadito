@@ -10,6 +10,10 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Sistema_Mercadito.Capa_de_Datos;
+using System.Threading;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Runtime.InteropServices;
 
 namespace Sistema_Mercadito
 {
@@ -24,9 +28,26 @@ namespace Sistema_Mercadito
         public MainWindow()
         {
             InitializeComponent();
-            CultureInfo.CurrentCulture = new CultureInfo("en-US");
-            VerificaCarpetaLogs();
-            checkDatabaseFirstConfig();
+            string procName = Process.GetCurrentProcess().ProcessName;
+            // get the list of all processes by that name
+
+            Process[] processes = Process.GetProcessesByName(procName);
+
+            if (processes.Length > 1)
+            {
+                MessageBox.Show(procName + " already running");
+                Mutex signalMutex = Mutex.OpenExisting("MiMutexGlobal_Signal");
+                signalMutex.WaitOne();
+                signalMutex.ReleaseMutex();
+                return;
+            }
+            else
+            {
+                CultureInfo.CurrentCulture = new CultureInfo("en-US");
+                VerificaCarpetaLogs();
+                checkDatabaseFirstConfig();
+                // Application.Run(...);
+            }
         }
 
         private bool _CajaAbierta = false;
@@ -91,18 +112,18 @@ namespace Sistema_Mercadito
             Popup.IsOpen = false;
         }
 
-        private void btnProducts_MouseEnter(object sender, MouseEventArgs e)
+        private void btnCajas_MouseEnter(object sender, MouseEventArgs e)
         {
             if (Tg_Btn.IsChecked == false)
             {
-                Popup.PlacementTarget = btnProducts;
+                Popup.PlacementTarget = btnCajas;
                 Popup.Placement = PlacementMode.Right;
                 Popup.IsOpen = true;
                 Header.PopupText.Text = "Ventas";
             }
         }
 
-        private void btnProducts_MouseLeave(object sender, MouseEventArgs e)
+        private void btnCajas_MouseLeave(object sender, MouseEventArgs e)
         {
             Popup.Visibility = Visibility.Collapsed;
             Popup.IsOpen = false;
@@ -142,7 +163,7 @@ namespace Sistema_Mercadito
             Popup.IsOpen = false;
         }
 
-        private void btnBilling_MouseEnter(object sender, MouseEventArgs e)
+        private void btnReporte_MouseEnter(object sender, MouseEventArgs e)
         {
             if (Tg_Btn.IsChecked == false)
             {
@@ -153,24 +174,24 @@ namespace Sistema_Mercadito
             }
         }
 
-        private void btnBilling_MouseLeave(object sender, MouseEventArgs e)
+        private void btnReporte_MouseLeave(object sender, MouseEventArgs e)
         {
             Popup.Visibility = Visibility.Collapsed;
             Popup.IsOpen = false;
         }
 
-        private void btnPointOfSale_MouseEnter(object sender, MouseEventArgs e)
+        private void btnCompraDolares_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (Tg_Btn.IsChecked == false)
-            {
-                Popup.PlacementTarget = btnPointOfSale;
-                Popup.Placement = PlacementMode.Right;
-                Popup.IsOpen = true;
-                Header.PopupText.Text = "Poin Of Sale";
-            }
+            //if (Tg_Btn.IsChecked == false)
+            //{
+            //    Popup.PlacementTarget = btnPointOfSale;
+            //    Popup.Placement = PlacementMode.Right;
+            //    Popup.IsOpen = true;
+            //    Header.PopupText.Text = "Poin Of Sale";
+            //}
         }
 
-        private void btnPointOfSale_MouseLeave(object sender, MouseEventArgs e)
+        private void btnCompraDolares_MouseLeave(object sender, MouseEventArgs e)
         {
             Popup.Visibility = Visibility.Collapsed;
             Popup.IsOpen = false;
@@ -259,7 +280,7 @@ namespace Sistema_Mercadito
             }
         }
 
-        private void btnProducts_Click(object sender, RoutedEventArgs e)
+        private void btnCajas_Click(object sender, RoutedEventArgs e)
         {
             VistaVenta();
             //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
@@ -342,7 +363,11 @@ namespace Sistema_Mercadito
 
         private void btnCierreCaja_Click(object sender, RoutedEventArgs e)
         {
-            VistaCierreCajas();
+            //VistaCierreCajas();
+        }
+
+        private void btnCompraDolares_click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

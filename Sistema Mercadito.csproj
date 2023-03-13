@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Sistema_Mercadito.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>bolsa-de-dinero.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -109,6 +115,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\CompraDolaresPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Configuracion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +132,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MensajeVueltoCliente.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\RegistrarCompraDolares.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -162,6 +176,9 @@
     <Compile Include="Pages\CierreCajas.xaml.cs">
       <DependentUpon>CierreCajas.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\CompraDolaresPage.xaml.cs">
+      <DependentUpon>CompraDolaresPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Configuracion.xaml.cs">
       <DependentUpon>Configuracion.xaml</DependentUpon>
     </Compile>
@@ -173,6 +190,9 @@
     </Compile>
     <Compile Include="Pages\MensajeVueltoCliente.xaml.cs">
       <DependentUpon>MensajeVueltoCliente.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RegistrarCompraDolares.xaml.cs">
+      <DependentUpon>RegistrarCompraDolares.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\RegistrarVentas.xaml.cs">
       <DependentUpon>RegistrarVentas.xaml</DependentUpon>
@@ -260,6 +280,29 @@
       <Project>{e3a2830c-160b-45b8-915b-c9caddd0b311}</Project>
       <Name>ImprimirTiquetes</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\money-exchange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sale-tag.png" />
+    <Resource Include="Resources\sale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\configuration.png" />
+    <Resource Include="Resources\gear.png" />
+    <Resource Include="Resources\requirements.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gear2.png" />
+    <Resource Include="Resources\maintenance.png" />
+    <Resource Include="Resources\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bolsa-de-dinero.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
