@@ -32,17 +32,11 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void loaded(object sender, RoutedEventArgs e)
-        {
-            txtTipoCambio.Text = "0";
-            txtDolaresRecibidos.Text = "0";
-        }
-
         private void Border_PreviewKeyDown(object sender, KeyEventArgs e)
         {
         }
 
-        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
         }
 
@@ -51,16 +45,48 @@ namespace Sistema_Mercadito.Pages
             RealizaCompraDolares();
         }
 
-        private void btnActualizar_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
         }
 
         private void btnRegresar_Click(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        {
+        }
+
+        private void loaded(object sender, RoutedEventArgs e)
+        {
+            txtTipoCambio.Text = "0";
+            txtDolaresRecibidos.Text = "0";
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void PreviewKeyDownPagar(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                txtDolaresRecibidos.Focus();
+                txtDolaresRecibidos.SelectAll();
+                e.Handled = true;
+            }
+        }
+
+        private void SeleccionaTextoClick(object sender, MouseButtonEventArgs e)
+        {
+            ((TextBox)sender).SelectAll();
+        }
+
+        private void TipoCambioGotFocus(object sender, RoutedEventArgs e)
+        {
+            txtTipoCambio.SelectAll();
         }
 
         private void txtLostFocus(object sender, RoutedEventArgs e)
@@ -92,27 +118,6 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void SeleccionaTextoClick(object sender, MouseButtonEventArgs e)
-        {
-            ((TextBox)sender).SelectAll();
-        }
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
-        private void txtTextChangedDolaresR(object sender, TextChangedEventArgs e)
-        {
-            CalculaDolaresToColones();
-        }
-
-        private void TipoCambioGotFocus(object sender, RoutedEventArgs e)
-        {
-            txtTipoCambio.SelectAll();
-        }
-
         private void txtTextChanged(object sender, TextChangedEventArgs e)
         {
             if (((TextBox)sender).Text.Length > 0 && txtDolaresRecibidos.Text.Length > 0 && txtTipoCambio.Text.Length > 0)
@@ -121,7 +126,14 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
+        private void txtTextChangedDolaresR(object sender, TextChangedEventArgs e)
+        {
+            CalculaDolaresToColones();
+        }
+
         #endregion Eventos
+
+        #region Procedimientos
 
         private void CalculaDolaresToColones()
         {
@@ -152,6 +164,35 @@ namespace Sistema_Mercadito.Pages
                     MessageBox.Show(ex.ToString());
                 }
             }
+        }
+
+        private void ImprimirTipoCambio(string _dolaresRecibidos, string _tipoCambio, string _montoPagado)
+        {
+            #region Imprime tiquete
+
+            ImprimeFactura.StartPrint();
+
+            //DOLARES RECIBIDOS
+            ImprimeFactura.Println("Dolares");
+            ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + _dolaresRecibidos.Length), '.'));
+            ImprimeFactura.Print(_dolaresRecibidos);
+
+            //TIPO DE CAMBIO
+            ImprimeFactura.Println("Tipo de Cambio");
+            ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (14 + _tipoCambio.Length), '.'));
+            ImprimeFactura.Print(_tipoCambio);
+
+            //VUELTO A ENTREGAR
+            ImprimeFactura.PrintDashes();
+            string _vuelto = "Equivalen a: " + _montoPagado;
+            ImprimeFactura.PrintVuelto(_vuelto);
+            ImprimeFactura.PrintDashes();
+
+            //TERMINA LA IMPRESION
+            ImprimeFactura.PrintFooterBn();
+            ImprimeFactura.EndPrint();
+
+            #endregion Imprime tiquete
         }
 
         private void RealizaCompraDolares()
@@ -199,44 +240,9 @@ namespace Sistema_Mercadito.Pages
             worker.RunWorkerAsync();
         }
 
-        private void ImprimirTipoCambio(string _dolaresRecibidos, string _tipoCambio, string _montoPagado)
-        {
-            #region Imprime tiquete
+        #endregion Procedimientos
 
-            ImprimeFactura.StartPrint();
-
-            //DOLARES RECIBIDOS
-            ImprimeFactura.Println("Dolares");
-            ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + _dolaresRecibidos.Length), '.'));
-            ImprimeFactura.Print(_dolaresRecibidos);
-
-            //TIPO DE CAMBIO
-            ImprimeFactura.Println("Tipo de Cambio");
-            ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (14 + _tipoCambio.Length), '.'));
-            ImprimeFactura.Print(_tipoCambio);
-
-            //VUELTO A ENTREGAR
-            ImprimeFactura.PrintDashes();
-            string _vuelto = "Equivalen a: " + _montoPagado;
-            ImprimeFactura.PrintVuelto(_vuelto);
-            ImprimeFactura.PrintDashes();
-
-            //TERMINA LA IMPRESION
-            ImprimeFactura.PrintFooterBn();
-            ImprimeFactura.EndPrint();
-
-            #endregion Imprime tiquete
-        }
-
-        private void tataka(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Tab)
-            {
-                txtDolaresRecibidos.Focus();
-                txtDolaresRecibidos.SelectAll();
-                e.Handled = true;
-            }
-        }
+        #region Vistas
 
         private void VistaVentas()
         {
@@ -266,5 +272,7 @@ namespace Sistema_Mercadito.Pages
             //Controla los atajos
             vc.gridAtajos.Visibility = Visibility.Visible;
         }
+
+        #endregion Vistas
     }
 }

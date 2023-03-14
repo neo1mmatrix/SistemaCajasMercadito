@@ -23,40 +23,27 @@ namespace Sistema_Mercadito.Pages
 
         #region Eventos de Controles
 
-        private void txtMouseDobleClick(object sender, MouseButtonEventArgs e)
-        {
-            txtEfectivo.IsReadOnly = false;
-        }
-
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
             SharedResources.LimpiaVariablesVentas();
-            // Acceder a la ventana principal
-            Window mainWindow = Application.Current.MainWindow;
+            VistaVentas();
+        }
 
-            // Acceder a un elemento dentro de la ventana principal
-            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
-            VentasCajas vc = new VentasCajas();
-            fContainer.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Venta";
-            vc.txtColones.IsEnabled = true;
-            vc.txtDolares.IsEnabled = true;
-            vc.txtVenta.IsEnabled = true;
-            vc.txtSinpe.IsEnabled = true;
-            vc.txtTarjeta.IsEnabled = true;
-            vc.txtTipoCambio.IsEnabled = true;
-            vc._NuevaVenta = true;
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Visible;
-            vc.btnRegresar.Visibility = Visibility.Collapsed;
-            vc.btnEliminar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Visible;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Visible;
+        private void CargaDatosLoaded(object sender, RoutedEventArgs e)
+        {
+            Inicio();
+            btnAceptar.Focus();
+        }
+
+        private void ColonesGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
+        }
+
+        private void DoubleClickMontosOriginales(object sender, MouseButtonEventArgs e)
+        {
+            Inicio();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -99,12 +86,9 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void txtTextChanged(object sender, TextChangedEventArgs e)
+        private void txtMouseDobleClick(object sender, MouseButtonEventArgs e)
         {
-            if (((TextBox)sender).Text.Length > 0)
-            {
-                CalculaVuelto();
-            }
+            txtEfectivo.IsReadOnly = false;
         }
 
         //EVITA QUE CAPTURE EL ESPACIO EN EL CAMPO NUMERICO, EJEM: "2 4 555"
@@ -116,7 +100,36 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
+        private void txtTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (((TextBox)sender).Text.Length > 0)
+            {
+                CalculaVuelto();
+            }
+        }
+
         #endregion Eventos de Controles
+
+        #region Procedimientos
+
+        private void CalculaVuelto()
+        {
+            decimal _EfectivoTemporal = 0;
+            decimal _VueltoTemporal = 0;
+            try
+            {
+                if (txtEfectivo.Text.Length > 0 && _CargaDatos)
+                {
+                    _EfectivoTemporal = decimal.Parse(txtEfectivo.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
+                    _VueltoTemporal = _EfectivoTemporal - SharedResources._MontoPagar;
+                    txtVuelto.Text = _VueltoTemporal.ToString("N2");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
 
         private void Inicio()
         {
@@ -163,40 +176,40 @@ namespace Sistema_Mercadito.Pages
             SharedResources._Vuelto = 0;
         }
 
-        private void ColonesGotFocus(object sender, RoutedEventArgs e)
+        #endregion Procedimientos
+
+        #region Vistas
+
+        private void VistaVentas()
         {
-            TextBox textBox = (TextBox)sender;
-            textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            VentasCajas vc = new VentasCajas();
+            fContainer.Content = vc;
+            //Controla los campos de texto
+            vc.tbTitulo.Text = "Venta";
+            vc.txtColones.IsEnabled = true;
+            vc.txtDolares.IsEnabled = true;
+            vc.txtVenta.IsEnabled = true;
+            vc.txtSinpe.IsEnabled = true;
+            vc.txtTarjeta.IsEnabled = true;
+            vc.txtTipoCambio.IsEnabled = true;
+            vc._NuevaVenta = true;
+            // Controla los botones
+            vc.btnPagar.Visibility = Visibility.Visible;
+            vc.btnRegresar.Visibility = Visibility.Collapsed;
+            vc.btnEliminar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            vc.tbfechaAntigua.Visibility = Visibility.Visible;
+            vc.tbfecha.Visibility = Visibility.Visible;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Visible;
         }
 
-        private void CalculaVuelto()
-        {
-            decimal _EfectivoTemporal = 0;
-            decimal _VueltoTemporal = 0;
-            try
-            {
-                if (txtEfectivo.Text.Length > 0 && _CargaDatos)
-                {
-                    _EfectivoTemporal = decimal.Parse(txtEfectivo.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
-                    _VueltoTemporal = _EfectivoTemporal - SharedResources._MontoPagar;
-                    txtVuelto.Text = _VueltoTemporal.ToString("N2");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void DoubleClickMontosOriginales(object sender, MouseButtonEventArgs e)
-        {
-            Inicio();
-        }
-
-        private void CargaDatosLoaded(object sender, RoutedEventArgs e)
-        {
-            Inicio();
-            btnAceptar.Focus();
-        }
+        #endregion Vistas
     }
 }

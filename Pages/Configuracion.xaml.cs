@@ -1,5 +1,4 @@
 ﻿using Sistema_Mercadito.Capa_de_Datos;
-using System;
 using System.Drawing.Printing;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,6 +32,17 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
+        #region Eventos
+
+        private void btnActualizar_Click(object sender, RoutedEventArgs e)
+        {
+            ActualizarConfig();
+        }
+
+        private void btnCerrar_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
         private void btnGuardar_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (CompruebaCampos())
@@ -51,7 +61,7 @@ namespace Sistema_Mercadito.Pages
                 {
                     MessageBox.Show("Configuracion Guardado Correctamente");
                     objetoSql.ConsultaConfiguracion();
-                    NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+                    VistaAbrirCajas();
                 }
             }
             else
@@ -60,23 +70,7 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private bool CompruebaCampos()
-        {
-            bool compruebaCampos = true;
-            if (string.IsNullOrEmpty(txtEmail.Text.ToString()))
-                compruebaCampos = false;
-            if (string.IsNullOrEmpty(txtNombreEmpresa.ToString())) compruebaCampos = false;
-
-            if (string.IsNullOrEmpty(txtLongitudImpresion.ToString())) compruebaCampos = false;
-
-            if (string.IsNullOrEmpty(txtTamanoLetra.ToString())) compruebaCampos = false;
-
-            return compruebaCampos;
-        }
-
-        private void btnCerrar_Click(object sender, RoutedEventArgs e)
-        {
-        }
+        #endregion Eventos
 
         #region Lista de Impresoras Instaladas
 
@@ -91,26 +85,7 @@ namespace Sistema_Mercadito.Pages
 
         #endregion Lista de Impresoras Instaladas
 
-        private void btnActualizar_Click(object sender, RoutedEventArgs e)
-        {
-            ActualizarConfig();
-        }
-
-        private void CargarConfig()
-        {
-            //SharedResources._CfgId = lector.GetInt32(0);
-            //SharedResources._CfgPrinterName = lector.GetString(1);
-            //SharedResources._CfgPrinterLong = lector.GetInt32(2);
-            //SharedResources._CfgPrinterFontSize = lector.GetInt32(3);
-            //SharedResources._CfgNombreEmpresa = lector.GetString(4);
-            //SharedResources._CfgEmail = lector.GetString(5);
-
-            cbImpresoras.SelectedValue = SharedResources._CfgPrinterName;
-            txtEmail.Text = SharedResources._CfgEmail;
-            txtLongitudImpresion.Text = SharedResources._CfgPrinterLong.ToString();
-            txtNombreEmpresa.Text = SharedResources._CfgNombreEmpresa;
-            txtTamanoLetra.Text = SharedResources._CfgPrinterFontSize.ToString();
-        }
+        #region Procedimientos
 
         private void ActualizarConfig()
         {
@@ -129,10 +104,45 @@ namespace Sistema_Mercadito.Pages
             VistaVentas();
         }
 
+        private void CargarConfig()
+        {
+            cbImpresoras.SelectedValue = SharedResources._CfgPrinterName;
+            txtEmail.Text = SharedResources._CfgEmail;
+            txtLongitudImpresion.Text = SharedResources._CfgPrinterLong.ToString();
+            txtNombreEmpresa.Text = SharedResources._CfgNombreEmpresa;
+            txtTamanoLetra.Text = SharedResources._CfgPrinterFontSize.ToString();
+        }
+
+        private bool CompruebaCampos()
+        {
+            bool compruebaCampos = true;
+            if (string.IsNullOrEmpty(txtEmail.Text.ToString()))
+                compruebaCampos = false;
+            if (string.IsNullOrEmpty(txtNombreEmpresa.ToString())) compruebaCampos = false;
+
+            if (string.IsNullOrEmpty(txtLongitudImpresion.ToString())) compruebaCampos = false;
+
+            if (string.IsNullOrEmpty(txtTamanoLetra.ToString())) compruebaCampos = false;
+
+            return compruebaCampos;
+        }
+
+        #endregion Procedimientos
+
+        #region Vistas
+
+        private void VistaAbrirCajas()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            VentasCajas vc = new VentasCajas();
+            fContainer.Content = vc;
+        }
+
         private void VistaVentas()
         {
             Window mainWindow = Application.Current.MainWindow;
-
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
             VentasCajas vc = new VentasCajas();
@@ -157,5 +167,7 @@ namespace Sistema_Mercadito.Pages
             //Controla los atajos
             vc.gridAtajos.Visibility = Visibility.Visible;
         }
+
+        #endregion Vistas
     }
 }

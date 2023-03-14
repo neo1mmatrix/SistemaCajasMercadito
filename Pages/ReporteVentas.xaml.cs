@@ -22,50 +22,13 @@ namespace Sistema_Mercadito.Pages
             InitializeComponent();
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            ConsultaVentaDia();
-        }
-
-        private void btnColonClick(object sender, RoutedEventArgs e)
-        {
-            ConsultaVentaDia();
-        }
-
-        private void Consultar(object sender, RoutedEventArgs e)
-        {
-            int id = (int)((Button)sender).CommandParameter;
-            SharedResources._idVenta = id;
-            //NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
-            VentasCajas vc = new VentasCajas();
-            vc.Consulta();
-            FrameReporte.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Consulta de Venta";
-            vc.txtColones.IsEnabled = false;
-            vc.txtDolares.IsEnabled = false;
-            vc.txtVenta.IsEnabled = false;
-            vc.txtSinpe.IsEnabled = false;
-            vc.txtTarjeta.IsEnabled = false;
-            vc.txtTipoCambio.IsEnabled = false;
-            vc._NuevaVenta = false;
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Collapsed;
-            vc.btnRegresar.Visibility = Visibility.Visible;
-            vc.btnEliminar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Collapsed;
-            vc.tbfechaHora.Visibility = Visibility.Collapsed;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Collapsed;
-        }
+        #region Eventos
 
         private void Actualizar(object sender, RoutedEventArgs e)
         {
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
+
             VentasCajas vc = new VentasCajas();
             vc.Consulta();
             FrameReporte.Content = vc;
@@ -91,37 +54,69 @@ namespace Sistema_Mercadito.Pages
             vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
 
-        private void Eliminar(object sender, RoutedEventArgs e)
+        private void btnCerrarCaja_Click(object sender, RoutedEventArgs e)
+        {
+            objetoSql.SumaCierre();
+            objetoSql.CierreCaja();
+            objetoSql.ConsultaCaja();
+            Thread hilo = new Thread(new ThreadStart(EnviarCorreo));
+            hilo.Start();
+            MessageBox.Show("Cierre Correcto");
+            SharedResources.LimpiaVariables();
+            NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+        }
+
+        private void btnColonClick(object sender, RoutedEventArgs e)
+        {
+            ConsultaVentaDia();
+        }
+
+        private void Consultar(object sender, RoutedEventArgs e)
         {
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
+
             VentasCajas vc = new VentasCajas();
             vc.Consulta();
             FrameReporte.Content = vc;
             //Controla los campos de texto
-            vc.tbTitulo.Text = "Eliminar Venta";
-            vc.tbEliminarMotivo.Visibility = Visibility.Visible;
+            vc.tbTitulo.Text = "Consulta de Venta";
             vc.txtColones.IsEnabled = false;
             vc.txtDolares.IsEnabled = false;
             vc.txtVenta.IsEnabled = false;
             vc.txtSinpe.IsEnabled = false;
             vc.txtTarjeta.IsEnabled = false;
             vc.txtTipoCambio.IsEnabled = false;
-            vc.txtElimarMotivo.Visibility = Visibility.Visible;
             vc._NuevaVenta = false;
-            //Controla los botones
+            // Controla los botones
             vc.btnPagar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
             vc.btnRegresar.Visibility = Visibility.Visible;
-            vc.btnEliminar.Visibility = Visibility.Visible;
+            vc.btnEliminar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Collapsed;
             //Controla el campo de la fecha
             vc.tbfechaAntigua.Visibility = Visibility.Visible;
             vc.tbfecha.Visibility = Visibility.Collapsed;
             vc.tbfechaHora.Visibility = Visibility.Collapsed;
-            vc.Visibility = Visibility.Visible;
             //Controla los atajos
             vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
+
+        private void Eliminar(object sender, RoutedEventArgs e)
+        {
+            int id = (int)((Button)sender).CommandParameter;
+            SharedResources._idVenta = id;
+
+            VistaVentaActualizar();
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            ConsultaVentaDia();
+        }
+
+        #endregion Eventos
+
+        #region Procedimientos
 
         private void ConsultaVentaDia()
         {
@@ -145,41 +140,66 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void btnCerrarCaja_Click(object sender, RoutedEventArgs e)
+        #endregion Procedimientos
+
+        #region Enviar Correo
+
+        public void EnviarCorreo(string pEmailTo, string pAsunto, string pDetalles)
         {
-            objetoSql.SumaCierre();
-            objetoSql.CierreCaja();
-            objetoSql.ConsultaCaja();
-            Thread hilo = new Thread(new ThreadStart(EnviarCorreo));
-            hilo.Start();
-            MessageBox.Show("Cierre Correcto");
-            SharedResources.LimpiaVariables();
-            NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+            const string _emailPersonal = "esteban26mora01@gmail.com";
+            SmtpClient smtp = new SmtpClient
+            {
+                Port = 587,
+                Host = "smtp.gmail.com",
+                Credentials = new NetworkCredential(_emailPersonal, "phuebfaoyoxxehxg"),
+                EnableSsl = true
+            };
+
+            MailMessage correo = new MailMessage
+            {
+                From = new MailAddress(_emailPersonal),
+                To = { pEmailTo },
+                Subject = pAsunto,
+                Body = pDetalles,
+                IsBodyHtml = true,
+                Priority = MailPriority.Normal
+            };
+
+            try
+            {
+                smtp.Send(correo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message,
+                                "Error al enviar correo",
+                                MessageBoxButton.OK);
+            }
         }
 
-        public void VistaVenta()
+        private void DetallesCorreo(ref string pConsulta)
         {
-            VentasCajas vc = new VentasCajas();
-            FrameReporte.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Venta";
-            vc.txtColones.IsEnabled = true;
-            vc.txtDolares.IsEnabled = true;
-            vc.txtVenta.IsEnabled = true;
-            vc.txtSinpe.IsEnabled = true;
-            vc.txtTarjeta.IsEnabled = true;
-            vc.txtTipoCambio.IsEnabled = true;
-            vc._NuevaVenta = true;
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Visible;
-            vc.btnRegresar.Visibility = Visibility.Collapsed;
-            vc.btnEliminar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Visible;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Visible;
+            //CREA LA TABLA EN HTML
+            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
+
+            //ENCABEZADOS DE LA TABLA
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Venta</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Efectivo</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dolares</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Tarjeta</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Sinpe</th>";
+
+            //CIERRE DE LA TABLA
+            _tablaEncabezados += "</tr> </thead>";
+
+            string _consulta = "";
+            string _consultaRetiro = "";
+            pConsulta = _tablaEncabezados;
+
+            //Consulta
+            objetoSql.SEL_REPORTE_DETALLE_VENTAS(SharedResources._idCajaAbierta, ref _consulta);
+            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
         }
 
         private void EnviarCorreo()
@@ -295,62 +315,65 @@ namespace Sistema_Mercadito.Pages
             EnviarCorreo("dist.mercadito@gmail.com", "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
         }
 
-        private void DetallesCorreo(ref string pConsulta)
+        #endregion Enviar Correo
+
+        #region Vistas
+
+        public void VistaVenta()
         {
-            //CREA LA TABLA EN HTML
-            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
-
-            //ENCABEZADOS DE LA TABLA
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Venta</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Efectivo</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dolares</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Tarjeta</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Sinpe</th>";
-
-            //CIERRE DE LA TABLA
-            _tablaEncabezados += "</tr> </thead>";
-
-            string _consulta = "";
-            string _consultaRetiro = "";
-            pConsulta = _tablaEncabezados;
-
-            //Consulta
-            objetoSql.SEL_REPORTE_DETALLE_VENTAS(SharedResources._idCajaAbierta, ref _consulta);
-            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
+            VentasCajas vc = new VentasCajas();
+            FrameReporte.Content = vc;
+            //Controla los campos de texto
+            vc.tbTitulo.Text = "Venta";
+            vc.txtColones.IsEnabled = true;
+            vc.txtDolares.IsEnabled = true;
+            vc.txtVenta.IsEnabled = true;
+            vc.txtSinpe.IsEnabled = true;
+            vc.txtTarjeta.IsEnabled = true;
+            vc.txtTipoCambio.IsEnabled = true;
+            vc._NuevaVenta = true;
+            // Controla los botones
+            vc.btnPagar.Visibility = Visibility.Visible;
+            vc.btnRegresar.Visibility = Visibility.Collapsed;
+            vc.btnEliminar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            vc.tbfechaAntigua.Visibility = Visibility.Visible;
+            vc.tbfecha.Visibility = Visibility.Visible;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Visible;
         }
 
-        public void EnviarCorreo(string pEmailTo, string pAsunto, string pDetalles)
+        public void VistaVentaActualizar()
         {
-            const string _emailPersonal = "esteban26mora01@gmail.com";
-            SmtpClient smtp = new SmtpClient
-            {
-                Port = 587,
-                Host = "smtp.gmail.com",
-                Credentials = new NetworkCredential(_emailPersonal, "phuebfaoyoxxehxg"),
-                EnableSsl = true
-            };
-
-            MailMessage correo = new MailMessage
-            {
-                From = new MailAddress(_emailPersonal),
-                To = { pEmailTo },
-                Subject = pAsunto,
-                Body = pDetalles,
-                IsBodyHtml = true,
-                Priority = MailPriority.Normal
-            };
-
-            try
-            {
-                smtp.Send(correo);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message,
-                                "Error al enviar correo",
-                                MessageBoxButton.OK);
-            }
+            VentasCajas vc = new VentasCajas();
+            vc.Consulta();
+            FrameReporte.Content = vc;
+            //Controla los campos de texto
+            vc.tbTitulo.Text = "Eliminar Venta";
+            vc.tbEliminarMotivo.Visibility = Visibility.Visible;
+            vc.txtColones.IsEnabled = false;
+            vc.txtDolares.IsEnabled = false;
+            vc.txtVenta.IsEnabled = false;
+            vc.txtSinpe.IsEnabled = false;
+            vc.txtTarjeta.IsEnabled = false;
+            vc.txtTipoCambio.IsEnabled = false;
+            vc.txtElimarMotivo.Visibility = Visibility.Visible;
+            vc._NuevaVenta = false;
+            //Controla los botones
+            vc.btnPagar.Visibility = Visibility.Collapsed;
+            vc.btnActualizar.Visibility = Visibility.Collapsed;
+            vc.btnRegresar.Visibility = Visibility.Visible;
+            vc.btnEliminar.Visibility = Visibility.Visible;
+            //Controla el campo de la fecha
+            vc.tbfechaAntigua.Visibility = Visibility.Visible;
+            vc.tbfecha.Visibility = Visibility.Collapsed;
+            vc.tbfechaHora.Visibility = Visibility.Collapsed;
+            vc.Visibility = Visibility.Visible;
+            //Controla los atajos
+            vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
+
+        #endregion Vistas
     }
 }

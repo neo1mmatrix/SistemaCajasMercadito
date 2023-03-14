@@ -37,12 +37,12 @@ namespace Sistema_Mercadito.Pages
             /// ACTULIZAR TB CAJAS
             ///
 
-            if (objetoSql.SumaCierre() == "Continuar")
-            {
-                objetoSql.CierreCaja();
-                SharedResources.LimpiaVariables();
-                NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
-            }
+            //if (objetoSql.SumaCierre() == "Continuar")
+            //{
+            //    objetoSql.CierreCaja();
+            //    SharedResources.LimpiaVariables();
+            //    NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+            //}
 
             //Restar los Retiros
 

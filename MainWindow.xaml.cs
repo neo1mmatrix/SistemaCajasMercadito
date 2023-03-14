@@ -82,6 +82,7 @@ namespace Sistema_Mercadito
         // Start: Button Close | Restore | Minimize
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            System.Windows.Application.Current.Shutdown();
             Close();
         }
 
@@ -104,7 +105,7 @@ namespace Sistema_Mercadito
         {
             if (_CajaAbierta == false)
             {
-                fContainer.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+                VistaAperturaCajas();
             }
             else
             {
@@ -131,7 +132,7 @@ namespace Sistema_Mercadito
 
         private void btnHome_Click(object sender, RoutedEventArgs e)
         {
-            fContainer.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
+            //fContainer.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void btnHome_MouseEnter(object sender, MouseEventArgs e)
@@ -270,7 +271,7 @@ namespace Sistema_Mercadito
         {
             if (SharedResources._idCajaAbierta > 0)
             {
-                fContainer.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                VistaReporteVentas();
             }
         }
 
@@ -313,7 +314,7 @@ namespace Sistema_Mercadito
             }
             else
             {
-                fContainer.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+                VistaAperturaCajas();
             }
         }
 
@@ -335,9 +336,9 @@ namespace Sistema_Mercadito
 
         public void VistaVenta()
         {
-            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
             VentasCajas vc = new VentasCajas();
             fContainer.Content = vc;
+
             //Controla los campos de texto
             vc.tbTitulo.Text = "Venta";
             vc.txtColones.IsEnabled = true;
@@ -347,14 +348,17 @@ namespace Sistema_Mercadito
             vc.txtTarjeta.IsEnabled = true;
             vc.txtTipoCambio.IsEnabled = true;
             vc._NuevaVenta = true;
+
             // Controla los botones
             vc.btnPagar.Visibility = Visibility.Visible;
             vc.btnRegresar.Visibility = Visibility.Collapsed;
             vc.btnEliminar.Visibility = Visibility.Collapsed;
             vc.btnActualizar.Visibility = Visibility.Collapsed;
+
             //Controla el campo de la fecha
             vc.tbfechaAntigua.Visibility = Visibility.Visible;
             vc.tbfecha.Visibility = Visibility.Visible;
+
             //Controla los atajos
             vc.gridAtajos.Visibility = Visibility.Visible;
         }
@@ -375,6 +379,18 @@ namespace Sistema_Mercadito
         {
             Configuracion conf = new Configuracion(ref consulta);
             fContainer.Content = conf;
+        }
+
+        private void VistaAperturaCajas()
+        {
+            Dashboard apertura = new Dashboard();
+            fContainer.Content = apertura;
+        }
+
+        private void VistaReporteVentas()
+        {
+            ReporteVentas rv = new ReporteVentas();
+            fContainer.Content = rv;
         }
 
         #endregion VistasPages

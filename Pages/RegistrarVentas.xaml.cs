@@ -66,6 +66,18 @@ namespace Sistema_Mercadito.Pages
             { DayOfWeek.Saturday, "Sábado" }
         };
 
+        public VentasCajas()
+        {
+            InitializeComponent();
+            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
+            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
+            _mesActual = mesesEnEspanol[DateTime.Now.Month];
+            _diaSemana += " " + _mesActual;
+            FechayHora();
+            SharedResources.LimpiaVariablesVentas();
+            Inicio();
+        }
+
         #region Controles de Eventos
 
         //EVENTO KEYDOWN
@@ -89,6 +101,10 @@ namespace Sistema_Mercadito.Pages
                     PagoTarjeta();
                 }
             }
+        }
+
+        private void Border_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
         }
 
         private void btnActualizarClick(object sender, RoutedEventArgs e)
@@ -154,6 +170,19 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
+        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Key == Key.F5) && this.IsLoaded)
+            {
+                // Obtener acceso al control que tiene el evento KeyDown
+                TextBox miTextBox = this.txtVenta;
+
+                // Llamar al evento KeyDown
+                AtajoTeclado(txtVenta, e);
+                e.Handled = true;
+            }
+        }
+
         private void InitializedVariables(object sender, EventArgs e)
         {
         }
@@ -171,6 +200,16 @@ namespace Sistema_Mercadito.Pages
         {
             Regex regex = new Regex("[^0-9]");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void PreviewKeyDownPagar(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                txtVenta.Focus();
+                txtVenta.SelectAll();
+                e.Handled = true;
+            }
         }
 
         private void RegresarClick(object sender, RoutedEventArgs e)
@@ -258,76 +297,6 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Controles de Eventos
-
-        public VentasCajas()
-        {
-            InitializeComponent();
-            _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
-            _diaSemana += " " + DateTime.Now.Day.ToString() + " de ";
-            _mesActual = mesesEnEspanol[DateTime.Now.Month];
-            _diaSemana += " " + _mesActual;
-            FechayHora();
-            SharedResources.LimpiaVariablesVentas();
-            Inicio();
-        }
-
-        public void Consulta()
-        {
-            objetoSql.ConsultaVentaRealizada();
-            txtVenta.Text = Math.Truncate(SharedResources._Venta).ToString("N0");
-            txtColones.Text = Math.Truncate(SharedResources._Efectivo).ToString("N0");
-            txtDolares.Text = Math.Truncate(SharedResources._Dolares).ToString("N0");
-            txtSinpe.Text = Math.Truncate(SharedResources._Sinpe).ToString("N0");
-            txtTipoCambio.Text = Math.Truncate(SharedResources._TipoCambio).ToString("N0");
-            txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
-            tbVuelto.Content = Math.Truncate(SharedResources._Vuelto).ToString("N0");
-            tbfechaAntigua.Text = SharedResources._FechaFormateada.ToString();
-        }
-
-        private void FechayHora()
-        {
-            // Cree un DispatcherTimer con un intervalo de 1 segundo
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-
-            // Asigne un controlador de eventos para el evento Tick del DispatcherTimer
-            timer.Tick += Timer_Tick;
-
-            // Inicie el DispatcherTimer
-            timer.Start();
-
-            // Controlador de eventos para el evento Tick del DispatcherTimer
-            tbfecha.Visibility = Visibility.Visible;
-            tbfechaHora.Visibility = Visibility.Visible;
-        }
-
-        private void Inicio()
-        {
-            _ValoresCargados = false;
-            txtVenta.Text = "0";
-            txtColones.Text = "0";
-            txtDolares.Text = "0";
-            txtTipoCambio.Text = "0";
-            txtSinpe.Text = "0";
-            txtTarjeta.Text = "0";
-            _NuevaVenta = true;
-            _ValoresCargados = true;
-        }
-
-        private void LimpiarCampos()
-        {
-            SharedResources._idVenta = 0;
-            SharedResources._MontoPagar = 0;
-            SharedResources._Efectivo = 0;
-            SharedResources._Dolares = 0;
-            SharedResources._Sinpe = 0;
-            SharedResources._TipoCambio = 0;
-            SharedResources._Tarjeta = 0;
-            SharedResources._Vuelto = 0;
-            SharedResources._FechaFormateada = "";
-            SharedResources._MontoPagoDolares = 0;
-            SharedResources._Venta = 0;
-        }
 
         #region Pagos
 
@@ -534,72 +503,7 @@ namespace Sistema_Mercadito.Pages
 
         #endregion Pagos
 
-        private void SumaDinero()
-        {
-            try
-            {
-                _Venta = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Colones = decimal.Parse(txtColones.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Dolares = decimal.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Sinpe = decimal.Parse(txtSinpe.Text, System.Globalization.NumberStyles.AllowThousands);
-                _Tarjeta = decimal.Parse(txtTarjeta.Text, System.Globalization.NumberStyles.AllowThousands);
-                _TipoCambio = decimal.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands);
-
-                _Vuelto = 0;
-                _CompraDolares = _Dolares * _TipoCambio;
-                _MontoPagoDolares = _CompraDolares;
-                _Vuelto = (_Colones + _CompraDolares + _Sinpe + _Tarjeta) - _Venta;
-
-                if (_Vuelto < 0)
-                {
-                    tbVuelto.Foreground = new SolidColorBrush(Colors.Crimson);
-                    tbVuelto.Content = _Vuelto.ToString("N0");
-                }
-                else
-                {
-                    tbVuelto.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#ddc77a"));
-                    tbVuelto.Content = _Vuelto.ToString("N0");
-                }
-
-                if (int.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands) > 0 && int.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands) == 0)
-                {
-                    tbAdvertencia.Text = "El Tipo de Cambio del Dolar no Puede ser Cero";
-                    tbAdvertencia.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    tbAdvertencia.Visibility = Visibility.Collapsed;
-                }
-
-                if (_CompraDolares > 0)
-                {
-                    tbDolarToColones.Text = "Equivalen a";
-                    tbSumaDolarToColones.Text = "₡" + _CompraDolares.ToString("N0");
-                    tbDolarToColones.Visibility = Visibility.Visible;
-                    tbSumaDolarToColones.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    tbDolarToColones.Visibility = Visibility.Collapsed;
-                    tbSumaDolarToColones.Visibility = Visibility.Collapsed;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void VerificaMonto()
-        {
-            //
-        }
-
-        private void VistaVuelto()
-        {
-            MensajeVueltoCliente mvc = new MensajeVueltoCliente();
-            fContainer.Content = mvc;
-        }
+        #region Procedimientos
 
         private void AbirCaja()
         {
@@ -666,21 +570,135 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void Border_PreviewKeyDown(object sender, KeyEventArgs e)
+        public void Consulta()
         {
+            objetoSql.ConsultaVentaRealizada();
+            txtVenta.Text = Math.Truncate(SharedResources._Venta).ToString("N0");
+            txtColones.Text = Math.Truncate(SharedResources._Efectivo).ToString("N0");
+            txtDolares.Text = Math.Truncate(SharedResources._Dolares).ToString("N0");
+            txtSinpe.Text = Math.Truncate(SharedResources._Sinpe).ToString("N0");
+            txtTipoCambio.Text = Math.Truncate(SharedResources._TipoCambio).ToString("N0");
+            txtTarjeta.Text = Math.Truncate(SharedResources._Tarjeta).ToString("N0");
+            tbVuelto.Content = Math.Truncate(SharedResources._Vuelto).ToString("N0");
+            tbfechaAntigua.Text = SharedResources._FechaFormateada.ToString();
         }
 
-        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        private void FechayHora()
         {
-            if ((e.Key == Key.F5) && this.IsLoaded)
-            {
-                // Obtener acceso al control que tiene el evento KeyDown
-                TextBox miTextBox = this.txtVenta;
+            // Cree un DispatcherTimer con un intervalo de 1 segundo
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
 
-                // Llamar al evento KeyDown
-                AtajoTeclado(txtVenta, e);
-                e.Handled = true;
+            // Asigne un controlador de eventos para el evento Tick del DispatcherTimer
+            timer.Tick += Timer_Tick;
+
+            // Inicie el DispatcherTimer
+            timer.Start();
+
+            // Controlador de eventos para el evento Tick del DispatcherTimer
+            tbfecha.Visibility = Visibility.Visible;
+            tbfechaHora.Visibility = Visibility.Visible;
+        }
+
+        private void Inicio()
+        {
+            _ValoresCargados = false;
+            txtVenta.Text = "0";
+            txtColones.Text = "0";
+            txtDolares.Text = "0";
+            txtTipoCambio.Text = "0";
+            txtSinpe.Text = "0";
+            txtTarjeta.Text = "0";
+            _NuevaVenta = true;
+            _ValoresCargados = true;
+        }
+
+        private void LimpiarCampos()
+        {
+            SharedResources._idVenta = 0;
+            SharedResources._MontoPagar = 0;
+            SharedResources._Efectivo = 0;
+            SharedResources._Dolares = 0;
+            SharedResources._Sinpe = 0;
+            SharedResources._TipoCambio = 0;
+            SharedResources._Tarjeta = 0;
+            SharedResources._Vuelto = 0;
+            SharedResources._FechaFormateada = "";
+            SharedResources._MontoPagoDolares = 0;
+            SharedResources._Venta = 0;
+        }
+
+        private void SumaDinero()
+        {
+            try
+            {
+                _Venta = decimal.Parse(txtVenta.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Colones = decimal.Parse(txtColones.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Dolares = decimal.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Sinpe = decimal.Parse(txtSinpe.Text, System.Globalization.NumberStyles.AllowThousands);
+                _Tarjeta = decimal.Parse(txtTarjeta.Text, System.Globalization.NumberStyles.AllowThousands);
+                _TipoCambio = decimal.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands);
+
+                _Vuelto = 0;
+                _CompraDolares = _Dolares * _TipoCambio;
+                _MontoPagoDolares = _CompraDolares;
+                _Vuelto = (_Colones + _CompraDolares + _Sinpe + _Tarjeta) - _Venta;
+
+                if (_Vuelto < 0)
+                {
+                    tbVuelto.Foreground = new SolidColorBrush(Colors.Crimson);
+                    tbVuelto.Content = _Vuelto.ToString("N0");
+                }
+                else
+                {
+                    tbVuelto.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#ddc77a"));
+                    tbVuelto.Content = _Vuelto.ToString("N0");
+                }
+
+                if (int.Parse(txtDolares.Text, System.Globalization.NumberStyles.AllowThousands) > 0 && int.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands) == 0)
+                {
+                    tbAdvertencia.Text = "El Tipo de Cambio del Dolar no Puede ser Cero";
+                    tbAdvertencia.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    tbAdvertencia.Visibility = Visibility.Collapsed;
+                }
+
+                if (_CompraDolares > 0)
+                {
+                    tbDolarToColones.Text = "Equivalen a";
+                    tbSumaDolarToColones.Text = "₡" + _CompraDolares.ToString("N0");
+                    tbDolarToColones.Visibility = Visibility.Visible;
+                    tbSumaDolarToColones.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    tbDolarToColones.Visibility = Visibility.Collapsed;
+                    tbSumaDolarToColones.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
+
+        private void VerificaMonto()
+        {
+            //
+        }
+
+        #endregion Procedimientos
+
+        #region Vistas
+
+        private void VistaVuelto()
+        {
+            MensajeVueltoCliente mvc = new MensajeVueltoCliente();
+            fContainer.Content = mvc;
+        }
+
+        #endregion Vistas
     }
 }

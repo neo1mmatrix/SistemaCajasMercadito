@@ -26,135 +26,6 @@ namespace Sistema_Mercadito.Pages
             //CheckOpenCasher();
         }
 
-        // CARGA LOS CAMPOS  DE TEXTO
-        private void CargarValores()
-        {
-            txt20mil.Text = 0.ToString("N0");
-            txt10mil.Text = 0.ToString("N0");
-            txt5mil.Text = 0.ToString("N0");
-            txt2mil.Text = 0.ToString("N0");
-            txt1mil.Text = 0.ToString("N0");
-            txt500.Text = 0.ToString("N0");
-            txt100.Text = 0.ToString("N0");
-            txt50.Text = 0.ToString("N0");
-            txt25.Text = 0.ToString("N0");
-            txt10.Text = 0.ToString("N0");
-            txt5.Text = 0.ToString("N0");
-        }
-
-        private void GuardaCajaAbierta()
-        {
-            // isOpen Hace que el estado de la factura este abierta
-            bool registro = false;
-
-            int _billetes20Mil = 0;
-            int _billetes10Mil = 0;
-            int _billetes5Mil = 0;
-            int _billetes2Mil = 0;
-            int _billetes1Mil = 0;
-
-            int _monedas500 = 0;
-            int _monedas100 = 0;
-            int _monedas50 = 0;
-            int _monedas25 = 0;
-            int _monedas10 = 0;
-            int _monedas5 = 0;
-            DateTime _fecha = DateTime.Now;
-
-            int _montoInicio = 0;
-            try
-            {
-                _billetes20Mil = int.Parse(tb20mil.Text, NumberStyles.AllowThousands);
-                _billetes10Mil = int.Parse(tb10mil.Text, NumberStyles.AllowThousands);
-                _billetes5Mil = int.Parse(tb5mil.Text, NumberStyles.AllowThousands);
-                _billetes2Mil = int.Parse(tb2mil.Text, NumberStyles.AllowThousands);
-                _billetes1Mil = int.Parse(tb1mil.Text, NumberStyles.AllowThousands);
-
-                _monedas500 = int.Parse(tb500.Text, NumberStyles.AllowThousands);
-                _monedas100 = int.Parse(tb100.Text, NumberStyles.AllowThousands);
-                _monedas50 = int.Parse(tb50.Text, NumberStyles.AllowThousands);
-                _monedas25 = int.Parse(tb25.Text, NumberStyles.AllowThousands);
-                _monedas10 = int.Parse(tb10.Text, NumberStyles.AllowThousands);
-                _monedas5 = int.Parse(tb5.Text, NumberStyles.AllowThousands);
-
-                _montoInicio = int.Parse(tbTotal.Text, NumberStyles.AllowThousands);
-
-                if (_montoInicio > 0)
-                {
-                    registro = objetoSql.AperturaCaja(_montoInicio, _billetes20Mil, _billetes10Mil, _billetes5Mil, _billetes2Mil, _billetes1Mil,
-                        _monedas500, _monedas100, _monedas50, _monedas25, _monedas10, _monedas5);
-                }
-
-                if (registro)
-                {
-                    MessageBox.Show("Bienvenido");
-                    objetoSql.ConsultaCajaAbierta();
-
-                    NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void SumaMontos()
-        {
-            int billete20mil = 0;
-            int billete10mil = 0;
-            int billete5mil = 0;
-            int billete2mil = 0;
-            int billete1mil = 0;
-
-            int moneda500 = 0;
-            int moneda100 = 0;
-            int moneda50 = 0;
-            int moneda25 = 0;
-            int moneda10 = 0;
-            int moneda5 = 0;
-
-            int total = 0;
-
-            if (txt20mil.Text.Length > 0 &&
-                txt10mil.Text.Length > 0 &&
-                txt5mil.Text.Length > 0 &&
-                txt2mil.Text.Length > 0 &&
-                txt1mil.Text.Length > 0 &&
-                txt500.Text.Length > 0 &&
-                txt100.Text.Length > 0 &&
-                txt50.Text.Length > 0 &&
-                txt25.Text.Length > 0 &&
-                txt10.Text.Length > 0 &&
-                txt5.Text.Length > 0)
-            {
-                try
-                {
-                    billete20mil = int.Parse(tb20mil.Text, NumberStyles.AllowThousands);
-                    billete10mil = int.Parse(tb10mil.Text, NumberStyles.AllowThousands);
-                    billete5mil = int.Parse(tb5mil.Text, NumberStyles.AllowThousands);
-                    billete2mil = int.Parse(tb2mil.Text, NumberStyles.AllowThousands);
-                    billete1mil = int.Parse(tb1mil.Text, NumberStyles.AllowThousands);
-
-                    moneda500 = int.Parse(tb500.Text, NumberStyles.AllowThousands);
-                    moneda100 = int.Parse(tb100.Text, NumberStyles.AllowThousands);
-                    moneda50 = int.Parse(tb50.Text, NumberStyles.AllowThousands);
-                    moneda25 = int.Parse(tb25.Text, NumberStyles.AllowThousands);
-                    moneda10 = int.Parse(tb10.Text, NumberStyles.AllowThousands);
-                    moneda5 = int.Parse(tb5.Text, NumberStyles.AllowThousands);
-
-                    total = billete20mil + billete10mil + billete5mil + billete2mil + billete1mil;
-                    total += moneda500 + moneda100 + moneda50 + moneda25 + moneda10 + moneda5;
-
-                    tbTotal.Text = total.ToString("N0");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
-            }
-        }
-
         #region Controles de Eventos
 
         private void btnIniciar_Click(object sender, RoutedEventArgs e)
@@ -290,6 +161,24 @@ namespace Sistema_Mercadito.Pages
 
         #endregion Controles de Eventos
 
+        #region Procedimientos
+
+        // CARGA LOS CAMPOS  DE TEXTO
+        private void CargarValores()
+        {
+            txt20mil.Text = 0.ToString("N0");
+            txt10mil.Text = 0.ToString("N0");
+            txt5mil.Text = 0.ToString("N0");
+            txt2mil.Text = 0.ToString("N0");
+            txt1mil.Text = 0.ToString("N0");
+            txt500.Text = 0.ToString("N0");
+            txt100.Text = 0.ToString("N0");
+            txt50.Text = 0.ToString("N0");
+            txt25.Text = 0.ToString("N0");
+            txt10.Text = 0.ToString("N0");
+            txt5.Text = 0.ToString("N0");
+        }
+
         private void CheckOpenCasher()
         {
             objetoSql.ConsultaCajaAbierta();
@@ -298,14 +187,137 @@ namespace Sistema_Mercadito.Pages
                 try
                 {
                     objetoSql.ConsultaCajaAbierta();
-                    NavigationService navigationService = NavigationService.GetNavigationService(this);
-                    navigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
+                    VistaRegistrarVentas();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.ToString());
                 }
             }
+        }
+
+        private void GuardaCajaAbierta()
+        {
+            // isOpen Hace que el estado de la factura este abierta
+            bool registro = false;
+
+            int _billetes20Mil = 0;
+            int _billetes10Mil = 0;
+            int _billetes5Mil = 0;
+            int _billetes2Mil = 0;
+            int _billetes1Mil = 0;
+
+            int _monedas500 = 0;
+            int _monedas100 = 0;
+            int _monedas50 = 0;
+            int _monedas25 = 0;
+            int _monedas10 = 0;
+            int _monedas5 = 0;
+            DateTime _fecha = DateTime.Now;
+
+            int _montoInicio = 0;
+            try
+            {
+                _billetes20Mil = int.Parse(tb20mil.Text, NumberStyles.AllowThousands);
+                _billetes10Mil = int.Parse(tb10mil.Text, NumberStyles.AllowThousands);
+                _billetes5Mil = int.Parse(tb5mil.Text, NumberStyles.AllowThousands);
+                _billetes2Mil = int.Parse(tb2mil.Text, NumberStyles.AllowThousands);
+                _billetes1Mil = int.Parse(tb1mil.Text, NumberStyles.AllowThousands);
+
+                _monedas500 = int.Parse(tb500.Text, NumberStyles.AllowThousands);
+                _monedas100 = int.Parse(tb100.Text, NumberStyles.AllowThousands);
+                _monedas50 = int.Parse(tb50.Text, NumberStyles.AllowThousands);
+                _monedas25 = int.Parse(tb25.Text, NumberStyles.AllowThousands);
+                _monedas10 = int.Parse(tb10.Text, NumberStyles.AllowThousands);
+                _monedas5 = int.Parse(tb5.Text, NumberStyles.AllowThousands);
+
+                _montoInicio = int.Parse(tbTotal.Text, NumberStyles.AllowThousands);
+
+                if (_montoInicio > 0)
+                {
+                    registro = objetoSql.AperturaCaja(_montoInicio, _billetes20Mil, _billetes10Mil, _billetes5Mil, _billetes2Mil, _billetes1Mil,
+                        _monedas500, _monedas100, _monedas50, _monedas25, _monedas10, _monedas5);
+                }
+
+                if (registro)
+                {
+                    MessageBox.Show("Bienvenido");
+                    objetoSql.ConsultaCajaAbierta();
+
+                    VistaRegistrarVentas();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void SumaMontos()
+        {
+            int billete20mil = 0;
+            int billete10mil = 0;
+            int billete5mil = 0;
+            int billete2mil = 0;
+            int billete1mil = 0;
+
+            int moneda500 = 0;
+            int moneda100 = 0;
+            int moneda50 = 0;
+            int moneda25 = 0;
+            int moneda10 = 0;
+            int moneda5 = 0;
+
+            int total = 0;
+
+            if (txt20mil.Text.Length > 0 &&
+                txt10mil.Text.Length > 0 &&
+                txt5mil.Text.Length > 0 &&
+                txt2mil.Text.Length > 0 &&
+                txt1mil.Text.Length > 0 &&
+                txt500.Text.Length > 0 &&
+                txt100.Text.Length > 0 &&
+                txt50.Text.Length > 0 &&
+                txt25.Text.Length > 0 &&
+                txt10.Text.Length > 0 &&
+                txt5.Text.Length > 0)
+            {
+                try
+                {
+                    billete20mil = int.Parse(tb20mil.Text, NumberStyles.AllowThousands);
+                    billete10mil = int.Parse(tb10mil.Text, NumberStyles.AllowThousands);
+                    billete5mil = int.Parse(tb5mil.Text, NumberStyles.AllowThousands);
+                    billete2mil = int.Parse(tb2mil.Text, NumberStyles.AllowThousands);
+                    billete1mil = int.Parse(tb1mil.Text, NumberStyles.AllowThousands);
+
+                    moneda500 = int.Parse(tb500.Text, NumberStyles.AllowThousands);
+                    moneda100 = int.Parse(tb100.Text, NumberStyles.AllowThousands);
+                    moneda50 = int.Parse(tb50.Text, NumberStyles.AllowThousands);
+                    moneda25 = int.Parse(tb25.Text, NumberStyles.AllowThousands);
+                    moneda10 = int.Parse(tb10.Text, NumberStyles.AllowThousands);
+                    moneda5 = int.Parse(tb5.Text, NumberStyles.AllowThousands);
+
+                    total = billete20mil + billete10mil + billete5mil + billete2mil + billete1mil;
+                    total += moneda500 + moneda100 + moneda50 + moneda25 + moneda10 + moneda5;
+
+                    tbTotal.Text = total.ToString("N0");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+        }
+
+        #endregion Procedimientos
+
+        private void VistaRegistrarVentas()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            VentasCajas vc = new VentasCajas();
+            fContainer.Content = vc;
         }
     }
 }

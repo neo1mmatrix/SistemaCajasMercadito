@@ -160,7 +160,7 @@
                 Click="btnComprar_Click"
                 Content="Comprar Dólares"
                 FontWeight="Bold"
-                PreviewKeyDown="tataka"
+                PreviewKeyDown="PreviewKeyDownPagar"
                 Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="7" />
 

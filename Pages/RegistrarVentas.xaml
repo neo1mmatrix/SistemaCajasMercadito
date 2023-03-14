@@ -244,6 +244,7 @@
                 Click="btnPagarClick"
                 Content="Pagar"
                 FontWeight="Bold"
+                PreviewKeyDown="PreviewKeyDownPagar"
                 Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="7" />
 
