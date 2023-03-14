@@ -88,6 +88,7 @@
                                 <Border Style="{StaticResource IndicatorStyle}" />
 
                                 <!--  Icon  -->
+
                                 <Path
                                     Width="{Binding IconWidth, ElementName=this, FallbackValue=20, TargetNullValue=20}"
                                     Margin="{Binding IconMargin, FallbackValue='0,0,0,0', TargetNullValue='20,0,0,0'}"

@@ -1,15 +1,11 @@
 ﻿using Sistema_Mercadito.Pages;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Runtime.Remoting;
-using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Media3D;
+using System.Windows.Controls.Primitives;
 
 namespace Sistema_Mercadito.Capa_de_Datos
 {
@@ -46,27 +42,46 @@ namespace Sistema_Mercadito.Capa_de_Datos
         //Actualiza el registro de una venta seleccionada
         public void ActualizarVenta()
         {
-            SqlCommand com = new SqlCommand
+            try
             {
-                Connection = AbrirConexion(),
-                CommandText = "ActualizarVenta",
-                CommandType = CommandType.StoredProcedure
-            };
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "ActualizarVenta",
+                    CommandType = CommandType.StoredProcedure
+                };
 
-            com.Parameters.AddWithValue("@IdVenta", SharedResources._idVenta);
-            com.Parameters.AddWithValue("@Venta", SharedResources._Venta);
-            com.Parameters.AddWithValue("@MontoCambio", SharedResources._Vuelto);
-            com.Parameters.AddWithValue("@MontoColones", SharedResources._Efectivo);
-            com.Parameters.AddWithValue("@MontoDolares", SharedResources._Dolares);
-            com.Parameters.AddWithValue("@MontoSinpe", SharedResources._Sinpe);
-            com.Parameters.AddWithValue("@MontoTarjeta", SharedResources._Tarjeta);
-            com.Parameters.AddWithValue("@TipoCambio", SharedResources._TipoCambio);
-            com.Parameters.AddWithValue("@MontoPagoDolares", SharedResources._MontoPagoDolares);
-            com.ExecuteNonQuery();
-            com.Parameters.Clear();
+                com.Parameters.AddWithValue("@IdVenta", SharedResources._idVenta);
+                com.Parameters.AddWithValue("@Venta", SharedResources._Venta);
+                com.Parameters.AddWithValue("@MontoCambio", SharedResources._Vuelto);
+                com.Parameters.AddWithValue("@MontoColones", SharedResources._Efectivo);
+                com.Parameters.AddWithValue("@MontoDolares", SharedResources._Dolares);
+                com.Parameters.AddWithValue("@MontoSinpe", SharedResources._Sinpe);
+                com.Parameters.AddWithValue("@MontoTarjeta", SharedResources._Tarjeta);
+                com.Parameters.AddWithValue("@TipoCambio", SharedResources._TipoCambio);
+                com.Parameters.AddWithValue("@MontoPagoDolares", SharedResources._MontoPagoDolares);
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
 
-            SharedResources._MontoSaldoCajas = SharedResources._Efectivo - SharedResources._MontoPagoDolares;
-            CerrarConexion();
+                SharedResources._MontoSaldoCajas = SharedResources._Efectivo - SharedResources._MontoPagoDolares;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                CerrarConexion();
+            }
         }
 
         public void ConsultaVentaRealizada()
@@ -126,69 +141,120 @@ namespace Sistema_Mercadito.Capa_de_Datos
 
         public void ConsultaVentas(ref DataTable dtVentas)
         {
-            AbrirConexion();
-            SqlDataAdapter da = new SqlDataAdapter("sp_consultaventasreporte", AbrirConexion());
-            da.SelectCommand.CommandType = CommandType.StoredProcedure;
-            da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
-            DataSet ds = new DataSet();
-            ds.Clear();
-            da.Fill(ds);
+            try
+            {
+                AbrirConexion();
+                SqlDataAdapter da = new SqlDataAdapter("sp_consultaventasreporte", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
 
-            dtVentas = new DataTable();
-            da.Fill(dtVentas);
-
-            //GridDatos.ItemsSource = dt.DefaultView;
-            CerrarConexion();
+                dtVentas = new DataTable();
+                da.Fill(dtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
         }
 
         public void EliminarVenta(string _Motivo)
         {
-            SqlCommand com = new SqlCommand
+            try
             {
-                Connection = AbrirConexion(),
-                CommandText = "EliminarVenta",
-                CommandType = CommandType.StoredProcedure
-            };
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "EliminarVenta",
+                    CommandType = CommandType.StoredProcedure
+                };
 
-            com.Parameters.AddWithValue("@idVenta", SharedResources._idVenta);
-            com.Parameters.AddWithValue("@Motivo", _Motivo);
+                com.Parameters.AddWithValue("@idVenta", SharedResources._idVenta);
+                com.Parameters.AddWithValue("@Motivo", _Motivo);
 
-            com.ExecuteNonQuery();
-            com.Parameters.Clear();
-            CerrarConexion();
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
         }
 
         public void RegistraVenta(int idcaja,
-                                                              decimal venta,
+                              decimal venta,
                               decimal montoCambio,
                               decimal montoColones,
                               decimal montoDolares,
                               decimal montoSinpe,
                               decimal montoTarjeta,
                               float tipoCambio,
-                              decimal montoPagoDolares
-          )
+                              decimal montoPagoDolares)
         {
-            SqlCommand com = new SqlCommand()
+            try
             {
-                Connection = AbrirConexion(),
-                CommandText = "SP_I_VENTA",
-                CommandType = System.Data.CommandType.StoredProcedure
-            };
+                SqlCommand com = new SqlCommand()
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "SP_I_VENTA",
+                    CommandType = System.Data.CommandType.StoredProcedure
+                };
 
-            com.Parameters.AddWithValue("@idCaja", idcaja);
-            com.Parameters.AddWithValue("@Venta", venta);
-            com.Parameters.AddWithValue("@MontoCambio", montoCambio);
-            com.Parameters.AddWithValue("@MontoColones", montoColones);
-            com.Parameters.AddWithValue("@MontoDolares", montoDolares);
-            com.Parameters.AddWithValue("@MontoSinpe", montoSinpe);
-            com.Parameters.AddWithValue("@MontoTarjeta", montoTarjeta);
-            com.Parameters.AddWithValue("@TipoCambio", tipoCambio);
-            com.Parameters.AddWithValue("@MontoPagoDolares", montoPagoDolares);
+                com.Parameters.AddWithValue("@idCaja", idcaja);
+                com.Parameters.AddWithValue("@Venta", venta);
+                com.Parameters.AddWithValue("@MontoCambio", montoCambio);
+                com.Parameters.AddWithValue("@MontoColones", montoColones);
+                com.Parameters.AddWithValue("@MontoDolares", montoDolares);
+                com.Parameters.AddWithValue("@MontoSinpe", montoSinpe);
+                com.Parameters.AddWithValue("@MontoTarjeta", montoTarjeta);
+                com.Parameters.AddWithValue("@TipoCambio", tipoCambio);
+                com.Parameters.AddWithValue("@MontoPagoDolares", montoPagoDolares);
 
-            com.ExecuteNonQuery();
-            com.Parameters.Clear();
-            CerrarConexion();
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
         }
 
         #endregion RegistroVentas
@@ -263,25 +329,43 @@ namespace Sistema_Mercadito.Capa_de_Datos
 
         public void CierreCaja()
         {
-            SqlCommand com = new SqlCommand
+            try
             {
-                Connection = AbrirConexion(),
-                CommandText = "SP_Cierre_Caja",
-                CommandType = CommandType.StoredProcedure
-            };
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "SP_Cierre_Caja",
+                    CommandType = CommandType.StoredProcedure
+                };
 
-            com.Parameters.AddWithValue("@Id", SharedResources._idCajaAbierta);
-            com.Parameters.AddWithValue("@Venta", SharedResources._Venta);
-            com.Parameters.AddWithValue("@MontoColones", SharedResources._Efectivo);
-            com.Parameters.AddWithValue("@MontoDolares", SharedResources._Dolares);
-            com.Parameters.AddWithValue("@MontoSinpe", SharedResources._Sinpe);
-            com.Parameters.AddWithValue("@MontoTarjeta", SharedResources._Tarjeta);
-            com.Parameters.AddWithValue("@MontoPagoDolares", SharedResources._MontoPagoDolares);
-            com.Parameters.AddWithValue("@MontoSaldoCajas", SharedResources._MontoSaldoCajas);
-            com.ExecuteNonQuery();
-            com.Parameters.Clear();
-
-            CerrarConexion();
+                com.Parameters.AddWithValue("@Id", SharedResources._idCajaAbierta);
+                com.Parameters.AddWithValue("@Venta", SharedResources._Venta);
+                com.Parameters.AddWithValue("@MontoColones", SharedResources._Efectivo);
+                com.Parameters.AddWithValue("@MontoDolares", SharedResources._Dolares);
+                com.Parameters.AddWithValue("@MontoSinpe", SharedResources._Sinpe);
+                com.Parameters.AddWithValue("@MontoTarjeta", SharedResources._Tarjeta);
+                com.Parameters.AddWithValue("@MontoPagoDolares", SharedResources._MontoPagoDolares);
+                com.Parameters.AddWithValue("@MontoSaldoCajas", SharedResources._MontoSaldoCajas);
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                CerrarConexion();
+            }
         }
 
         public string SumaCierre()
@@ -658,6 +742,49 @@ namespace Sistema_Mercadito.Capa_de_Datos
             return resultado;
         }
 
+        public void ActualizarConfig(int _printerLong,
+                                     int _printerFontSize,
+                                     string _printerName,
+                                     string _empresaNombre,
+                                     string _email)
+        {
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "SP_Actualizar_Config",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                com.Parameters.AddWithValue("@id", SharedResources._CfgId);
+                com.Parameters.AddWithValue("@printerLong", _printerLong);
+                com.Parameters.AddWithValue("@printerFontSize", _printerFontSize);
+                com.Parameters.AddWithValue("@printerName", _printerName);
+                com.Parameters.AddWithValue("@EmpresaNombre", _empresaNombre);
+                com.Parameters.AddWithValue("@Email", _email);
+
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+        }
+
         public void ConsultaConfiguracion()
         {
             // Crear un objeto SqlDataReader para leer los resultados de la consulta
@@ -707,5 +834,52 @@ namespace Sistema_Mercadito.Capa_de_Datos
         }
 
         #endregion Configuracion
+
+        #region Compra Dolares
+
+        public Boolean Ins_Compra_Dolares(float _tipoCambio,
+                                     int _cantidadDolares,
+                                     decimal _totalPagado)
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "[SP_Compra_Dolares]",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                //Registra los datos de la compra de dolares
+                com.Parameters.AddWithValue("@IdCajaRegist", SharedResources._idCajaAbierta);
+                com.Parameters.AddWithValue("@TipoCambio", _tipoCambio);
+                com.Parameters.AddWithValue("@CantidadDolares", _cantidadDolares);
+                com.Parameters.AddWithValue("@TotalPagado", _totalPagado);
+
+                //Ejectura el procedimiento almacenado
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+
+                resultado = true;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            return resultado;
+        }
+
+        #endregion Compra Dolares
     }
 }

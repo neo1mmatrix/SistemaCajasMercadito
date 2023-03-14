@@ -376,7 +376,7 @@ namespace Sistema_Mercadito.Pages
                     Thread hilo = new Thread(new ThreadStart(AbirCaja));
                     // LimpiarCampos();
                     hilo.Start();
-                    AbirCaja();
+                    //AbirCaja();
                     //Inicio();
                 }
             }

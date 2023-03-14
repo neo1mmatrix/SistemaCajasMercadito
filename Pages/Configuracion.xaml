@@ -147,6 +147,15 @@
             Click="btnGuardar_Click"
             Content="Guardar" />
             <Button
+            x:Name="btnActualizar"
+            Grid.Row="15"
+            Grid.Column="6"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Click="btnActualizar_Click"
+            Visibility="Collapsed"
+            Content="Actualizar" />
+            <Button
             x:Name="btnCerrar"
             Grid.Row="15"
             Grid.Column="4"

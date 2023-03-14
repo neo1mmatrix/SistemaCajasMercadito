@@ -24,6 +24,13 @@
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
     <Style x:Key="ButtonStyleGlobal" TargetType="{x:Type Button}">
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="#2CEAA3" />
+                <Setter Property="Foreground" Value="Navy" />
+                <Setter Property="FontSize" Value="20" />
+            </Trigger>
+        </Style.Triggers>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}" />
         <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}" />

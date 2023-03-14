@@ -84,6 +84,7 @@
                             <ctls:MenuItem
                                 VerticalAlignment="Center"
                                 GroupName="MenuItem"
+
                                 Icon="{DynamicResource dashboard}"
                                 IconWidth="16"
                                 IndicatorBrush="{DynamicResource PrimaryBlueColor}"
@@ -162,7 +163,8 @@
                             x:Name="btnSetting"
                             MouseEnter="btnSetting_MouseEnter"
                             MouseLeave="btnSetting_MouseLeave"
-                            Style="{DynamicResource PopupButtonStyle}">
+                            Style="{DynamicResource PopupButtonStyle}" Click="btnSettings_Click">
+
                             <Image Height="30" Source="/Resources/maintenance.png" />
                         </Button>
                     </StackPanel>
