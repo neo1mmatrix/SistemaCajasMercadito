@@ -1,9 +1,6 @@
 ﻿using Sistema_Mercadito.Capa_de_Datos;
-using Sistema_Mercadito.dbSistemaMercaditoDataSet1TableAdapters;
 using Sistema_Mercadito.Pages;
 using System;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -21,6 +18,7 @@ namespace Sistema_Mercadito
     public partial class MainWindow : Window
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
+        private bool _CajaAbierta = false;
         private int _registroConfiguracion = 0;
 
         public MainWindow()
@@ -44,11 +42,8 @@ namespace Sistema_Mercadito
                 CultureInfo.CurrentCulture = new CultureInfo("en-US");
                 VerificaCarpetaLogs();
                 checkDatabaseFirstConfig();
-                // Application.Run(...);
             }
         }
-
-        private bool _CajaAbierta = false;
 
         #region Eventos
 
@@ -57,7 +52,88 @@ namespace Sistema_Mercadito
             Tg_Btn.IsChecked = false;
         }
 
-        // Start: MenuLeft PopupButton //
+        private void btnCajas_Click(object sender, RoutedEventArgs e)
+        {
+            VistaVenta();
+        }
+
+        private void btnCajas_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (Tg_Btn.IsChecked == false)
+            {
+                Popup.PlacementTarget = btnCajas;
+                Popup.Placement = PlacementMode.Right;
+                Popup.IsOpen = true;
+                Header.PopupText.Text = "Ventas";
+            }
+        }
+
+        private void btnCajas_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Popup.Visibility = Visibility.Collapsed;
+            Popup.IsOpen = false;
+        }
+
+        private void btnCierreCaja_Click(object sender, RoutedEventArgs e)
+        {
+            //VistaCierreCajas();
+        }
+
+        // Start: Button Close | Restore | Minimize
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void btnCompraDolares_click(object sender, RoutedEventArgs e)
+        {
+            VistaCompraDolares();
+        }
+
+        private void btnCompraDolares_MouseEnter(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void btnCompraDolares_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Popup.Visibility = Visibility.Collapsed;
+            Popup.IsOpen = false;
+        }
+
+        private void btnDashboard_Click(object sender, RoutedEventArgs e)
+        {
+            if (_CajaAbierta == false)
+            {
+                fContainer.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+            }
+            else
+            {
+                VistaVenta();
+            }
+        }
+
+        private void btnDashboard_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (Tg_Btn.IsChecked == false)
+            {
+                Popup.PlacementTarget = btnDashboard;
+                Popup.Placement = PlacementMode.Right;
+                Popup.IsOpen = true;
+                Header.PopupText.Text = "Cajas";
+            }
+        }
+
+        private void btnDashboard_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Popup.Visibility = Visibility.Collapsed;
+            Popup.IsOpen = false;
+        }
+
+        private void btnHome_Click(object sender, RoutedEventArgs e)
+        {
+            fContainer.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
+        }
+
         private void btnHome_MouseEnter(object sender, MouseEventArgs e)
         {
             if (Tg_Btn.IsChecked == false)
@@ -75,32 +151,9 @@ namespace Sistema_Mercadito
             Popup.IsOpen = false;
         }
 
-        private void btnDashboard_MouseLeave(object sender, MouseEventArgs e)
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
         {
-            Popup.Visibility = Visibility.Collapsed;
-            Popup.IsOpen = false;
-        }
-
-        private void btnCajas_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (Tg_Btn.IsChecked == false)
-            {
-                Popup.PlacementTarget = btnCajas;
-                Popup.Placement = PlacementMode.Right;
-                Popup.IsOpen = true;
-                Header.PopupText.Text = "Ventas";
-            }
-        }
-
-        private void btnProductStock_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (Tg_Btn.IsChecked == false)
-            {
-                Popup.PlacementTarget = btnProductStock;
-                Popup.Placement = PlacementMode.Right;
-                Popup.IsOpen = true;
-                Header.PopupText.Text = "Product Stock";
-            }
+            WindowState = WindowState.Minimized;
         }
 
         private void btnOrderList_MouseEnter(object sender, MouseEventArgs e)
@@ -114,29 +167,21 @@ namespace Sistema_Mercadito
             }
         }
 
-        private void btnCompraDolares_MouseLeave(object sender, MouseEventArgs e)
+        private void btnOrderList_MouseLeave(object sender, MouseEventArgs e)
         {
             Popup.Visibility = Visibility.Collapsed;
             Popup.IsOpen = false;
         }
 
-        private void btnSecurity_MouseLeave(object sender, MouseEventArgs e)
+        private void btnProductStock_MouseEnter(object sender, MouseEventArgs e)
         {
-            Popup.Visibility = Visibility.Collapsed;
-            Popup.IsOpen = false;
-        }
-
-        // End: MenuLeft PopupButton //
-        // End: Button Close | Restore | Minimize
-        private void btnCompraDolares_MouseEnter(object sender, MouseEventArgs e)
-        {
-            //if (Tg_Btn.IsChecked == false)
-            //{
-            //    Popup.PlacementTarget = btnPointOfSale;
-            //    Popup.Placement = PlacementMode.Right;
-            //    Popup.IsOpen = true;
-            //    Header.PopupText.Text = "Poin Of Sale";
-            //}
+            if (Tg_Btn.IsChecked == false)
+            {
+                Popup.PlacementTarget = btnProductStock;
+                Popup.Placement = PlacementMode.Right;
+                Popup.IsOpen = true;
+                Header.PopupText.Text = "Product Stock";
+            }
         }
 
         private void btnProductStock_MouseLeave(object sender, MouseEventArgs e)
@@ -145,10 +190,29 @@ namespace Sistema_Mercadito
             Popup.IsOpen = false;
         }
 
-        private void btnCajas_MouseLeave(object sender, MouseEventArgs e)
+        private void btnReporte_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (Tg_Btn.IsChecked == false)
+            {
+                Popup.PlacementTarget = btnReporte;
+                Popup.Placement = PlacementMode.Right;
+                Popup.IsOpen = true;
+                Header.PopupText.Text = "Billing";
+            }
+        }
+
+        private void btnReporte_MouseLeave(object sender, MouseEventArgs e)
         {
             Popup.Visibility = Visibility.Collapsed;
             Popup.IsOpen = false;
+        }
+
+        private void btnRestore_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+                WindowState = WindowState.Maximized;
+            else
+                WindowState = WindowState.Normal;
         }
 
         private void btnSecurity_MouseEnter(object sender, MouseEventArgs e)
@@ -162,7 +226,7 @@ namespace Sistema_Mercadito
             }
         }
 
-        private void btnReporte_MouseLeave(object sender, MouseEventArgs e)
+        private void btnSecurity_MouseLeave(object sender, MouseEventArgs e)
         {
             Popup.Visibility = Visibility.Collapsed;
             Popup.IsOpen = false;
@@ -185,14 +249,21 @@ namespace Sistema_Mercadito
             Popup.IsOpen = false;
         }
 
-        private void btnCompraDolares_click(object sender, RoutedEventArgs e)
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            VistaCompraDolares();
-        }
+            if (_registroConfiguracion == 1)
+            {
+                //Existe una configuracion, se cargan los datos y se procede con actulizar datos
+                //consulta del registro
 
-        private void btnCierreCaja_Click(object sender, RoutedEventArgs e)
-        {
-            //VistaCierreCajas();
+                //boton de actualizar
+                VistaConfig("Actualizar");
+            }
+            else
+            {
+                //Abre la ventana con las opciones de guardar la configuracion
+                VistaConfig("Crear");
+            }
         }
 
         private void ClickReporte(object sender, RoutedEventArgs e)
@@ -200,71 +271,6 @@ namespace Sistema_Mercadito
             if (SharedResources._idCajaAbierta > 0)
             {
                 fContainer.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
-            }
-        }
-
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void btnOrderList_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Popup.Visibility = Visibility.Collapsed;
-            Popup.IsOpen = false;
-        }
-
-        private void btnDashboard_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (Tg_Btn.IsChecked == false)
-            {
-                Popup.PlacementTarget = btnDashboard;
-                Popup.Placement = PlacementMode.Right;
-                Popup.IsOpen = true;
-                Header.PopupText.Text = "Cajas";
-            }
-        }
-
-        // Start: Button Close | Restore | Minimize
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void btnReporte_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (Tg_Btn.IsChecked == false)
-            {
-                Popup.PlacementTarget = btnReporte;
-                Popup.Placement = PlacementMode.Right;
-                Popup.IsOpen = true;
-                Header.PopupText.Text = "Billing";
-            }
-        }
-
-        private void btnRestore_Click(object sender, RoutedEventArgs e)
-        {
-            if (WindowState == WindowState.Normal)
-                WindowState = WindowState.Maximized;
-            else
-                WindowState = WindowState.Normal;
-        }
-
-        private void btnHome_Click(object sender, RoutedEventArgs e)
-        {
-            fContainer.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
-        }
-
-        private void btnDashboard_Click(object sender, RoutedEventArgs e)
-        {
-            if (_CajaAbierta == false)
-            {
-                fContainer.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
-            }
-            else
-            {
-                VistaVenta();
-                // fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
             }
         }
 
@@ -276,22 +282,13 @@ namespace Sistema_Mercadito
             }
         }
 
-        private void btnCajas_Click(object sender, RoutedEventArgs e)
-        {
-            VistaVenta();
-            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
-        }
-
         #endregion Eventos
 
         #region Funciones
 
         private void checkDatabaseFirstConfig()
         {
-            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["SistemaMercadito"].ConnectionString + ";Password=Est26r5");
-            conn.Open();
-            SqlCommand comm = new SqlCommand("SELECT COUNT(*) FROM TbConfig", conn);
-            _registroConfiguracion = (Int32)comm.ExecuteScalar();
+            objetoSql.ConsultaSumaConfig(ref _registroConfiguracion);
 
             if (_registroConfiguracion == 0)
             {
@@ -302,8 +299,6 @@ namespace Sistema_Mercadito
                 objetoSql.ConsultaConfiguracion();
                 checkOpenCasher();
             }
-
-            conn.Close();
         }
 
         private void checkOpenCasher()
@@ -313,7 +308,6 @@ namespace Sistema_Mercadito
             if (SharedResources._idCajaAbierta > 0)
             {
                 _CajaAbierta = true;
-                //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
                 VistaVenta();
                 btnDashboard.Visibility = Visibility.Hidden;
             }
@@ -338,12 +332,6 @@ namespace Sistema_Mercadito
         #endregion Funciones
 
         #region VistasPages
-
-        private void VistaCompraDolares()
-        {
-            RegistrarCompraDolares cd = new RegistrarCompraDolares();
-            fContainer.Content = cd;
-        }
 
         public void VistaVenta()
         {
@@ -377,6 +365,12 @@ namespace Sistema_Mercadito
             fContainer.Content = cc;
         }
 
+        private void VistaCompraDolares()
+        {
+            RegistrarCompraDolares cd = new RegistrarCompraDolares();
+            fContainer.Content = cd;
+        }
+
         private void VistaConfig(string consulta)
         {
             Configuracion conf = new Configuracion(ref consulta);
@@ -384,22 +378,5 @@ namespace Sistema_Mercadito
         }
 
         #endregion VistasPages
-
-        private void btnSettings_Click(object sender, RoutedEventArgs e)
-        {
-            if (_registroConfiguracion == 1)
-            {
-                //Existe una configuracion, se cargan los datos y se procede con actulizar datos
-                //consulta del registro
-
-                //boton de actualizar
-                VistaConfig("Actualizar");
-            }
-            else
-            {
-                //Abre la ventana con las opciones de guardar la configuracion
-                VistaConfig("Crear");
-            }
-        }
     }
 }
