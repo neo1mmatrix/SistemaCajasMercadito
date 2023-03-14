@@ -115,10 +115,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\CompraDolaresPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\Configuracion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,9 +171,6 @@
   <ItemGroup>
     <Compile Include="Pages\CierreCajas.xaml.cs">
       <DependentUpon>CierreCajas.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\CompraDolaresPage.xaml.cs">
-      <DependentUpon>CompraDolaresPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Configuracion.xaml.cs">
       <DependentUpon>Configuracion.xaml</DependentUpon>

@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -58,8 +57,6 @@ namespace Sistema_Mercadito.Pages
             vc.tbfecha.Visibility = Visibility.Visible;
             //Controla los atajos
             vc.gridAtajos.Visibility = Visibility.Visible;
-
-            //NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

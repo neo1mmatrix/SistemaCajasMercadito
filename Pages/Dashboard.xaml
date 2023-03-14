@@ -170,7 +170,7 @@
                 x:Name="txt5mil"
                 Grid.Row="7"
                 Grid.Column="2"
-                       Grid.ColumnSpan="2"
+                Grid.ColumnSpan="2"
                 GotFocus="txtFocusEvent"
                 LostFocus="txtLostFocus"
                 MaxLength="3"
@@ -182,7 +182,7 @@
                 x:Name="txt2mil"
                 Grid.Row="9"
                 Grid.Column="2"
-                       Grid.ColumnSpan="2"
+                Grid.ColumnSpan="2"
                 GotFocus="txtFocusEvent"
                 LostFocus="txtLostFocus"
                 MaxLength="3"
@@ -194,7 +194,7 @@
                 x:Name="txt1mil"
                 Grid.Row="11"
                 Grid.Column="2"
-                       Grid.ColumnSpan="2"
+                Grid.ColumnSpan="2"
                 GotFocus="txtFocusEvent"
                 LostFocus="txtLostFocus"
                 MaxLength="3"
@@ -383,13 +383,13 @@
                 Click="btnIniciar_Click"
                 Content="Iniciar" />
             <Frame
-                    Name="fContainer"
-                    Margin="20"
-                Grid.Column="0"
+                Name="fContainer"
                 Grid.Row="0"
-                Grid.ColumnSpan="12"
                 Grid.RowSpan="18"
-                    NavigationUIVisibility="Hidden" />
+                Grid.Column="0"
+                Grid.ColumnSpan="12"
+                Margin="20"
+                NavigationUIVisibility="Hidden" />
         </Grid>
     </Border>
 </Page>

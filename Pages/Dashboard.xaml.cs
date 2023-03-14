@@ -1,7 +1,6 @@
 ﻿using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -301,7 +300,6 @@ namespace Sistema_Mercadito.Pages
                     objetoSql.ConsultaCajaAbierta();
                     NavigationService navigationService = NavigationService.GetNavigationService(this);
                     navigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
-                    //NavigationService.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
                 }
                 catch (Exception ex)
                 {

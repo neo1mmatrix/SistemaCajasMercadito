@@ -1,17 +1,12 @@
 ﻿using Sistema_Mercadito.Capa_de_Datos;
+using System;
 using System.Data;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
 using System.Net;
 using System.Net.Mail;
-
 using System.Text;
-
-using System;
-using System.Windows.Controls.Primitives;
-using System.Linq;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Sistema_Mercadito.Pages
 {

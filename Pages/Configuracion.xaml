@@ -47,122 +47,122 @@
             <!--#endregion-->
             <!--#region TEXTBLOCKS-->
             <TextBlock
-            Grid.Row="3"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            FontSize="18"
-            Text="Impresora: " />
+                Grid.Row="3"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Text="Impresora: " />
             <TextBlock
-            Grid.Row="5"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            FontSize="18"
-            Text="Tamaño de Letra: " />
+                Grid.Row="5"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Text="Tamaño de Letra: " />
             <TextBlock
-            Grid.Row="7"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            FontSize="18"
-            Text="Longitud de Impresion: " />
+                Grid.Row="7"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Text="Longitud de Impresion: " />
             <TextBlock
-            Grid.Row="9"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            FontSize="18"
-            Text="Nombre Empresa: " />
+                Grid.Row="9"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Text="Nombre Empresa: " />
             <TextBlock
-            Grid.Row="11"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            FontSize="18"
-            Text="Email: " />
+                Grid.Row="11"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Text="Email: " />
             <TextBlock
-            Grid.Row="1"
-            Grid.Column="2"
-            Grid.ColumnSpan="5"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="24"
-            Text="Configuracion de Impresora" />
+                Grid.Row="1"
+                Grid.Column="2"
+                Grid.ColumnSpan="5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="24"
+                Text="Configuracion de Impresora" />
             <!--#endregion-->
             <!--#region COMBOBOX-->
             <ComboBox
-            x:Name="cbImpresoras"
-            Grid.Row="3"
-            Grid.Column="2"
-            Grid.ColumnSpan="5"
-            Margin="0,5,0,5"
-            Height="40"
-            SelectedItem="Seleccione Una Impresora">
+                x:Name="cbImpresoras"
+                Grid.Row="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="5"
+                Height="40"
+                Margin="0,5,0,5"
+                SelectedItem="Seleccione Una Impresora">
                 <ComboBoxItem Content="Seleccione Una Impresora" />
             </ComboBox>
             <!--#endregion-->
             <!--#region TEXTBOX-->
             <TextBox
-            x:Name="txtTamanoLetra"
-            Grid.Row="5"
-            Grid.Column="2"
-            Grid.ColumnSpan="1"
-            Width="80"
-            VerticalAlignment="Center"
-            Height="30"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center" />
+                x:Name="txtTamanoLetra"
+                Grid.Row="5"
+                Grid.Column="2"
+                Grid.ColumnSpan="1"
+                Width="80"
+                Height="30"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
             <TextBox
-            x:Name="txtLongitudImpresion"
-            Grid.Row="7"
-            Grid.Column="2"
-            Height="30"
-            VerticalAlignment="Center"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            Width="80"
-            Grid.ColumnSpan="1" />
+                x:Name="txtLongitudImpresion"
+                Grid.Row="7"
+                Grid.Column="2"
+                Grid.ColumnSpan="1"
+                Width="80"
+                Height="30"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
             <TextBox
-            x:Name="txtNombreEmpresa"
-            Grid.Row="9"
-            Grid.Column="2"
-            Grid.ColumnSpan="3"
-            VerticalAlignment="Center"
-            Height="30"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center" />
+                x:Name="txtNombreEmpresa"
+                Grid.Row="9"
+                Grid.Column="2"
+                Grid.ColumnSpan="3"
+                Height="30"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
             <TextBox
-            x:Name="txtEmail"
-            Grid.Row="11"
-            Grid.Column="2"
-            Grid.ColumnSpan="3"
-            VerticalAlignment="Center"
-            Height="30"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center" />
+                x:Name="txtEmail"
+                Grid.Row="11"
+                Grid.Column="2"
+                Grid.ColumnSpan="3"
+                Height="30"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
             <!--#endregion-->
             <!--#region BUTTONS-->
             <Button
-            x:Name="btnGuardar"
-            Grid.Row="15"
-            Grid.Column="6"
-            Grid.ColumnSpan="2"
-            Margin="5"
-            Click="btnGuardar_Click"
-            Content="Guardar" />
+                x:Name="btnGuardar"
+                Grid.Row="15"
+                Grid.Column="6"
+                Grid.ColumnSpan="2"
+                Margin="5"
+                Click="btnGuardar_Click"
+                Content="Guardar" />
             <Button
-            x:Name="btnActualizar"
-            Grid.Row="15"
-            Grid.Column="6"
-            Grid.ColumnSpan="2"
-            Margin="5"
-            Click="btnActualizar_Click"
-            Visibility="Collapsed"
-            Content="Actualizar" />
+                x:Name="btnActualizar"
+                Grid.Row="15"
+                Grid.Column="6"
+                Grid.ColumnSpan="2"
+                Margin="5"
+                Click="btnActualizar_Click"
+                Content="Actualizar"
+                Visibility="Collapsed" />
             <Button
-            x:Name="btnCerrar"
-            Grid.Row="15"
-            Grid.Column="4"
-            Grid.ColumnSpan="2"
-            Margin="5"
-            Click="btnCerrar_Click"
-            Content="Cerrar" />
+                x:Name="btnCerrar"
+                Grid.Row="15"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
+                Margin="5"
+                Click="btnCerrar_Click"
+                Content="Cerrar" />
             <!--#endregion-->
         </Grid>
     </Border>

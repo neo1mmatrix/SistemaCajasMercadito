@@ -1,17 +1,16 @@
-﻿using Sistema_Mercadito.Capa_de_Datos;
-using System;
+﻿using ImprimirTiquetes;
+using Sistema_Mercadito.Capa_de_Datos;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Windows;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using ImprimirTiquetes;
-using System.Threading;
+using System.Windows;
+using System;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -478,10 +477,6 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             _MontoPagoDolares);
                     VistaVuelto();
-                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
-                    //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
-                    // LimpiarCampos();
-                    //Inicio();
                 }
             }
             catch (Exception ex)
@@ -528,10 +523,6 @@ namespace Sistema_Mercadito.Pages
                                             0,
                                             _MontoPagoDolares);
                     VistaVuelto();
-                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
-                    //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
-                    // LimpiarCampos();
-                    //Inicio();
                 }
             }
             catch (Exception ex)
@@ -606,7 +597,6 @@ namespace Sistema_Mercadito.Pages
 
         private void VistaVuelto()
         {
-            //fContainer.Navigate(new System.Uri("Pages/RegistrarVentas.xaml", UriKind.RelativeOrAbsolute));
             MensajeVueltoCliente mvc = new MensajeVueltoCliente();
             fContainer.Content = mvc;
         }
