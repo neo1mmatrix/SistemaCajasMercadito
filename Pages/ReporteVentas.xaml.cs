@@ -16,6 +16,8 @@ namespace Sistema_Mercadito.Pages
     public partial class ReporteVentas : Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
+        private int _SumaCompraDolares = 0;
+        private decimal _SumaColonesPagadosDolares = 0;
 
         public ReporteVentas()
         {
@@ -29,35 +31,19 @@ namespace Sistema_Mercadito.Pages
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
 
-            VentasCajas vc = new VentasCajas();
+            VentasCajas vc = new VentasCajas("Actualizar");
             vc.Consulta();
             FrameReporte.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Actualización de Venta";
-            vc.txtColones.IsEnabled = true;
-            vc.txtDolares.IsEnabled = true;
-            vc.txtVenta.IsEnabled = true;
-            vc.txtSinpe.IsEnabled = true;
-            vc.txtTarjeta.IsEnabled = true;
-            vc.txtTipoCambio.IsEnabled = true;
-            vc._NuevaVenta = false;
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Visible;
-            vc.btnRegresar.Visibility = Visibility.Visible;
-            vc.btnActualizar.Visibility = Visibility.Visible;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Collapsed;
-            vc.tbfechaHora.Visibility = Visibility.Collapsed;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
 
         private void btnCerrarCaja_Click(object sender, RoutedEventArgs e)
         {
             objetoSql.SumaCierre();
+            objetoSql.SumaDolares(ref _SumaCompraDolares, ref _SumaColonesPagadosDolares);
+
+            SharedResources._MontoSaldoCajas = SharedResources._MontoSaldoCajas - _SumaColonesPagadosDolares;
             objetoSql.CierreCaja();
+
             objetoSql.ConsultaCaja();
             Thread hilo = new Thread(new ThreadStart(EnviarCorreo));
             hilo.Start();
@@ -75,30 +61,8 @@ namespace Sistema_Mercadito.Pages
         {
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
-
-            VentasCajas vc = new VentasCajas();
-            vc.Consulta();
+            VentasCajas vc = new VentasCajas("Consulta");
             FrameReporte.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Consulta de Venta";
-            vc.txtColones.IsEnabled = false;
-            vc.txtDolares.IsEnabled = false;
-            vc.txtVenta.IsEnabled = false;
-            vc.txtSinpe.IsEnabled = false;
-            vc.txtTarjeta.IsEnabled = false;
-            vc.txtTipoCambio.IsEnabled = false;
-            vc._NuevaVenta = false;
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Collapsed;
-            vc.btnRegresar.Visibility = Visibility.Visible;
-            vc.btnEliminar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Collapsed;
-            vc.tbfechaHora.Visibility = Visibility.Collapsed;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Collapsed;
         }
 
         private void Eliminar(object sender, RoutedEventArgs e)
@@ -106,7 +70,7 @@ namespace Sistema_Mercadito.Pages
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
 
-            VistaVentaActualizar();
+            VistaVentaEliminar();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -177,31 +141,6 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void DetallesCorreo(ref string pConsulta)
-        {
-            //CREA LA TABLA EN HTML
-            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
-
-            //ENCABEZADOS DE LA TABLA
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Venta</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Efectivo</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dolares</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Tarjeta</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Sinpe</th>";
-
-            //CIERRE DE LA TABLA
-            _tablaEncabezados += "</tr> </thead>";
-
-            string _consulta = "";
-            string _consultaRetiro = "";
-            pConsulta = _tablaEncabezados;
-
-            //Consulta
-            objetoSql.SEL_REPORTE_DETALLE_VENTAS(SharedResources._idCajaAbierta, ref _consulta);
-            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
-        }
-
         private void EnviarCorreo()
         {
             //Variable para crear el contenido del correo en formato HTML
@@ -213,7 +152,7 @@ namespace Sistema_Mercadito.Pages
             string _CentrarTituloOn = "<center>";
             string _CentrarTituloOff = "</center>";
             string _Consulta = "";
-            string _LetraAzul = "<FONT COLOR=\"#2500FF\"> ";
+            string _LetraAzul = "<FONT COLOR=\"#1E81B0\"> ";
             string _LetraMorada = "<FONT COLOR=\"#EC00EB\" > ";
             string _LetraTeal = "<FONT COLOR=\"#008080\" > ";
             string _LetraFin = "</FONT>";
@@ -289,14 +228,21 @@ namespace Sistema_Mercadito.Pages
 
             if (SharedResources._Dolares > 0)
             {
-                _detalleCorreoBuilder.Append($"Pagos Recividos en Dolares: {SharedResources._Dolares.ToString("N2")}{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"Pagos Recibidos en Dolares: {SharedResources._Dolares.ToString("N2")}{_NuevaLinea}");
                 _detalleCorreoBuilder.Append($"Compra de Dolares: {SharedResources._MontoPagoDolares.ToString("N2")}{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"</p>");
             }
-            //If _SumaDolares > 0 Then
-            //    _detalleCorreoBuilder.Append($"Dolares: {FormatNumber(_SumaDolares)}{_NuevaLinea}")
-            //    _detalleCorreoBuilder.Append($"Compra de Dolares: {FormatNumber(_SumaDolares)}{_NuevaLinea}")
-            //End If
-            _detalleCorreoBuilder.Append($"</p>");
+
+            if (_SumaCompraDolares > 0)
+            {
+                _detalleCorreoBuilder.Append($"</p>");
+                _detalleCorreoBuilder.Append($"{_NuevaLinea}<hr>{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"{_LetraAzul}{_NegritaOn}<p style=\"font-size: 16px;\">");
+                _detalleCorreoBuilder.Append($"Compra{_EspacioVacio} de{_EspacioVacio} Dólares{_EspacioVacio}: ${_SumaCompraDolares.ToString("N2")}  {_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"Pago por los Dólares: ₡{_SumaColonesPagadosDolares.ToString("N2")}{_NegritaOff + _LetraFin + _NuevaLinea + _NuevaLinea}");
+                _detalleCorreoBuilder.Append($"</p>");
+                _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}");
+            }
 
             #endregion Resumen de ventas
 
@@ -315,63 +261,63 @@ namespace Sistema_Mercadito.Pages
             EnviarCorreo("dist.mercadito@gmail.com", "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
         }
 
+        private void DetallesCorreo(ref string pConsulta)
+        {
+            //CREA LA TABLA EN HTML
+            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
+
+            //ENCABEZADOS DE LA TABLA
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Venta</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Efectivo</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dolares</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Tarjeta</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Sinpe</th>";
+
+            //CIERRE DE LA TABLA
+            _tablaEncabezados += "</tr> </thead>";
+
+            string _consulta = "";
+            string _consultaRetiro = "";
+            pConsulta = _tablaEncabezados;
+
+            //Consulta
+            objetoSql.SEL_REPORTE_DETALLE_VENTAS(SharedResources._idCajaAbierta, ref _consulta);
+            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
+        }
+
         #endregion Enviar Correo
 
         #region Vistas
 
         public void VistaVenta()
         {
-            VentasCajas vc = new VentasCajas();
-            FrameReporte.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Venta";
-            vc.txtColones.IsEnabled = true;
-            vc.txtDolares.IsEnabled = true;
-            vc.txtVenta.IsEnabled = true;
-            vc.txtSinpe.IsEnabled = true;
-            vc.txtTarjeta.IsEnabled = true;
-            vc.txtTipoCambio.IsEnabled = true;
-            vc._NuevaVenta = true;
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Visible;
-            vc.btnRegresar.Visibility = Visibility.Collapsed;
-            vc.btnEliminar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Visible;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Visible;
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+
+            VentasCajas vc = new VentasCajas("Venta");
+            fContainer.Content = vc;
         }
 
         public void VistaVentaActualizar()
         {
-            VentasCajas vc = new VentasCajas();
-            vc.Consulta();
-            FrameReporte.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Eliminar Venta";
-            vc.tbEliminarMotivo.Visibility = Visibility.Visible;
-            vc.txtColones.IsEnabled = false;
-            vc.txtDolares.IsEnabled = false;
-            vc.txtVenta.IsEnabled = false;
-            vc.txtSinpe.IsEnabled = false;
-            vc.txtTarjeta.IsEnabled = false;
-            vc.txtTipoCambio.IsEnabled = false;
-            vc.txtElimarMotivo.Visibility = Visibility.Visible;
-            vc._NuevaVenta = false;
-            //Controla los botones
-            vc.btnPagar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-            vc.btnRegresar.Visibility = Visibility.Visible;
-            vc.btnEliminar.Visibility = Visibility.Visible;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Collapsed;
-            vc.tbfechaHora.Visibility = Visibility.Collapsed;
-            vc.Visibility = Visibility.Visible;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Collapsed;
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+
+            VentasCajas vc = new VentasCajas("Actualizar");
+            fContainer.Content = vc;
+        }
+
+        public void VistaVentaEliminar()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+
+            VentasCajas vc = new VentasCajas("Eliminar");
+            fContainer.Content = vc;
         }
 
         #endregion Vistas

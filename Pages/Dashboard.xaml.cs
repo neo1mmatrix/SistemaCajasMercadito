@@ -316,7 +316,7 @@ namespace Sistema_Mercadito.Pages
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
-            VentasCajas vc = new VentasCajas();
+            VentasCajas vc = new VentasCajas("Venta");
             fContainer.Content = vc;
         }
     }

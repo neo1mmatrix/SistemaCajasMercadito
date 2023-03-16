@@ -93,6 +93,13 @@ namespace Sistema_Mercadito
 
         private void btnCompraDolares_MouseEnter(object sender, MouseEventArgs e)
         {
+            if (Tg_Btn.IsChecked == false)
+            {
+                Popup.PlacementTarget = btnCompraDolares;
+                Popup.Placement = PlacementMode.Right;
+                Popup.IsOpen = true;
+                Header.PopupText.Text = "Cambio de Dólares";
+            }
         }
 
         private void btnCompraDolares_MouseLeave(object sender, MouseEventArgs e)
@@ -198,7 +205,7 @@ namespace Sistema_Mercadito
                 Popup.PlacementTarget = btnReporte;
                 Popup.Placement = PlacementMode.Right;
                 Popup.IsOpen = true;
-                Header.PopupText.Text = "Billing";
+                Header.PopupText.Text = "Reportes";
             }
         }
 
@@ -240,7 +247,7 @@ namespace Sistema_Mercadito
                 Popup.PlacementTarget = btnSetting;
                 Popup.Placement = PlacementMode.Right;
                 Popup.IsOpen = true;
-                Header.PopupText.Text = "Setting";
+                Header.PopupText.Text = "Configuraciones";
             }
         }
 
@@ -336,31 +343,8 @@ namespace Sistema_Mercadito
 
         public void VistaVenta()
         {
-            VentasCajas vc = new VentasCajas();
+            VentasCajas vc = new VentasCajas("Venta");
             fContainer.Content = vc;
-
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Venta";
-            vc.txtColones.IsEnabled = true;
-            vc.txtDolares.IsEnabled = true;
-            vc.txtVenta.IsEnabled = true;
-            vc.txtSinpe.IsEnabled = true;
-            vc.txtTarjeta.IsEnabled = true;
-            vc.txtTipoCambio.IsEnabled = true;
-            vc._NuevaVenta = true;
-
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Visible;
-            vc.btnRegresar.Visibility = Visibility.Collapsed;
-            vc.btnEliminar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Visible;
-
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Visible;
         }
 
         private void VistaCierreCajas()
@@ -389,8 +373,8 @@ namespace Sistema_Mercadito
 
         private void VistaReporteVentas()
         {
-            ReporteVentas rv = new ReporteVentas();
-            fContainer.Content = rv;
+            ClaveAcceso ca = new ClaveAcceso();
+            fContainer.Content = ca;
         }
 
         #endregion VistasPages

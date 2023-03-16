@@ -47,7 +47,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 SqlCommand com = new SqlCommand
                 {
                     Connection = AbrirConexion(),
-                    CommandText = "ActualizarVenta",
+                    CommandText = "[SP_Actualizar_Venta]",
                     CommandType = CommandType.StoredProcedure
                 };
 
@@ -87,7 +87,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
         public void ConsultaVentaRealizada()
         {
             // Crear el comando que ejecutará el procedimiento almacenado
-            SqlCommand cmd = new SqlCommand("ConsultaVenta", AbrirConexion());
+            SqlCommand cmd = new SqlCommand("[SP_Consulta_Venta]", AbrirConexion());
             cmd.CommandType = CommandType.StoredProcedure;
 
             // Agregar el parámetro de entrada
@@ -144,7 +144,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
             try
             {
                 AbrirConexion();
-                SqlDataAdapter da = new SqlDataAdapter("sp_consultaventasreporte", AbrirConexion());
+                SqlDataAdapter da = new SqlDataAdapter("[SP_Consulta_Ventas_Reporte]", AbrirConexion());
                 da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
                 DataSet ds = new DataSet();
@@ -179,7 +179,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 SqlCommand com = new SqlCommand
                 {
                     Connection = AbrirConexion(),
-                    CommandText = "EliminarVenta",
+                    CommandText = "[SP_Eliminar_Venta]",
                     CommandType = CommandType.StoredProcedure
                 };
 
@@ -222,7 +222,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 SqlCommand com = new SqlCommand()
                 {
                     Connection = AbrirConexion(),
-                    CommandText = "SP_I_VENTA",
+                    CommandText = "[SP_Agregar_Venta]",
                     CommandType = System.Data.CommandType.StoredProcedure
                 };
 
@@ -642,7 +642,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
         public void ConsultaCajaAbierta()
         {
             // Crear el comando que ejecutará el procedimiento almacenado
-            SqlCommand cmd = new SqlCommand("Sp_Id_CajaRegist_Abierta", AbrirConexion());
+            SqlCommand cmd = new SqlCommand("SP_Id_CajaRegist_Abierta", AbrirConexion());
             cmd.CommandType = CommandType.StoredProcedure;
 
             // Crear un objeto SqlDataReader para leer los resultados de la consulta
@@ -903,6 +903,67 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
                 resultado = false;
+            }
+            return resultado;
+        }
+
+        public string SumaDolares(ref int _dolaresComprados, ref decimal _montoPagadoDolares)
+        {
+            string resultado = null;
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("[SP_Suma_Compra_Dolares]", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@IdCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                if (lector.HasRows)
+                {
+                    // Leer los resultados de la consulta
+                    while (lector.Read())
+                    {
+                        if (!lector.IsDBNull(0))
+                        {
+                            _dolaresComprados = lector.GetInt32(0);
+                            _montoPagadoDolares = lector.GetDecimal(1);
+                            resultado = "Continuar";
+                        }
+                    }
+                    SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
+                }
+                else
+                {
+                    MessageBox.Show("No habien filas");
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                if (lector != null)
+                {
+                    lector.Close();
+                }
+                CerrarConexion();
             }
             return resultado;
         }

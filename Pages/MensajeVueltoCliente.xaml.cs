@@ -187,27 +187,8 @@ namespace Sistema_Mercadito.Pages
 
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
-            VentasCajas vc = new VentasCajas();
+            VentasCajas vc = new VentasCajas("Venta");
             fContainer.Content = vc;
-            //Controla los campos de texto
-            vc.tbTitulo.Text = "Venta";
-            vc.txtColones.IsEnabled = true;
-            vc.txtDolares.IsEnabled = true;
-            vc.txtVenta.IsEnabled = true;
-            vc.txtSinpe.IsEnabled = true;
-            vc.txtTarjeta.IsEnabled = true;
-            vc.txtTipoCambio.IsEnabled = true;
-            vc._NuevaVenta = true;
-            // Controla los botones
-            vc.btnPagar.Visibility = Visibility.Visible;
-            vc.btnRegresar.Visibility = Visibility.Collapsed;
-            vc.btnEliminar.Visibility = Visibility.Collapsed;
-            vc.btnActualizar.Visibility = Visibility.Collapsed;
-            //Controla el campo de la fecha
-            vc.tbfechaAntigua.Visibility = Visibility.Visible;
-            vc.tbfecha.Visibility = Visibility.Visible;
-            //Controla los atajos
-            vc.gridAtajos.Visibility = Visibility.Visible;
         }
 
         #endregion Vistas

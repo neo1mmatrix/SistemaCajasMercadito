@@ -25,6 +25,7 @@ namespace Sistema_Mercadito.Pages
         private readonly CD_Conexion objetoSql = new CD_Conexion();
         private decimal _Colones = 0;
         private decimal _CompraDolares = 0;
+        public string _Estado = string.Empty;
 
         // Obtener el día de la semana actual y traducirlo al español
         private string _diaSemana = "";
@@ -66,7 +67,7 @@ namespace Sistema_Mercadito.Pages
             { DayOfWeek.Saturday, "Sábado" }
         };
 
-        public VentasCajas()
+        public VentasCajas(string _EstadoVista)
         {
             InitializeComponent();
             _diaSemana = traduccionDias[DateTime.Now.DayOfWeek];
@@ -74,6 +75,7 @@ namespace Sistema_Mercadito.Pages
             _mesActual = mesesEnEspanol[DateTime.Now.Month];
             _diaSemana += " " + _mesActual;
             FechayHora();
+            _Estado = _EstadoVista;
             SharedResources.LimpiaVariablesVentas();
             Inicio();
         }
@@ -361,6 +363,14 @@ namespace Sistema_Mercadito.Pages
 
             try
             {
+                //Chequea que si es ingresado por medio de atajo no se haya presionado
+                // 1 por equivocacion al final de la venta, ademas tiene que ser de longitud
+                //mayor a 1 para que no ingrese datos vacios en la base de datos
+                if (txtVenta.Text.ToString().EndsWith("1") && txtVenta.Text.Length > 1)
+                {
+                    txtVenta.Text = txtVenta.Text.Substring(0, txtVenta.Text.Length - 1);
+                }
+
                 _vuelto = decimal.Parse(tbVuelto.Content.ToString(), NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
                 if (_vuelto < 0)
                 {
@@ -611,6 +621,23 @@ namespace Sistema_Mercadito.Pages
             txtTarjeta.Text = "0";
             _NuevaVenta = true;
             _ValoresCargados = true;
+
+            if (_Estado == "Venta")
+            {
+                EstadoVenta();
+            }
+            if (_Estado == "Actualizar")
+            {
+                EstadoActualizar();
+            }
+            else if (_Estado == "Eliminar")
+            {
+                EstadoEliminar();
+            }
+            else if (_Estado == "Consulta")
+            {
+                EstadoConsulta();
+            }
         }
 
         private void LimpiarCampos()
@@ -695,10 +722,117 @@ namespace Sistema_Mercadito.Pages
 
         private void VistaVuelto()
         {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
             MensajeVueltoCliente mvc = new MensajeVueltoCliente();
-            fContainer.Content = mvc;
+            fContainerm.Content = mvc;
         }
 
         #endregion Vistas
+
+        private void EstadoActualizar()
+        {
+            Consulta();
+            //Controla los campos de texto
+            tbTitulo.Text = "Actualizar Venta";
+            txtColones.IsEnabled = true;
+            txtDolares.IsEnabled = true;
+            txtVenta.IsEnabled = true;
+            txtSinpe.IsEnabled = true;
+            txtTarjeta.IsEnabled = true;
+            txtTipoCambio.IsEnabled = true;
+            txtElimarMotivo.Visibility = Visibility.Collapsed;
+            _NuevaVenta = false;
+            //Controla los botones
+            btnPagar.Visibility = Visibility.Collapsed;
+            btnActualizar.Visibility = Visibility.Visible;
+            btnRegresar.Visibility = Visibility.Visible;
+            btnEliminar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            tbfechaAntigua.Visibility = Visibility.Visible;
+            tbfecha.Visibility = Visibility.Collapsed;
+            tbfechaHora.Visibility = Visibility.Collapsed;
+
+            //Controla los atajos
+            gridAtajos.Visibility = Visibility.Collapsed;
+        }
+
+        private void EstadoEliminar()
+        {
+            Consulta();
+            //Controla los campos de texto
+            tbTitulo.Text = "Eliminar Venta";
+            txtColones.IsEnabled = false;
+            txtDolares.IsEnabled = false;
+            txtVenta.IsEnabled = false;
+            txtSinpe.IsEnabled = false;
+            txtTarjeta.IsEnabled = false;
+            txtTipoCambio.IsEnabled = false;
+            txtElimarMotivo.Visibility = Visibility.Visible;
+            txtElimarMotivo.Focus();
+            _NuevaVenta = false;
+            //Controla los botones
+            btnPagar.Visibility = Visibility.Collapsed;
+            btnActualizar.Visibility = Visibility.Collapsed;
+            btnRegresar.Visibility = Visibility.Visible;
+            btnEliminar.Visibility = Visibility.Visible;
+            //Controla el campo de la fecha
+            tbfechaAntigua.Visibility = Visibility.Visible;
+            tbfecha.Visibility = Visibility.Collapsed;
+            tbfechaHora.Visibility = Visibility.Collapsed;
+            Visibility = Visibility.Visible;
+            //Controla los atajos
+            gridAtajos.Visibility = Visibility.Collapsed;
+        }
+
+        private void EstadoVenta()
+        {
+            //Controla los campos de texto
+            tbTitulo.Text = "Venta";
+            txtColones.IsEnabled = true;
+            txtDolares.IsEnabled = true;
+            txtVenta.IsEnabled = true;
+            txtSinpe.IsEnabled = true;
+            txtTarjeta.IsEnabled = true;
+            txtTipoCambio.IsEnabled = true;
+            _NuevaVenta = true;
+            // Controla los botones
+            btnPagar.Visibility = Visibility.Visible;
+            btnRegresar.Visibility = Visibility.Collapsed;
+            btnEliminar.Visibility = Visibility.Collapsed;
+            btnActualizar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            tbfechaAntigua.Visibility = Visibility.Visible;
+            tbfecha.Visibility = Visibility.Visible;
+            //Controla los atajos
+            gridAtajos.Visibility = Visibility.Visible;
+        }
+
+        private void EstadoConsulta()
+        {
+            Consulta();
+            //Controla los campos de texto
+            tbTitulo.Text = "Consulta de Venta";
+            tbEliminarMotivo.Visibility = Visibility.Collapsed;
+            txtColones.IsEnabled = false;
+            txtDolares.IsEnabled = false;
+            txtVenta.IsEnabled = false;
+            txtSinpe.IsEnabled = false;
+            txtTarjeta.IsEnabled = false;
+            txtTipoCambio.IsEnabled = false;
+            _NuevaVenta = false;
+            //Controla los botones
+            btnPagar.Visibility = Visibility.Collapsed;
+            btnActualizar.Visibility = Visibility.Collapsed;
+            btnRegresar.Visibility = Visibility.Visible;
+            btnEliminar.Visibility = Visibility.Collapsed;
+            //Controla el campo de la fecha
+            tbfechaAntigua.Visibility = Visibility.Visible;
+            tbfecha.Visibility = Visibility.Collapsed;
+            tbfechaHora.Visibility = Visibility.Collapsed;
+            //Controla los atajos
+            gridAtajos.Visibility = Visibility.Collapsed;
+        }
     }
 }

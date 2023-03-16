@@ -164,7 +164,7 @@
                         x:Name="tbMontoDineroCompra"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="28"
+                        FontSize="32"
                         FontWeight="ExtraBlack"
                         Foreground="#116530"
                         Text="0.00" />
@@ -195,7 +195,7 @@
                 VerticalContentAlignment="Center"
                 Background="GhostWhite"
                 BorderBrush="Navy"
-                FontSize="52"
+                FontSize="64"
                 FontWeight="Bold"
                 Foreground="#1039BE"
                 IsReadOnly="True"

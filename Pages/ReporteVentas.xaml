@@ -54,8 +54,16 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="11"
                 Height="50"
-                Background="#706b6d"
+                Background="#444654"
                 CornerRadius="20">
+                <Border.Effect>
+                    <DropShadowEffect
+                        BlurRadius="9"
+                        Direction="320"
+                        Opacity="0.5"
+                        ShadowDepth="0"
+                        Color="Black" />
+                </Border.Effect>
                 <TextBlock
                     Height="30"
                     HorizontalAlignment="Center"
@@ -82,7 +90,9 @@
                 GridLinesVisibility="Horizontal"
                 HeadersVisibility="Column"
                 HorizontalGridLinesBrush="#1C1B1F"
+                IsReadOnly="True"
                 RowBackground="Transparent"
+                SelectionMode="Single"
                 Style="{DynamicResource GridReporteVentasStyle}">
 
                 <DataGrid.Columns>
@@ -130,7 +140,7 @@
                         Header="Id"
                         Visibility="Collapsed" />
                     <DataGridTextColumn
-                        Width="50"
+                        Width="100"
                         Binding="{Binding Venta}"
                         Header="Venta">
                         <DataGridTextColumn.ElementStyle>
@@ -140,7 +150,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="80"
+                        Width="100"
                         Binding="{Binding MontoColones}"
                         Header="Colones">
                         <DataGridTextColumn.ElementStyle>
@@ -150,7 +160,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="80"
+                        Width="100"
                         Binding="{Binding MontoDolares}"
                         Header="Dolares">
                         <DataGridTextColumn.ElementStyle>
