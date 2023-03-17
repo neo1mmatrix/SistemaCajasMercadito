@@ -34,9 +34,9 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition MaxHeight="10" />
-                <RowDefinition Height="55" />
+                <RowDefinition Height="40" />
                 <RowDefinition MaxHeight="5" />
-                <RowDefinition MaxHeight="40" />
+                <RowDefinition MaxHeight="55" />
                 <RowDefinition MaxHeight="5" />
                 <RowDefinition />
                 <RowDefinition />
@@ -50,7 +50,7 @@
                 <RowDefinition MaxHeight="10" />
             </Grid.RowDefinitions>
             <Border
-                Grid.Row="1"
+                Grid.Row="3"
                 Grid.Column="1"
                 Grid.ColumnSpan="11"
                 Height="50"
@@ -204,35 +204,70 @@
             </DataGrid>
 
             <StackPanel
-                Grid.Row="3"
+                Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="9"
                 Orientation="Horizontal">
                 <Button
                     x:Name="btnColones"
-                    Click="btnColonClick"
                     Content="Colones"
-                    Style="{DynamicResource ButtonReporte}" />
+                    Style="{DynamicResource ButtonReporte}"
+                    Visibility="Collapsed" />
 
                 <Button
                     x:Name="btnTarjeta"
                     Content="Tarjeta"
-                    Style="{DynamicResource ButtonReporte}" />
+                    Style="{DynamicResource ButtonReporte}"
+                    Visibility="Collapsed" />
 
                 <Button
                     x:Name="btnDolares"
                     Content="Dolares"
-                    Style="{DynamicResource ButtonReporte}" />
+                    Style="{DynamicResource ButtonReporte}"
+                    Visibility="Collapsed" />
 
                 <Button
                     x:Name="btnSinpe"
                     Content="Sinpe"
-                    Style="{DynamicResource ButtonReporte}" />
+                    Style="{DynamicResource ButtonReporte}"
+                    Visibility="Collapsed" />
+                <TextBlock
+                    Margin="5,0,5,0"
+                    VerticalAlignment="Center"
+                    Text="Reporte: " />
+                <ComboBox
+                    x:Name="cbReporte"
+                    Width="210"
+                    Padding="20,5,0,0"
+                    SelectionChanged="cbReporte_tipoReporte"
+                    Style="{DynamicResource ComboBoxStyle1}">
+                    <ComboBoxItem>Ventas</ComboBoxItem>
+                    <ComboBoxItem>Retiros</ComboBoxItem>
+                    <ComboBoxItem>Cambio Dolares</ComboBoxItem>
+                    <ComboBoxItem>Pagos de Servicios</ComboBoxItem>
+                </ComboBox>
+                <TextBlock
+                    Margin="20,0,5,0"
+                    VerticalAlignment="Center"
+                    Text="Tipo de Venta: " />
+
+                <ComboBox
+                    x:Name="cbVentas"
+                    Width="140"
+                    SelectionChanged="cbVentas_tipoVenta"
+                    Padding="20,5,0,0"
+                    Style="{DynamicResource ComboBoxStyle1}">
+                    <ComboBoxItem>Todos</ComboBoxItem>
+                    <ComboBoxItem>Colones</ComboBoxItem>
+                    <ComboBoxItem>Tarjeta</ComboBoxItem>
+                    <ComboBoxItem>Dolares</ComboBoxItem>
+                    <ComboBoxItem>Sinpe</ComboBoxItem>
+                </ComboBox>
             </StackPanel>
 
             <Button
                 x:Name="btnCerrarCajas"
-                Grid.Row="3"
+                Grid.Row="1"
                 Grid.Column="10"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Right"

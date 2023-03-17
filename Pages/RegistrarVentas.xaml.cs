@@ -343,7 +343,15 @@ namespace Sistema_Mercadito.Pages
                                             (float)_TipoCambio,
                                             _MontoPagoDolares);
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
-                    Thread hilo = new Thread(new ThreadStart(AbirCaja));
+
+                    Thread hilo = new Thread(new ThreadStart(() => AbirCaja(_Venta.ToString("N2"),
+                                                                        _Colones.ToString("N2"),
+                                                                        _Dolares.ToString("N2"),
+                                                                        _TipoCambio.ToString("N2"),
+                                                                        _MontoPagoDolares.ToString("N2"),
+                                                                        _vuelto.ToString("N2"),
+                                                                        _Sinpe.ToString("N2"),
+                                                                        _Tarjeta.ToString("N2"))));
                     // LimpiarCampos();
                     hilo.Start();
                     //AbirCaja();
@@ -406,7 +414,17 @@ namespace Sistema_Mercadito.Pages
                     //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
                     //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
                     // LimpiarCampos();
-                    Thread hilo = new Thread(new ThreadStart(AbirCaja));
+                    //Thread hilo = new Thread(new ThreadStart(AbirCaja));
+
+                    Thread hilo = new Thread(new ThreadStart(() => AbirCaja(_Venta.ToString("N2"),
+                                                                       _Colones.ToString("N2"),
+                                                                       _Dolares.ToString("N2"),
+                                                                       _TipoCambio.ToString("N2"),
+                                                                       _MontoPagoDolares.ToString("N2"),
+                                                                       _vuelto.ToString("N2"),
+                                                                       _Sinpe.ToString("N2"),
+                                                                       _Tarjeta.ToString("N2"))));
+
                     hilo.Start();
                     //AbirCaja();
                     // Inicio();
@@ -515,7 +533,7 @@ namespace Sistema_Mercadito.Pages
 
         #region Procedimientos
 
-        private void AbirCaja()
+        private void AbirCaja(string _venta, string _efectivo, string _dolares, string _tipoCambio, string _equivaleA, string _vuelto, string _sinpe, string _tarjeta)
         {
             if (SharedResources._Dolares > 0)
             {
@@ -523,49 +541,48 @@ namespace Sistema_Mercadito.Pages
 
                 //IMPRIME LA VENTA REALIZADA
                 ImprimeFactura.Println("Venta");
-                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (5 + SharedResources._MontoPagar.ToString("N2").Length), '.'));
-                ImprimeFactura.Print(SharedResources._MontoPagar.ToString("N2"));
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (5 + _venta.Length), '.'));
+                ImprimeFactura.Print(_venta);
 
                 //EFECTIVO
                 ImprimeFactura.Println("Efectivo");
-                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (8 + SharedResources._Efectivo.ToString("N2").Length), '.'));
-                ImprimeFactura.Print(SharedResources._Efectivo.ToString("N2"));
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (8 + _efectivo.Length), '.'));
+                ImprimeFactura.Print(_efectivo);
 
                 //DOLARES
                 ImprimeFactura.Println("Dolares");
-                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + SharedResources._Dolares.ToString("N2").Length), '.'));
-                ImprimeFactura.Print(SharedResources._Dolares.ToString("N2"));
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + _dolares.Length), '.'));
+                ImprimeFactura.Print(_dolares);
 
                 //TIPO DE CAMBIO
                 ImprimeFactura.Println("Tipo de Cambio");
-                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (14 + SharedResources._TipoCambio.ToString("N2").Length), '.'));
-                ImprimeFactura.Print(SharedResources._TipoCambio.ToString("N2"));
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (14 + _tipoCambio.Length), '.'));
+                ImprimeFactura.Print(_tipoCambio);
 
                 //SINPE
                 if (SharedResources._Sinpe > 0)
                 {
                     ImprimeFactura.Println("Sinpe");
-                    ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (5 + SharedResources._Sinpe.ToString("N2").Length), '.'));
-                    ImprimeFactura.Print(SharedResources._Sinpe.ToString("N2"));
+                    ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (5 + _sinpe.Length), '.'));
+                    ImprimeFactura.Print(_sinpe);
                 }
 
                 //TARJETA
                 if (SharedResources._Tarjeta > 0)
                 {
                     ImprimeFactura.Println("Tarjeta");
-                    ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + SharedResources._Tarjeta.ToString("N2").Length), '.'));
-                    ImprimeFactura.Print(SharedResources._Tarjeta.ToString("N2"));
+                    ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (7 + _tarjeta.Length), '.'));
+                    ImprimeFactura.Print(_tarjeta);
                 }
 
                 //Equivalen a "COLONES"
                 ImprimeFactura.Println("Equivalen a");
-                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (11 + (SharedResources._Dolares * SharedResources._TipoCambio).ToString("N2").Length), '.'));
-                ImprimeFactura.Print((SharedResources._Dolares * SharedResources._TipoCambio).ToString("N2"));
+                ImprimeFactura.Println("".PadLeft(SharedResources._CfgPrinterLong - (11 + _equivaleA.Length), '.'));
+                ImprimeFactura.Print(_equivaleA);
 
                 //VUELTO A ENTREGAR
                 ImprimeFactura.PrintDashes();
-                string _vuelto = "Vuelto: " + SharedResources._Vuelto.ToString("N2");
-                ImprimeFactura.PrintVuelto(_vuelto);
+                ImprimeFactura.PrintVuelto("Vuelto: " + _vuelto);
                 ImprimeFactura.PrintDashes();
 
                 //TERMINA LA IMPRESION

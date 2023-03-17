@@ -343,8 +343,16 @@ namespace Sistema_Mercadito
 
         public void VistaVenta()
         {
-            VentasCajas vc = new VentasCajas("Venta");
-            fContainer.Content = vc;
+            if (SharedResources._idCajaAbierta > 0)
+            {
+                VentasCajas vc = new VentasCajas("Venta");
+                fContainer.Content = vc;
+            }
+            else
+            {
+                Dashboard db = new Dashboard();
+                fContainer.Content = db;
+            }
         }
 
         private void VistaCierreCajas()
@@ -355,8 +363,16 @@ namespace Sistema_Mercadito
 
         private void VistaCompraDolares()
         {
-            RegistrarCompraDolares cd = new RegistrarCompraDolares();
-            fContainer.Content = cd;
+            if (SharedResources._idCajaAbierta > 0)
+            {
+                RegistrarCompraDolares cd = new RegistrarCompraDolares();
+                fContainer.Content = cd;
+            }
+            else
+            {
+                Dashboard db = new Dashboard();
+                fContainer.Content = db;
+            }
         }
 
         private void VistaConfig(string consulta)

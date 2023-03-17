@@ -172,6 +172,142 @@ namespace Sistema_Mercadito.Capa_de_Datos
             }
         }
 
+        public void ConsultaVentasSinpe(ref DataTable dtVentas)
+        {
+            try
+            {
+                AbrirConexion();
+                SqlDataAdapter da = new SqlDataAdapter("SP_Consulta_Ventas_Reporte_Sinpe", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                // dtVentas.Rows.Clear();
+                dtVentas = new DataTable();
+                da.Fill(dtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+        }
+
+        public void ConsultaVentasTarjeta(ref DataTable dtVentas)
+        {
+            try
+            {
+                AbrirConexion();
+                SqlDataAdapter da = new SqlDataAdapter("SP_Consulta_Ventas_Reporte_Tarjeta", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                // dtVentas.Rows.Clear();
+                dtVentas = new DataTable();
+                da.Fill(dtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+        }
+
+        public void ConsultaVentasDolares(ref DataTable dtVentas)
+        {
+            try
+            {
+                AbrirConexion();
+                SqlDataAdapter da = new SqlDataAdapter("SP_Consulta_Ventas_Reporte_Dolares", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                // dtVentas.Rows.Clear();
+                dtVentas = new DataTable();
+                da.Fill(dtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+        }
+
+        public void ConsultaVentasEfectivo(ref DataTable dtVentas)
+        {
+            try
+            {
+                AbrirConexion();
+                SqlDataAdapter da = new SqlDataAdapter("[SP_Consulta_Ventas_Reporte_Colones]", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                // dtVentas.Rows.Clear();
+                dtVentas = new DataTable();
+                da.Fill(dtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+        }
+
         public void EliminarVenta(string _Motivo)
         {
             try

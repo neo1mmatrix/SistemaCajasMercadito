@@ -48,7 +48,7 @@ namespace Sistema_Mercadito.Pages
             if (CompruebaCampos())
             {
                 SharedResources._CfgPrinterName = cbImpresoras.SelectedValue.ToString();
-                SharedResources._CfgPrinterFontSize = int.Parse(txtLongitudImpresion.Text.ToString());
+                SharedResources._CfgPrinterLong = int.Parse(txtLongitudImpresion.Text.ToString());
                 SharedResources._CfgPrinterFontSize = int.Parse(txtTamanoLetra.Text.ToString());
 
                 SharedResources._CfgNombreEmpresa = txtNombreEmpresa.Text.ToString();

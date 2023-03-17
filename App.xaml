@@ -18,6 +18,8 @@
                 <ResourceDictionary Source="Styles/DictionaryGlobalButton.xaml" />
 
                 <ResourceDictionary Source="Styles/GlobalTextBoxNumb.xaml" />
+
+                <ResourceDictionary Source="Styles/DictionaryComboBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

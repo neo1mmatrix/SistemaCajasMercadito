@@ -13,11 +13,13 @@ namespace Sistema_Mercadito.Pages
     /// <summary>
     /// Interaction logic for ReporteVentas.xaml
     /// </summary>
+    ///
     public partial class ReporteVentas : Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
-        private int _SumaCompraDolares = 0;
+        private bool _seleccionMetodoPago = false;
         private decimal _SumaColonesPagadosDolares = 0;
+        private int _SumaCompraDolares = 0;
 
         public ReporteVentas()
         {
@@ -52,11 +54,6 @@ namespace Sistema_Mercadito.Pages
             NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
         }
 
-        private void btnColonClick(object sender, RoutedEventArgs e)
-        {
-            ConsultaVentaDia();
-        }
-
         private void Consultar(object sender, RoutedEventArgs e)
         {
             int id = (int)((Button)sender).CommandParameter;
@@ -76,6 +73,11 @@ namespace Sistema_Mercadito.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             ConsultaVentaDia();
+            cbVentas.SelectedIndex = 0;
+            cbReporte.SelectedIndex = 0;
+            cbVentas.SelectionChanged += cbVentas_tipoVenta;
+            cbReporte.SelectionChanged += cbReporte_tipoReporte;
+            _seleccionMetodoPago = false;
         }
 
         #endregion Eventos
@@ -139,6 +141,31 @@ namespace Sistema_Mercadito.Pages
                                 "Error al enviar correo",
                                 MessageBoxButton.OK);
             }
+        }
+
+        private void DetallesCorreo(ref string pConsulta)
+        {
+            //CREA LA TABLA EN HTML
+            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
+
+            //ENCABEZADOS DE LA TABLA
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Venta</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Efectivo</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dolares</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Tarjeta</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Sinpe</th>";
+
+            //CIERRE DE LA TABLA
+            _tablaEncabezados += "</tr> </thead>";
+
+            string _consulta = "";
+            string _consultaRetiro = "";
+            pConsulta = _tablaEncabezados;
+
+            //Consulta
+            objetoSql.SEL_REPORTE_DETALLE_VENTAS(SharedResources._idCajaAbierta, ref _consulta);
+            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
         }
 
         private void EnviarCorreo()
@@ -261,31 +288,6 @@ namespace Sistema_Mercadito.Pages
             EnviarCorreo("dist.mercadito@gmail.com", "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
         }
 
-        private void DetallesCorreo(ref string pConsulta)
-        {
-            //CREA LA TABLA EN HTML
-            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
-
-            //ENCABEZADOS DE LA TABLA
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Venta</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Efectivo</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dolares</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Tarjeta</th>";
-            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Sinpe</th>";
-
-            //CIERRE DE LA TABLA
-            _tablaEncabezados += "</tr> </thead>";
-
-            string _consulta = "";
-            string _consultaRetiro = "";
-            pConsulta = _tablaEncabezados;
-
-            //Consulta
-            objetoSql.SEL_REPORTE_DETALLE_VENTAS(SharedResources._idCajaAbierta, ref _consulta);
-            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
-        }
-
         #endregion Enviar Correo
 
         #region Vistas
@@ -321,5 +323,89 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Vistas
+
+        private void cbReporte_tipoReporte(object sender, SelectionChangedEventArgs e)
+        {
+            //ComboBoxItem selectedItem = (ComboBoxItem)cbReporte.SelectedItem;
+            //MessageBox.Show(selectedItem.Content.ToString());
+        }
+
+        private void cbVentas_tipoVenta(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = (ComboBoxItem)cbVentas.SelectedItem;
+            string opcion = selectedItem.Content.ToString();
+
+            if (_seleccionMetodoPago)
+            {
+                _seleccionMetodoPago = false;
+
+                switch (opcion)
+                {
+                    case "Todos":
+                        ConsultaVentaDia();
+                        break;
+
+                    case "Colones":
+                        TablaEfectivo();
+                        break;
+
+                    case "Tarjeta":
+                        TablaTarjeta();
+                        break;
+
+                    case "Dolares":
+                        TablaDolares();
+                        break;
+
+                    case "Sinpe":
+                        TablaSinpe();
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción inválida");
+                        break;
+                }
+            }
+            else
+            {
+                _seleccionMetodoPago = true;
+            }
+        }
+
+        #region Rellena Tablas
+
+        private void TablaDolares()
+        {
+            DataTable dtVentas;
+            dtVentas = new DataTable();
+            objetoSql.ConsultaVentasDolares(ref dtVentas);
+            GridDatos.ItemsSource = dtVentas.DefaultView;
+        }
+
+        private void TablaEfectivo()
+        {
+            DataTable dtVentas;
+            dtVentas = new DataTable();
+            objetoSql.ConsultaVentasEfectivo(ref dtVentas);
+            GridDatos.ItemsSource = dtVentas.DefaultView;
+        }
+
+        private void TablaSinpe()
+        {
+            DataTable dtVentas;
+            dtVentas = new DataTable();
+            objetoSql.ConsultaVentasSinpe(ref dtVentas);
+            GridDatos.ItemsSource = dtVentas.DefaultView;
+        }
+
+        private void TablaTarjeta()
+        {
+            DataTable dtVentas;
+            dtVentas = new DataTable();
+            objetoSql.ConsultaVentasTarjeta(ref dtVentas);
+            GridDatos.ItemsSource = dtVentas.DefaultView;
+        }
+
+        #endregion Rellena Tablas
     }
 }
