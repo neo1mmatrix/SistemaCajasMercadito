@@ -245,9 +245,45 @@ namespace Sistema_Mercadito.Capa_de_Datos
             try
             {
                 AbrirConexion();
-                SqlDataAdapter da = new SqlDataAdapter("SP_Consulta_Ventas_Reporte_Dolares", AbrirConexion());
+                SqlDataAdapter da = new SqlDataAdapter("[SP_Consulta_CompraDolares_Reporte]", AbrirConexion());
                 da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                // dtVentas.Rows.Clear();
+                dtVentas = new DataTable();
+                da.Fill(dtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+        }
+
+        public void ConsultaCompraDolares(ref DataTable dtVentas, int activo)
+        {
+            try
+            {
+                AbrirConexion();
+                SqlDataAdapter da = new SqlDataAdapter("[SP_Consulta_CompraDolares_Reporte]", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                da.SelectCommand.Parameters.Add("@activo", SqlDbType.Int).Value = activo;
                 DataSet ds = new DataSet();
                 ds.Clear();
                 da.Fill(ds);

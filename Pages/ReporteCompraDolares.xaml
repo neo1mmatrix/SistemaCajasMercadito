@@ -1,10 +1,11 @@
 ﻿<Page
-    x:Class="Sistema_Mercadito.Pages.ReporteVentas"
+    x:Class="Sistema_Mercadito.Pages.ReporteCompraDolares"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="ReporteVentas"
+    Title="ReporteCompraDolares"
     MinWidth="800"
     MinHeight="450"
     d:DesignHeight="450"
@@ -67,7 +68,7 @@
                 <TextBlock
                     Height="30"
                     HorizontalAlignment="Center"
-                    Text="Reporte de Ventas" />
+                    Text="Reporte de Compra de Dólares" />
             </Border>
 
             <DataGrid
@@ -108,7 +109,7 @@
                                         Background="#20B2AA"
                                         BorderBrush="Transparent"
                                         Click="Consultar"
-                                        CommandParameter="{Binding IdVenta}"
+                                        CommandParameter="{Binding IdCompraD}"
                                         Style="{DynamicResource ButtonGrid}">
                                         <Image Height="30" Source="/Resources/search.png" />
                                     </Button>
@@ -116,7 +117,7 @@
                                         x:Name="btnActualizar"
                                         Background="#018abd"
                                         Click="Actualizar"
-                                        CommandParameter="{Binding IdVenta}"
+                                        CommandParameter="{Binding IdCompraD}"
                                         Style="{DynamicResource ButtonGrid}">
                                         <Image Height="30" Source="/Resources/pencil.png" />
                                     </Button>
@@ -124,7 +125,7 @@
                                         x:Name="btnEliminar"
                                         Background="#8e0000 "
                                         Click="Eliminar"
-                                        CommandParameter="{Binding IdVenta}"
+                                        CommandParameter="{Binding IdCompraD}"
                                         Style="{DynamicResource ButtonGrid}">
                                         <Image Height="30" Source="/Resources/recycle-bin.png" />
                                     </Button>
@@ -136,13 +137,13 @@
                     <!--<DataGridTextColumn Width="50" Header="ID" />-->
                     <DataGridTextColumn
                         Width="0"
-                        Binding="{Binding IdVenta}"
+                        Binding="{Binding IdCompraD}"
                         Header="Id"
                         Visibility="Collapsed" />
                     <DataGridTextColumn
                         Width="100"
-                        Binding="{Binding Venta}"
-                        Header="Venta">
+                        Binding="{Binding Dolares}"
+                        Header="Dólares">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
                                 <Setter Property="TextBlock.TextAlignment" Value="Right" />
@@ -150,9 +151,9 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding MontoColones}"
-                        Header="Colones">
+                        Width="150"
+                        Binding="{Binding TipoCambio}"
+                        Header="Tipo de Cambio">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
                                 <Setter Property="TextBlock.TextAlignment" Value="Right" />
@@ -160,29 +161,9 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding MontoDolares}"
-                        Header="Dolares">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style>
-                                <Setter Property="TextBlock.TextAlignment" Value="Right" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="80"
-                        Binding="{Binding MontoTarjeta}"
-                        Header="Tarjeta">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style>
-                                <Setter Property="TextBlock.TextAlignment" Value="Right" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="80"
-                        Binding="{Binding MontoSinpe}"
-                        Header="Sinpe">
+                        Width="150"
+                        Binding="{Binding TotalPagado}"
+                        Header="Precio en Colones">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
                                 <Setter Property="TextBlock.TextAlignment" Value="Right" />
@@ -192,7 +173,7 @@
 
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding FechaVenta}"
+                        Binding="{Binding FechaCompra}"
                         Header="Fecha">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
@@ -208,29 +189,6 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="9"
                 Orientation="Horizontal">
-                <Button
-                    x:Name="btnColones"
-                    Content="Colones"
-                    Style="{DynamicResource ButtonReporte}"
-                    Visibility="Collapsed" />
-
-                <Button
-                    x:Name="btnTarjeta"
-                    Content="Tarjeta"
-                    Style="{DynamicResource ButtonReporte}"
-                    Visibility="Collapsed" />
-
-                <Button
-                    x:Name="btnDolares"
-                    Content="Dolares"
-                    Style="{DynamicResource ButtonReporte}"
-                    Visibility="Collapsed" />
-
-                <Button
-                    x:Name="btnSinpe"
-                    Content="Sinpe"
-                    Style="{DynamicResource ButtonReporte}"
-                    Visibility="Collapsed" />
                 <TextBlock
                     Margin="5,0,5,0"
                     VerticalAlignment="Center"
@@ -249,48 +207,19 @@
                 <TextBlock
                     Margin="20,0,5,0"
                     VerticalAlignment="Center"
-                    Text="Tipo de Venta: " />
+                    Text="Estado: " />
 
                 <ComboBox
-                    x:Name="cbVentas"
+                    x:Name="cbEstado"
                     Width="140"
-                    SelectionChanged="cbVentas_tipoVenta"
                     Padding="20,5,0,0"
+                    SelectionChanged="cbEstado_CompraDolares"
                     Style="{DynamicResource ComboBoxStyle1}">
-                    <ComboBoxItem>Todos</ComboBoxItem>
-                    <ComboBoxItem>Colones</ComboBoxItem>
-                    <ComboBoxItem>Tarjeta</ComboBoxItem>
-                    <ComboBoxItem>Dolares</ComboBoxItem>
-                    <ComboBoxItem>Sinpe</ComboBoxItem>
+                    <ComboBoxItem>Activo</ComboBoxItem>
+                    <ComboBoxItem>Inactivos</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
 
-            <Button
-                x:Name="btnCerrarCajas"
-                Grid.Row="1"
-                Grid.Column="10"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Right"
-                Click="btnCerrarCaja_Click"
-                Content="Cerrar Cajas"
-                Style="{DynamicResource ButtonReporte}" />
-
-            <TextBlock
-                x:Name="lbVenta"
-                Grid.Row="11"
-                Grid.Column="2"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                FontSize="15"
-                Text="VENTA" />
-            <TextBlock
-                x:Name="lbColones"
-                Grid.Row="11"
-                Grid.Column="4"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                FontSize="15"
-                Text="COLONES" />
             <TextBlock
                 x:Name="lbDolares"
                 Grid.Row="11"
@@ -300,15 +229,15 @@
                 FontSize="15"
                 Text="DOLARES" />
             <TextBlock
-                x:Name="lbTarjeta"
+                x:Name="lbTipoCambio"
                 Grid.Row="11"
                 Grid.Column="8"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 FontSize="15"
-                Text="TARJETA" />
+                Text="Tipo Cambio" />
             <TextBlock
-                x:Name="lbSinpe"
+                x:Name="lbEquivalenA"
                 Grid.Row="11"
                 Grid.Column="10"
                 HorizontalAlignment="Right"
@@ -317,35 +246,23 @@
                 Text="SINPE" />
 
             <TextBlock
-                x:Name="txtVenta"
-                Grid.Row="13"
-                Grid.Column="2"
-                HorizontalAlignment="Right"
-                Text="VENTA" />
-            <TextBlock
-                x:Name="txtColones"
-                Grid.Row="13"
-                Grid.Column="4"
-                HorizontalAlignment="Right"
-                Text="COLONES" />
-            <TextBlock
                 x:Name="txtDolares"
                 Grid.Row="13"
                 Grid.Column="6"
                 HorizontalAlignment="Right"
                 Text="DOLARES" />
             <TextBlock
-                x:Name="txtTarjeta"
+                x:Name="txtTipoCambio"
                 Grid.Row="13"
                 Grid.Column="8"
                 HorizontalAlignment="Right"
-                Text="TARJETA" />
+                Text="TipoCambio" />
             <TextBlock
-                x:Name="txtSinpe"
+                x:Name="txtEquivalenA"
                 Grid.Row="13"
                 Grid.Column="10"
                 HorizontalAlignment="Right"
-                Text="SINPE" />
+                Text="Equivalen" />
 
             <Frame
                 x:Name="FrameReporte"

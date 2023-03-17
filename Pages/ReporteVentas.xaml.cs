@@ -326,8 +326,44 @@ namespace Sistema_Mercadito.Pages
 
         private void cbReporte_tipoReporte(object sender, SelectionChangedEventArgs e)
         {
-            //ComboBoxItem selectedItem = (ComboBoxItem)cbReporte.SelectedItem;
-            //MessageBox.Show(selectedItem.Content.ToString());
+            ComboBoxItem selectedItem = (ComboBoxItem)cbReporte.SelectedItem;
+            string opcion = selectedItem.Content.ToString();
+
+            if (_seleccionMetodoPago)
+            {
+                _seleccionMetodoPago = false;
+
+                switch (opcion)
+                {
+                    case "Ventas":
+                        ConsultaVentaDia();
+                        break;
+
+                    case "Colones":
+                        //TablaEfectivo();
+                        break;
+
+                    case "Cambio Dólares":
+                        VistaCambioDolares();
+                        break;
+
+                    case "Dolares":
+                        //TablaDolares();
+                        break;
+
+                    case "Sinpe":
+                        // TablaSinpe();
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción inválida");
+                        break;
+                }
+            }
+            else
+            {
+                _seleccionMetodoPago = true;
+            }
         }
 
         private void cbVentas_tipoVenta(object sender, SelectionChangedEventArgs e)
@@ -376,6 +412,7 @@ namespace Sistema_Mercadito.Pages
 
         private void TablaDolares()
         {
+            int _activo = 1;
             DataTable dtVentas;
             dtVentas = new DataTable();
             objetoSql.ConsultaVentasDolares(ref dtVentas);
@@ -407,5 +444,14 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Rellena Tablas
+
+        private void VistaCambioDolares()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
+            ReporteCompraDolares rcd = new ReporteCompraDolares();
+            fContainerm.Content = rcd;
+        }
     }
 }
