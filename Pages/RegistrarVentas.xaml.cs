@@ -216,7 +216,7 @@ namespace Sistema_Mercadito.Pages
 
         private void RegresarClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+            VistaReporteVentas();
         }
 
         private void SeleccionaTextoClick(object sender, MouseButtonEventArgs e)
@@ -744,6 +744,15 @@ namespace Sistema_Mercadito.Pages
             Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
             MensajeVueltoCliente mvc = new MensajeVueltoCliente();
             fContainerm.Content = mvc;
+        }
+
+        private void VistaReporteVentas()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
+            ReporteVentas rv = new ReporteVentas();
+            fContainerm.Content = rv;
         }
 
         #endregion Vistas

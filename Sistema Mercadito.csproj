@@ -180,6 +180,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\RetirosEfectivo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\TestingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -239,6 +243,9 @@
     </Compile>
     <Compile Include="Pages\ReporteVentas.xaml.cs">
       <DependentUpon>ReporteVentas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RetirosEfectivo.xaml.cs">
+      <DependentUpon>RetirosEfectivo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SharedResources.cs" />
     <Compile Include="Pages\TestingPage.xaml.cs">
@@ -362,6 +369,10 @@
     <Resource Include="Resources\retiro-de-efectivo.png" />
     <Resource Include="Resources\retiro-de-efectivo1.png" />
     <Resource Include="Resources\retiro-de-efectivo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\retiro-de-dinero.png" />
+    <Resource Include="Resources\retiro.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -223,23 +223,6 @@ namespace Sistema_Mercadito
                 WindowState = WindowState.Normal;
         }
 
-        private void btnSecurity_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (Tg_Btn.IsChecked == false)
-            {
-                Popup.PlacementTarget = btnSecurity;
-                Popup.Placement = PlacementMode.Right;
-                Popup.IsOpen = true;
-                Header.PopupText.Text = "Security";
-            }
-        }
-
-        private void btnSecurity_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Popup.Visibility = Visibility.Collapsed;
-            Popup.IsOpen = false;
-        }
-
         private void btnSetting_MouseEnter(object sender, MouseEventArgs e)
         {
             if (Tg_Btn.IsChecked == false)
@@ -375,6 +358,20 @@ namespace Sistema_Mercadito
             }
         }
 
+        private void VistaRetiros()
+        {
+            if (SharedResources._idCajaAbierta > 0)
+            {
+                RetirosEfectivo re = new RetirosEfectivo();
+                fContainer.Content = re;
+            }
+            else
+            {
+                Dashboard db = new Dashboard();
+                fContainer.Content = db;
+            }
+        }
+
         private void VistaConfig(string consulta)
         {
             Configuracion conf = new Configuracion(ref consulta);
@@ -394,5 +391,27 @@ namespace Sistema_Mercadito
         }
 
         #endregion VistasPages
+
+        private void btnRetiros_Click(object sender, RoutedEventArgs e)
+        {
+            VistaRetiros();
+        }
+
+        private void btnRetiros_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (Tg_Btn.IsChecked == false)
+            {
+                Popup.PlacementTarget = btnRetiros;
+                Popup.Placement = PlacementMode.Right;
+                Popup.IsOpen = true;
+                Header.PopupText.Text = "Retiros";
+            }
+        }
+
+        private void btnRetiros_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Popup.Visibility = Visibility.Collapsed;
+            Popup.IsOpen = false;
+        }
     }
 }

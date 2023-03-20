@@ -143,20 +143,13 @@
                             <Image Height="30" Source="/Resources/money-exchange.png" />
                         </Button>
                         <Button
-                            x:Name="btnSecurity"
-                            Click="btnCierreCaja_Click"
-                            MouseEnter="btnSecurity_MouseEnter"
-                            MouseLeave="btnSecurity_MouseLeave"
+                            x:Name="btnRetiros"
+                            Click="btnRetiros_Click"
+                            MouseEnter="btnRetiros_MouseEnter"
+                            MouseLeave="btnRetiros_MouseLeave"
                             Style="{DynamicResource PopupButtonStyle}"
-                            Visibility="Collapsed">
-
-                            <ctls:MenuItem
-                                VerticalAlignment="Center"
-                                GroupName="MenuItem"
-                                Icon="{DynamicResource lock}"
-                                IconWidth="16"
-                                IndicatorBrush="{DynamicResource PrimaryBlueColor}"
-                                Text="Cambio de Dólares" />
+                            Visibility="Visible">
+                            <Image Height="30" Source="/Resources/Retiro-de-Efectivo2.png" />
                         </Button>
                         <Button
                             x:Name="btnSetting"

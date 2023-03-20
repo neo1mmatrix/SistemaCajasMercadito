@@ -1,0 +1,281 @@
+﻿<Page
+    x:Class="Sistema_Mercadito.Pages.RetirosEfectivo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Sistema_Mercadito.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="RetirosEfectivo"
+    MinWidth="800"
+    MinHeight="450"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    FontSize="20"
+    Foreground="{DynamicResource PrimaryTextColor}"
+    KeyDown="AtajoTeclado"
+    Loaded="loaded"
+    mc:Ignorable="d">
+
+    <Border
+        Background="{DynamicResource SecundaryBackgroundColor}"
+        CornerRadius="5"
+        PreviewKeyDown="Border_PreviewKeyDown">
+
+        <Grid
+            MaxHeight="800"
+            Background="Transparent"
+            KeyDown="Grid_KeyDown">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition MaxHeight="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition MaxHeight="15" />
+                <RowDefinition Height="*" />
+                <RowDefinition MaxHeight="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="8" />
+                <RowDefinition Height="50" />
+
+                <RowDefinition MaxHeight="15" />
+            </Grid.RowDefinitions>
+            <!--#region LabelsAtajos-->
+
+            <Grid
+                x:Name="gridAtajos"
+                Grid.Row="0"
+                Grid.RowSpan="5"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Width="150"
+                Height="90"
+                Background="Transparent"
+                Visibility="Visible">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+            </Grid>
+
+            <!--#endregion-->
+            <!--#region TEXTBLOCKS-->
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Efectivo: " />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Dólares: "
+                TextWrapping="Wrap" />
+
+            <TextBlock
+                Grid.Row="8"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Motivo: " />
+            <Border
+                Grid.Row="8"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                Background="#3f475b"
+                CornerRadius="5">
+                <Grid>
+
+                    <TextBox
+                        x:Name="txtMotivo"
+                        Margin="0,0,10,0"
+                        Padding="10,0,0,0"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        Background="#3f475b"
+                        BorderThickness="0"
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="Wheat"
+                        KeyDown="AtajoTeclado"
+                        TabIndex="3"
+                        MaxLength="100"
+                        Text="" />
+                </Grid>
+            </Border>
+
+            <!--#endregion-->
+            <!--#region BOTONES-->
+            <Button
+                x:Name="btnRetirar"
+                Grid.Row="10"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                Click="btnRetirar_Click"
+                Content="Retirar"
+                FontWeight="Bold"
+                PreviewKeyDown="PreviewKeyDownRetirar"
+                Style="{DynamicResource ButtonStyleGlobal}"
+                TabIndex="7" />
+
+            <Button
+                x:Name="btnActualizar"
+                Grid.Row="10"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                Click="btnActualizar_Click"
+                Content="Actualizar"
+                FontWeight="Bold"
+                Foreground="Navy"
+                Style="{DynamicResource ButtonStyleGlobal}"
+                TabIndex="8"
+                Visibility="Collapsed" />
+            <Button
+                x:Name="btnEliminar"
+                Grid.Row="10"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                Click="btnEliminar_Click"
+                Content="Eliminar Registro"
+                FontWeight="Bold"
+                Foreground="Crimson"
+                Style="{DynamicResource ButtonStyleGlobal}"
+                TabIndex="9"
+                Visibility="Collapsed" />
+            <Button
+                x:Name="btnRegresar"
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Width="120"
+                Margin="10,5,10,5"
+                HorizontalAlignment="Left"
+                Click="btnRegresar_Click"
+                Content="Regresar"
+                FontWeight="Bold"
+                Foreground="#005736"
+                Style="{DynamicResource ButtonStyleGlobal}"
+                TabIndex="10"
+                Visibility="Collapsed" />
+            <Button
+                x:Name="btnAbrirCaja"
+                Grid.Row="12"
+                Grid.Column="4"
+                Grid.ColumnSpan="5"
+                Click="btnAbrirCaja_Click"
+                Content="Abrir Caja"
+                FontWeight="Bold"
+                Foreground="Navy"
+                Style="{DynamicResource ButtonStyleGlobal}"
+                TabIndex="8"
+                Visibility="Visible" />
+            <!--#endregion-->
+            <!--#region Campos de Texto Montos-->
+            <TextBox
+                x:Name="txtEfectivo"
+                Grid.Row="3"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                FontSize="28"
+                FontWeight="Bold"
+                Foreground="Navy"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="12"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                Style="{DynamicResource TextBoxStyleNumb}"
+                TabIndex="0" />
+            <TextBox
+                x:Name="txtDolares"
+                Grid.Row="5"
+                Grid.Column="3"
+                Grid.ColumnSpan="7"
+                FontWeight="Bold"
+                FontSize="28"
+                Foreground="#651157"
+                KeyDown="AtajoTeclado"
+                LostFocus="txtLostFocus"
+                MaxLength="4"
+                PreviewKeyDown="txtPreviewKeyDownEvent"
+                PreviewMouseLeftButtonUp="SeleccionaTextoClick"
+                PreviewTextInput="NumberValidationTextBox"
+                Style="{DynamicResource TextBoxStyleNumb}"
+                TabIndex="1"
+                TextChanged="txtTextChanged" />
+
+            <!--#endregion-->
+
+            <TextBlock
+                x:Name="tbfecha"
+                Grid.Row="1"
+                Grid.Column="9"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Text=""
+                Visibility="Hidden" />
+            <TextBlock
+                x:Name="tbfechaHora"
+                Grid.Row="2"
+                Grid.RowSpan="2"
+                Grid.Column="9"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                FontSize="18"
+                Text=""
+                Visibility="Hidden" />
+            <TextBlock
+                x:Name="tbfechaAntigua"
+                Grid.Row="1"
+                Grid.Column="9"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Visibility="Collapsed" />
+            <TextBlock
+                x:Name="tbTitulo"
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="11"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Retiro de Efectivo" />
+
+            <Frame
+                Name="fContainer"
+                Grid.Row="0"
+                Grid.RowSpan="22"
+                Grid.Column="0"
+                Grid.ColumnSpan="13"
+                Margin="7"
+                NavigationUIVisibility="Hidden" />
+        </Grid>
+    </Border>
+</Page>

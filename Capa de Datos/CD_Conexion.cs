@@ -1242,5 +1242,47 @@ namespace Sistema_Mercadito.Capa_de_Datos
         }
 
         #endregion Compra Dolares
+
+        public Boolean SP_Retiro_Efectivo(decimal _MontoColones, decimal _MontoDolares, string _Motivo)
+        {
+            //
+            bool resultado = false;
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "[SP_Retiro_Efectivo]",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                //Registra los datos de la compra de dolares
+                com.Parameters.AddWithValue("@IdCaja", SharedResources._idCajaAbierta);
+                com.Parameters.AddWithValue("@Colones", _MontoColones);
+                com.Parameters.AddWithValue("@Dolares", _MontoDolares);
+                com.Parameters.AddWithValue("@Motivo", _Motivo);
+
+                //Ejectura el procedimiento almacenado
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+
+                resultado = true;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            return resultado;
+        }
     }
 }
