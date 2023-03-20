@@ -13,6 +13,7 @@ namespace Sistema_Mercadito.Pages
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
         private bool _seleccionMetodoPago = false;
+        private int _idConsulta = 0;
 
         public ReporteCompraDolares()
         {
@@ -63,14 +64,26 @@ namespace Sistema_Mercadito.Pages
 
         private void Actualizar(object sender, RoutedEventArgs e)
         {
+            if (cbEstado.SelectedIndex != 1)
+            {
+                _idConsulta = (int)((Button)sender).CommandParameter;
+                VistaActualizar();
+            }
         }
 
         private void Consultar(object sender, RoutedEventArgs e)
         {
+            _idConsulta = (int)((Button)sender).CommandParameter;
+            VistaConsultar();
         }
 
         private void Eliminar(object sender, RoutedEventArgs e)
         {
+            if (cbEstado.SelectedIndex != 1)
+            {
+                _idConsulta = (int)((Button)sender).CommandParameter;
+                VistaEliminar();
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -122,12 +135,42 @@ namespace Sistema_Mercadito.Pages
             fContainerm.Content = rv;
         }
 
+        private void VistaConsultar()
+        {
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            RegistrarCompraDolares rcd = new RegistrarCompraDolares("Consultar", _idConsulta);
+            // Acceder a un elemento dentro de la ventana principal
+            fContainer.Content = rcd;
+        }
+
+        private void VistaActualizar()
+        {
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            RegistrarCompraDolares rcd = new RegistrarCompraDolares("Actualizar", _idConsulta);
+            // Acceder a un elemento dentro de la ventana principal
+            fContainer.Content = rcd;
+        }
+
+        private void VistaEliminar()
+        {
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            RegistrarCompraDolares rcd = new RegistrarCompraDolares("Eliminar", _idConsulta);
+            // Acceder a un elemento dentro de la ventana principal
+            fContainer.Content = rcd;
+        }
+
         private void ConsultaCompraDolares()
         {
             int _activo = 1;
             DataTable dtVentas;
             dtVentas = new DataTable();
-            objetoSql.ConsultaCompraDolares(ref dtVentas, _activo);
+            objetoSql.ConsultaCompraDolaresReporte(ref dtVentas, _activo);
             GridDatos.ItemsSource = dtVentas.DefaultView;
         }
 
@@ -136,7 +179,7 @@ namespace Sistema_Mercadito.Pages
             int _activo = 0;
             DataTable dtVentas;
             dtVentas = new DataTable();
-            objetoSql.ConsultaCompraDolares(ref dtVentas, _activo);
+            objetoSql.ConsultaCompraDolaresReporte(ref dtVentas, _activo);
             GridDatos.ItemsSource = dtVentas.DefaultView;
         }
     }

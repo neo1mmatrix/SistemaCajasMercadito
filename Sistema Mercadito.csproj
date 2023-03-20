@@ -357,5 +357,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dinero-en-efectivo.png" />
+    <Resource Include="Resources\retiro-de-efectivo.png" />
+    <Resource Include="Resources\retiro-de-efectivo1.png" />
+    <Resource Include="Resources\retiro-de-efectivo2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

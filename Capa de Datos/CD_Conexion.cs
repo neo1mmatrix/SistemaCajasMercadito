@@ -240,42 +240,59 @@ namespace Sistema_Mercadito.Capa_de_Datos
             }
         }
 
-        public void ConsultaVentasDolares(ref DataTable dtVentas)
+        public void ConsultaDolaresComprados(ref string _dolares, ref string _tipoCambio, ref string _pagoEfectivo, int _id, ref string _fecha)
         {
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("[SP_Consulta_Compra_Dolares]", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = _id;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
             try
             {
-                AbrirConexion();
-                SqlDataAdapter da = new SqlDataAdapter("[SP_Consulta_CompraDolares_Reporte]", AbrirConexion());
-                da.SelectCommand.CommandType = CommandType.StoredProcedure;
-                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
 
-                DataSet ds = new DataSet();
-                ds.Clear();
-                da.Fill(ds);
-
-                // dtVentas.Rows.Clear();
-                dtVentas = new DataTable();
-                da.Fill(dtVentas);
+                // Leer los resultados de la consulta
+                while (lector.Read())
+                {
+                    _tipoCambio = lector.GetDouble(0).ToString("N0");
+                    _dolares = lector.GetInt32(1).ToString("N0");
+                    _pagoEfectivo = lector.GetDecimal(2).ToString("N0");
+                    _fecha = lector.GetString(3).ToString();
+                }
             }
             catch (SqlException ex)
             {
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Error en la base de datos " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Fallo en " + ex.ToString());
             }
             finally
             {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                if (lector != null)
+                {
+                    lector.Close();
+                }
+
                 CerrarConexion();
             }
         }
 
-        public void ConsultaCompraDolares(ref DataTable dtVentas, int activo)
+        public void ConsultaCompraDolaresReporte(ref DataTable dtVentas, int activo)
         {
             try
             {
@@ -1075,6 +1092,90 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
                 resultado = false;
+            }
+            return resultado;
+        }
+
+        public Boolean Actualizar_Compra_Dolares(int _idCompra,
+                                     float _tipoCambio,
+                                     int _cantidadDolares,
+                                     decimal _totalPagado)
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "[SP_Actualizar_Compra_Dolares]",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                com.Parameters.AddWithValue("@idCompraD", _idCompra);
+                com.Parameters.AddWithValue("@TipoCambio", _tipoCambio);
+                com.Parameters.AddWithValue("@CantidadDolares", _cantidadDolares);
+                com.Parameters.AddWithValue("@TotalPagado", _totalPagado);
+
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+                resultado = true;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+            return resultado;
+        }
+
+        public Boolean Eliminar_Compra_Dolares(int _idCompra)
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "[SP_Eliminar_Compra_Dolares]",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                com.Parameters.AddWithValue("@idCompraD", _idCompra);
+
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+                resultado = true;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            finally
+            {
+                CerrarConexion();
             }
             return resultado;
         }

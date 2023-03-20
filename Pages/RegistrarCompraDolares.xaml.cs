@@ -2,6 +2,7 @@
 using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,13 +13,34 @@ namespace Sistema_Mercadito.Pages
     /// <summary>
     /// Lógica de interacción para RegistrarCompraDolares.xaml
     /// </summary>
+    ///
     public partial class RegistrarCompraDolares : Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
+        private string _Estado = "";
+        private int _idConsulta = 0;
 
-        public RegistrarCompraDolares()
+        public RegistrarCompraDolares(string estado, int id)
         {
             InitializeComponent();
+            _Estado = estado;
+            _idConsulta = id;
+
+            txtTipoCambio.Text = "0";
+            txtDolaresRecibidos.Text = "0";
+
+            if (_Estado == "Consultar")
+            {
+                Consultar();
+            }
+            else if (_Estado == "Actualizar")
+            {
+                Actualizar();
+            }
+            else if (_Estado == "Eliminar")
+            {
+                Elimimnar();
+            }
         }
 
         #region Eventos
@@ -38,6 +60,28 @@ namespace Sistema_Mercadito.Pages
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
+            if (int.Parse(txtDolaresRecibidos.Text, System.Globalization.NumberStyles.AllowThousands) <= 0)
+            {
+                MessageBox.Show("Los dólares recibidos tienen que ser mayor a cero");
+                return;
+            }
+
+            if (int.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands) <= 0)
+            {
+                MessageBox.Show("El tipo de cambio no puede ser cero");
+                return;
+            }
+
+            int _tipoCambio = int.Parse(txtTipoCambio.Text, System.Globalization.NumberStyles.AllowThousands);
+            int _dolaresRecibidos = int.Parse(txtDolaresRecibidos.Text, System.Globalization.NumberStyles.AllowThousands);
+            decimal _montoCambio = _tipoCambio * _dolaresRecibidos;
+
+            if (objetoSql.Actualizar_Compra_Dolares(_idConsulta, _tipoCambio, _dolaresRecibidos, _montoCambio))
+            {
+                StartBackgroundTask(_dolaresRecibidos.ToString("N0"), _tipoCambio.ToString("N0"), _montoCambio.ToString("N0"));
+                MessageBox.Show("Datos actualizados correctamente");
+                VistaReporteCompraDolares();
+            }
         }
 
         private void btnComprar_Click(object sender, RoutedEventArgs e)
@@ -47,10 +91,16 @@ namespace Sistema_Mercadito.Pages
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
+            if (objetoSql.Eliminar_Compra_Dolares(_idConsulta))
+            {
+                MessageBox.Show("Datos Eliminados Correctamente");
+                VistaReporteCompraDolares();
+            }
         }
 
         private void btnRegresar_Click(object sender, RoutedEventArgs e)
         {
+            VistaReporteCompraDolares();
         }
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)
@@ -59,8 +109,6 @@ namespace Sistema_Mercadito.Pages
 
         private void loaded(object sender, RoutedEventArgs e)
         {
-            txtTipoCambio.Text = "0";
-            txtDolaresRecibidos.Text = "0";
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -252,6 +300,97 @@ namespace Sistema_Mercadito.Pages
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
             VentasCajas vc = new VentasCajas("Venta");
             fContainer.Content = vc;
+        }
+
+        private void Consultar()
+        {
+            tbTitulo.Text = "Consulta de " + tbTitulo.Text;
+            txtDolaresRecibidos.IsEnabled = false;
+            txtTipoCambio.IsEnabled = false;
+            btnComprar.Visibility = Visibility.Collapsed;
+
+            borderAtajo.Visibility = Visibility.Collapsed;
+            lbComprarAtajo.Visibility = Visibility.Collapsed;
+
+            borderAtajoBoton.Visibility = Visibility.Visible;
+            btnRegresar1.Visibility = Visibility.Visible;
+            string _TipoCambio = "";
+            string _Dolares = "";
+            string _PagoEfectivo = "";
+            string _FechaCompra = "";
+
+            objetoSql.ConsultaDolaresComprados(ref _Dolares, ref _TipoCambio, ref _PagoEfectivo, _idConsulta, ref _FechaCompra);
+
+            txtDolaresRecibidos.Text = _Dolares;
+            txtTipoCambio.Text = _TipoCambio;
+            tbfecha.Text = _FechaCompra;
+            tbfecha.Visibility = Visibility.Visible;
+            lbMontoEnColones.Content = _PagoEfectivo;
+        }
+
+        private void Actualizar()
+        {
+            tbTitulo.Text = "Actualizar " + tbTitulo.Text;
+            btnActualizar.Visibility = Visibility.Visible;
+            btnComprar.Visibility = Visibility.Collapsed;
+            btnEliminar.Visibility = Visibility.Collapsed;
+
+            borderAtajo.Visibility = Visibility.Collapsed;
+            lbComprarAtajo.Visibility = Visibility.Collapsed;
+
+            borderAtajoBoton.Visibility = Visibility.Visible;
+            btnRegresar1.Visibility = Visibility.Visible;
+            string _TipoCambio = "";
+            string _Dolares = "";
+            string _PagoEfectivo = "";
+            string _FechaCompra = "";
+
+            objetoSql.ConsultaDolaresComprados(ref _Dolares, ref _TipoCambio, ref _PagoEfectivo, _idConsulta, ref _FechaCompra);
+
+            txtDolaresRecibidos.Text = _Dolares;
+            txtTipoCambio.Text = _TipoCambio;
+            tbfecha.Text = _FechaCompra;
+            tbfecha.Visibility = Visibility.Visible;
+            lbMontoEnColones.Content = _PagoEfectivo;
+        }
+
+        private void Elimimnar()
+        {
+            tbTitulo.Text = "Eliminar Compra de Dólares";
+            txtDolaresRecibidos.IsEnabled = false;
+            txtTipoCambio.IsEnabled = false;
+
+            btnActualizar.Visibility = Visibility.Collapsed;
+            btnComprar.Visibility = Visibility.Collapsed;
+            btnEliminar.Visibility = Visibility.Visible;
+
+            borderAtajo.Visibility = Visibility.Collapsed;
+            lbComprarAtajo.Visibility = Visibility.Collapsed;
+
+            borderAtajoBoton.Visibility = Visibility.Visible;
+            btnRegresar1.Visibility = Visibility.Visible;
+            string _TipoCambio = "";
+            string _Dolares = "";
+            string _PagoEfectivo = "";
+            string _FechaCompra = "";
+
+            objetoSql.ConsultaDolaresComprados(ref _Dolares, ref _TipoCambio, ref _PagoEfectivo, _idConsulta, ref _FechaCompra);
+
+            txtDolaresRecibidos.Text = _Dolares;
+            txtTipoCambio.Text = _TipoCambio;
+            tbfecha.Text = _FechaCompra;
+            tbfecha.Visibility = Visibility.Visible;
+            lbMontoEnColones.Content = _PagoEfectivo;
+        }
+
+        private void VistaReporteCompraDolares()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            ReporteCompraDolares rcd = new ReporteCompraDolares();
+            fContainer.Content = rcd;
         }
 
         #endregion Vistas

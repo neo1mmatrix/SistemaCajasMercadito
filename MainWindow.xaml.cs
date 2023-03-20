@@ -365,7 +365,7 @@ namespace Sistema_Mercadito
         {
             if (SharedResources._idCajaAbierta > 0)
             {
-                RegistrarCompraDolares cd = new RegistrarCompraDolares();
+                RegistrarCompraDolares cd = new RegistrarCompraDolares("Compra", 0);
                 fContainer.Content = cd;
             }
             else

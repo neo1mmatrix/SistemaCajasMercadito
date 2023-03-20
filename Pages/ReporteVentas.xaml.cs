@@ -33,9 +33,7 @@ namespace Sistema_Mercadito.Pages
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
 
-            VentasCajas vc = new VentasCajas("Actualizar");
-            vc.Consulta();
-            FrameReporte.Content = vc;
+            VistaVentaActualizar();
         }
 
         private void btnCerrarCaja_Click(object sender, RoutedEventArgs e)
@@ -51,15 +49,15 @@ namespace Sistema_Mercadito.Pages
             hilo.Start();
             MessageBox.Show("Cierre Correcto");
             SharedResources.LimpiaVariables();
-            NavigationService.Navigate(new System.Uri("Pages/Dashboard.xaml", UriKind.RelativeOrAbsolute));
+            VistaAbrirCaja();
         }
 
         private void Consultar(object sender, RoutedEventArgs e)
         {
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
-            VentasCajas vc = new VentasCajas("Consulta");
-            FrameReporte.Content = vc;
+
+            VistaConsultar();
         }
 
         private void Eliminar(object sender, RoutedEventArgs e)
@@ -292,6 +290,16 @@ namespace Sistema_Mercadito.Pages
 
         #region Vistas
 
+        private void VistaAbrirCaja()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+
+            Dashboard db = new Dashboard();
+            fContainer.Content = db;
+        }
+
         public void VistaVenta()
         {
             Window mainWindow = Application.Current.MainWindow;
@@ -299,6 +307,17 @@ namespace Sistema_Mercadito.Pages
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
 
             VentasCajas vc = new VentasCajas("Venta");
+            fContainer.Content = vc;
+        }
+
+        private void VistaConsultar()
+        {
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            VentasCajas vc = new VentasCajas("Consulta");
+
+            // Acceder a un elemento dentro de la ventana principal
             fContainer.Content = vc;
         }
 
@@ -415,7 +434,7 @@ namespace Sistema_Mercadito.Pages
             int _activo = 1;
             DataTable dtVentas;
             dtVentas = new DataTable();
-            objetoSql.ConsultaVentasDolares(ref dtVentas);
+            objetoSql.ConsultaCompraDolaresReporte(ref dtVentas, _activo);
             GridDatos.ItemsSource = dtVentas.DefaultView;
         }
 
