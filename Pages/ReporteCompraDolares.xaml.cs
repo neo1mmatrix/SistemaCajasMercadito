@@ -88,6 +88,7 @@ namespace Sistema_Mercadito.Pages
             cbReporte.SelectedIndex = 2;
             cbEstado.SelectionChanged += cbEstado_CompraDolares;
             cbReporte.SelectionChanged += cbReporte_tipoReporte;
+            SumaGrid();
         }
 
         private void cbEstado_CompraDolares(object sender, SelectionChangedEventArgs e)
@@ -101,10 +102,12 @@ namespace Sistema_Mercadito.Pages
                 {
                     case "Activo":
                         ConsultaCompraDolares();
+                        SumaGrid();
                         break;
 
                     case "Inactivos":
                         ConsultaCompraDolaresInactivo();
+                        SumaGrid();
                         break;
 
                     default:
@@ -118,6 +121,8 @@ namespace Sistema_Mercadito.Pages
                 _ciclo = 0;
             }
         }
+
+        #region Vistas
 
         private void VistaReporteVentas()
         {
@@ -167,6 +172,8 @@ namespace Sistema_Mercadito.Pages
             fContainer.Content = rr;
         }
 
+        #endregion Vistas
+
         private void ConsultaCompraDolares()
         {
             int _activo = 1;
@@ -183,6 +190,28 @@ namespace Sistema_Mercadito.Pages
             dtVentas = new DataTable();
             objetoSql.ConsultaCompraDolaresReporte(ref dtVentas, _activo);
             GridDatos.ItemsSource = dtVentas.DefaultView;
+        }
+
+        private void SumaGrid()
+        {
+            decimal _totalDolares = 0;
+            decimal _totalMontoPagado = 0;
+
+            try
+            {
+                foreach (DataRowView row in GridDatos.ItemsSource)
+                {
+                    _totalDolares += decimal.Parse((string)row["Dolares"], System.Globalization.NumberStyles.AllowThousands);
+                    _totalMontoPagado += decimal.Parse((string)row["TotalPagado"], System.Globalization.NumberStyles.AllowThousands);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+            txtDolares.Text = "$ " + _totalDolares.ToString("N0");
+            txtEquivalenA.Text = "₡ " + _totalMontoPagado.ToString("N0");
         }
     }
 }

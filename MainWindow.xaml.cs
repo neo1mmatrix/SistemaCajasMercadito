@@ -261,7 +261,7 @@ namespace Sistema_Mercadito
         {
             if (SharedResources._idCajaAbierta > 0)
             {
-                VistaReporteVentas();
+                VistaAccesos();
             }
         }
 
@@ -384,17 +384,29 @@ namespace Sistema_Mercadito
             fContainer.Content = apertura;
         }
 
+        private void VistaAccesos()
+        {
+            if (SharedResources._idCajaAbierta > 0)
+            {
+                ClaveAcceso ca = new ClaveAcceso();
+                fContainer.Content = ca;
+            }
+            else
+            {
+                Dashboard db = new Dashboard();
+                fContainer.Content = db;
+            }
+        }
+
         private void VistaReporteVentas()
         {
-            ClaveAcceso ca = new ClaveAcceso();
-            fContainer.Content = ca;
         }
 
         #endregion VistasPages
 
         private void btnRetiros_Click(object sender, RoutedEventArgs e)
         {
-            VistaRetiros();
+            VistaAccesos();
         }
 
         private void btnRetiros_MouseEnter(object sender, MouseEventArgs e)

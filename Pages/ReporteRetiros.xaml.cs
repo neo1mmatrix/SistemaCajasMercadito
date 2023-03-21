@@ -39,11 +39,13 @@ namespace Sistema_Mercadito.Pages
                     case "Activo":
                         _activo = 1;
                         ConsultaRetiros(_activo);
+                        SumaGrid();
                         break;
 
                     case "Inactivos":
                         _activo = 0;
                         ConsultaRetiros(_activo);
+                        SumaGrid();
                         break;
 
                     default:
@@ -103,6 +105,7 @@ namespace Sistema_Mercadito.Pages
             cbReporte.SelectedIndex = 1;
             cbEstado.SelectionChanged += cbEstado_retiros;
             cbReporte.SelectionChanged += cbReporte_tipoReporte;
+            SumaGrid();
         }
 
         #endregion Eventos
@@ -194,5 +197,27 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Vistas
+
+        private void SumaGrid()
+        {
+            decimal _totalColones = 0;
+            decimal _totalDolares = 0;
+
+            try
+            {
+                foreach (DataRowView row in GridDatos.ItemsSource)
+                {
+                    _totalColones += decimal.Parse((string)row["Colones"], System.Globalization.NumberStyles.AllowThousands);
+                    _totalDolares += decimal.Parse((string)row["Dolares"], System.Globalization.NumberStyles.AllowThousands);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+            txtColones.Text = "₡" + _totalColones.ToString("N0");
+            txtDolares.Text = "$ " + _totalDolares.ToString("N0");
+        }
     }
 }

@@ -204,6 +204,7 @@
                 Content="Actualizar"
                 FontWeight="Bold"
                 Foreground="Navy"
+                PreviewKeyDown="PreviewKeyDownPagar"
                 Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="8"
                 Visibility="Collapsed" />
@@ -216,6 +217,7 @@
                 Content="Eliminar Registro"
                 FontWeight="Bold"
                 Foreground="Crimson"
+                PreviewKeyDown="PreviewKeyDownPagar"
                 Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="9"
                 Visibility="Collapsed" />

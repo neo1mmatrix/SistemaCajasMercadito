@@ -281,6 +281,7 @@
                 Content="Regresar"
                 FontWeight="Bold"
                 Foreground="#005736"
+                PreviewKeyDown="PreviewKeyDownPagar"
                 Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="10"
                 Visibility="Collapsed" />

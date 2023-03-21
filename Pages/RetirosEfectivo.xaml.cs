@@ -36,6 +36,9 @@ namespace Sistema_Mercadito.Pages
             {
                 Eliminar();
             }
+            else
+            {
+            }
         }
 
         #region Eventos
@@ -90,10 +93,14 @@ namespace Sistema_Mercadito.Pages
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
-            if (objetoSql.SP_Eliminar_Retiro_Efectivo(_idConsulta))
+            MessageBoxResult result = MessageBox.Show("¿Está seguro de que desea borrar este retiro?", "Advertencia", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBox.Show("Los datos han sido eliminados correctamente");
-                VistaReporte();
+                if (objetoSql.SP_Eliminar_Retiro_Efectivo(_idConsulta))
+                {
+                    MessageBox.Show("Los datos han sido eliminados correctamente");
+                    VistaReporte();
+                }
             }
         }
 
@@ -249,6 +256,8 @@ namespace Sistema_Mercadito.Pages
             txtEfectivo.Text = _Colones;
             txtDolares.Text = _Dolares;
             txtMotivo.Text = _Motivo;
+            tbfecha.Text = _Fecha;
+            tbfecha.Visibility = Visibility.Visible;
         }
 
         private void Actualizar()
@@ -270,6 +279,8 @@ namespace Sistema_Mercadito.Pages
             txtEfectivo.Text = _Colones;
             txtDolares.Text = _Dolares;
             txtMotivo.Text = _Motivo;
+            tbfecha.Text = _Fecha;
+            tbfecha.Visibility = Visibility.Visible;
         }
 
         private void Eliminar()
@@ -295,11 +306,23 @@ namespace Sistema_Mercadito.Pages
             txtEfectivo.Text = _Colones;
             txtDolares.Text = _Dolares;
             txtMotivo.Text = _Motivo;
+            tbfecha.Text = _Fecha;
+            tbfecha.Visibility = Visibility.Visible;
         }
 
         private void txtGotFocus(object sender, RoutedEventArgs e)
         {
             ((TextBox)sender).SelectAll();
+        }
+
+        private void PreviewKeyDownTabbutton(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                txtEfectivo.Focus();
+                txtEfectivo.SelectAll();
+                e.Handled = true;
+            }
         }
     }
 }

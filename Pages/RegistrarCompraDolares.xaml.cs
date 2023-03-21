@@ -91,10 +91,14 @@ namespace Sistema_Mercadito.Pages
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
-            if (objetoSql.Eliminar_Compra_Dolares(_idConsulta))
+            MessageBoxResult result = MessageBox.Show("¿Está seguro de que desea borrar esta Compra de dólares?", "Advertencia", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBox.Show("Datos Eliminados Correctamente");
-                VistaReporteCompraDolares();
+                if (objetoSql.Eliminar_Compra_Dolares(_idConsulta))
+                {
+                    MessageBox.Show("Datos Eliminados Correctamente");
+                    VistaReporteCompraDolares();
+                }
             }
         }
 
@@ -352,6 +356,8 @@ namespace Sistema_Mercadito.Pages
             tbfecha.Text = _FechaCompra;
             tbfecha.Visibility = Visibility.Visible;
             lbMontoEnColones.Content = _PagoEfectivo;
+            txtDolaresRecibidos.Focus();
+            txtDolaresRecibidos.SelectAll();
         }
 
         private void Elimimnar()

@@ -17,7 +17,7 @@
 
     <Border Background="{DynamicResource SecundaryBackgroundColor}" CornerRadius="5">
 
-        <Grid Background="Transparent">
+        <Grid Background="Transparent" x:Name="gridDatos">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="15" />
                 <ColumnDefinition Width="100" />

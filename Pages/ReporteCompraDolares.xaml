@@ -222,40 +222,28 @@
             <TextBlock
                 x:Name="lbDolares"
                 Grid.Row="11"
-                Grid.Column="6"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                FontSize="15"
-                Text="DOLARES" />
-            <TextBlock
-                x:Name="lbTipoCambio"
-                Grid.Row="11"
                 Grid.Column="8"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 FontSize="15"
-                Text="Tipo Cambio" />
+                Text="DOLARES" />
+
             <TextBlock
-                x:Name="lbEquivalenA"
+                x:Name="lbMontoPagado"
                 Grid.Row="11"
                 Grid.Column="10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 FontSize="15"
-                Text="SINPE" />
+                Text="Monto Pagado" />
 
             <TextBlock
                 x:Name="txtDolares"
                 Grid.Row="13"
-                Grid.Column="6"
-                HorizontalAlignment="Right"
-                Text="DOLARES" />
-            <TextBlock
-                x:Name="txtTipoCambio"
-                Grid.Row="13"
                 Grid.Column="8"
                 HorizontalAlignment="Right"
-                Text="TipoCambio" />
+                Text="DOLARES" />
+
             <TextBlock
                 x:Name="txtEquivalenA"
                 Grid.Row="13"

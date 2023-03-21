@@ -22,6 +22,10 @@ namespace Sistema_Mercadito.Pages
                 MessageBox.Show("Bienvenido");
                 VistaReporte();
             }
+            else if (pbContrasena.Password == "0287")
+            {
+                VistaRetiros();
+            }
             else
             {
                 MessageBox.Show("Contraseña Incorrecta");
@@ -36,6 +40,16 @@ namespace Sistema_Mercadito.Pages
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
             ReporteVentas rp = new ReporteVentas();
             fContainer.Content = rp;
+        }
+
+        private void VistaRetiros()
+        {
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            RetirosEfectivo re = new RetirosEfectivo("Retiro", 0);
+            fContainer.Content = re;
         }
 
         private new void PreviewKeyDown(object sender, KeyEventArgs e)

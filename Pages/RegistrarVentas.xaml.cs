@@ -136,7 +136,7 @@ namespace Sistema_Mercadito.Pages
                     objetoSql.ActualizarVenta();
                     LimpiarCampos();
                     MessageBox.Show("Los Datos han sido Actualizados correctamente");
-                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                    VistaReporteVentas();
                 }
             }
             catch (Exception ex)
@@ -167,7 +167,7 @@ namespace Sistema_Mercadito.Pages
                     objetoSql.EliminarVenta(txtElimarMotivo.Text);
                     LimpiarCampos();
                     MessageBox.Show("Los Datos han sido Borrados correctamente");
-                    NavigationService.Navigate(new System.Uri("Pages/ReporteVentas.xaml", UriKind.RelativeOrAbsolute));
+                    VistaReporteVentas();
                 }
             }
         }
@@ -330,7 +330,6 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._TipoCambio = _TipoCambio;
 
                     VistaVuelto();
-                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
@@ -410,12 +409,6 @@ namespace Sistema_Mercadito.Pages
                                             _MontoPagoDolares);
 
                     VistaVuelto();
-
-                    //NavigationService.Navigate(new System.Uri("Pages/MensajeVueltoCliente.xaml", UriKind.RelativeOrAbsolute));
-                    //LIMPIAR LOS CAMPOS PARA LA SIGUIENTE VENTA
-                    // LimpiarCampos();
-                    //Thread hilo = new Thread(new ThreadStart(AbirCaja));
-
                     Thread hilo = new Thread(new ThreadStart(() => AbirCaja(_Venta.ToString("N2"),
                                                                        _Colones.ToString("N2"),
                                                                        _Dolares.ToString("N2"),
@@ -426,8 +419,6 @@ namespace Sistema_Mercadito.Pages
                                                                        _Tarjeta.ToString("N2"))));
 
                     hilo.Start();
-                    //AbirCaja();
-                    // Inicio();
                 }
             }
             catch (Exception ex)
