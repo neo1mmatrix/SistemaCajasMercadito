@@ -176,6 +176,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\ReporteRetiros.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ReporteVentas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -240,6 +244,9 @@
     </Compile>
     <Compile Include="Pages\ReporteCompraDolares.xaml.cs">
       <DependentUpon>ReporteCompraDolares.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ReporteRetiros.xaml.cs">
+      <DependentUpon>ReporteRetiros.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ReporteVentas.xaml.cs">
       <DependentUpon>ReporteVentas.xaml</DependentUpon>

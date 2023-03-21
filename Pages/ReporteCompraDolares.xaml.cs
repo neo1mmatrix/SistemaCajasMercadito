@@ -39,7 +39,7 @@ namespace Sistema_Mercadito.Pages
                     break;
 
                 case "Retiros":
-
+                    VistaReporteRetiros();
                     break;
 
                 case "Cambio Dólares":
@@ -163,6 +163,15 @@ namespace Sistema_Mercadito.Pages
             RegistrarCompraDolares rcd = new RegistrarCompraDolares("Eliminar", _idConsulta);
             // Acceder a un elemento dentro de la ventana principal
             fContainer.Content = rcd;
+        }
+
+        private void VistaReporteRetiros()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            ReporteRetiros rr = new ReporteRetiros();
+            // Acceder a un elemento dentro de la ventana principal
+            fContainer.Content = rr;
         }
 
         private void ConsultaCompraDolares()

@@ -362,7 +362,7 @@ namespace Sistema_Mercadito
         {
             if (SharedResources._idCajaAbierta > 0)
             {
-                RetirosEfectivo re = new RetirosEfectivo();
+                RetirosEfectivo re = new RetirosEfectivo("Retiro", 0);
                 fContainer.Content = re;
             }
             else

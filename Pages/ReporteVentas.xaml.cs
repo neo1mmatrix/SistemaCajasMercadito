@@ -358,8 +358,8 @@ namespace Sistema_Mercadito.Pages
                         ConsultaVentaDia();
                         break;
 
-                    case "Colones":
-                        //TablaEfectivo();
+                    case "Retiros":
+                        VistaReporteRetiros();
                         break;
 
                     case "Cambio Dólares":
@@ -471,6 +471,15 @@ namespace Sistema_Mercadito.Pages
             Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
             ReporteCompraDolares rcd = new ReporteCompraDolares();
             fContainerm.Content = rcd;
+        }
+
+        private void VistaReporteRetiros()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            ReporteRetiros rr = new ReporteRetiros();
+            // Acceder a un elemento dentro de la ventana principal
+            fContainer.Content = rr;
         }
     }
 }

@@ -120,8 +120,8 @@
                         FontWeight="Bold"
                         Foreground="Wheat"
                         KeyDown="AtajoTeclado"
-                        TabIndex="3"
                         MaxLength="100"
+                        TabIndex="3"
                         Text="" />
                 </Grid>
             </Border>
@@ -201,6 +201,7 @@
                 FontSize="28"
                 FontWeight="Bold"
                 Foreground="Navy"
+                GotFocus="txtGotFocus"
                 KeyDown="AtajoTeclado"
                 LostFocus="txtLostFocus"
                 MaxLength="12"
@@ -208,15 +209,17 @@
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
                 Style="{DynamicResource TextBoxStyleNumb}"
-                TabIndex="0" />
+                TabIndex="0"
+                Text="0" />
             <TextBox
                 x:Name="txtDolares"
                 Grid.Row="5"
                 Grid.Column="3"
                 Grid.ColumnSpan="7"
-                FontWeight="Bold"
                 FontSize="28"
+                FontWeight="Bold"
                 Foreground="#651157"
+                GotFocus="txtGotFocus"
                 KeyDown="AtajoTeclado"
                 LostFocus="txtLostFocus"
                 MaxLength="4"
@@ -225,6 +228,7 @@
                 PreviewTextInput="NumberValidationTextBox"
                 Style="{DynamicResource TextBoxStyleNumb}"
                 TabIndex="1"
+                Text="0"
                 TextChanged="txtTextChanged" />
 
             <!--#endregion-->

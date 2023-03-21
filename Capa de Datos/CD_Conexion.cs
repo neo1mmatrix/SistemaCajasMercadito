@@ -1243,6 +1243,8 @@ namespace Sistema_Mercadito.Capa_de_Datos
 
         #endregion Compra Dolares
 
+        #region Retiros
+
         public Boolean SP_Retiro_Efectivo(decimal _MontoColones, decimal _MontoDolares, string _Motivo)
         {
             //
@@ -1284,5 +1286,178 @@ namespace Sistema_Mercadito.Capa_de_Datos
             }
             return resultado;
         }
+
+        public void SP_Consulta_Reporte_Retiros(ref DataTable dtVentas, int _activo)
+        {
+            try
+            {
+                AbrirConexion();
+                SqlDataAdapter da = new SqlDataAdapter("[SP_Consulta_Reporte_Retiros]", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@id", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                da.SelectCommand.Parameters.Add("@activo", SqlDbType.Int).Value = _activo;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                // dtVentas.Rows.Clear();
+                dtVentas = new DataTable();
+                da.Fill(dtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+        }
+
+        public void Sp_Consulta_Retiros(ref string colones, ref string dolares, ref string motivo, int _id, ref string fecha)
+        {
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("[SP_Consulta_Retiros]", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = _id;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                while (lector.Read())
+                {
+                    colones = lector.GetDecimal(0).ToString("N0");
+                    dolares = lector.GetDecimal(1).ToString("N0");
+                    motivo = lector.GetString(2).ToString();
+                    fecha = lector.GetString(3).ToString();
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Error en la base de datos " + ex.ToString());
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Fallo en " + ex.ToString());
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                if (lector != null)
+                {
+                    lector.Close();
+                }
+
+                CerrarConexion();
+            }
+        }
+
+        public Boolean SP_Actualizar_Retiro_Efectivo(int _idRetiro,
+                                   decimal _colones,
+                                   decimal _dolares,
+                                   string _motivo)
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "[SP_Actualizar_Retiro_Efectivo]",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                com.Parameters.AddWithValue("@idRetiro", _idRetiro);
+                com.Parameters.AddWithValue("@Colones", _colones);
+                com.Parameters.AddWithValue("@Dolares", _dolares);
+                com.Parameters.AddWithValue("@Motivo", _motivo);
+
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+                resultado = true;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+            return resultado;
+        }
+
+        public Boolean SP_Eliminar_Retiro_Efectivo(int _idRetiro)
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand com = new SqlCommand
+                {
+                    Connection = AbrirConexion(),
+                    CommandText = "[SP_Eliminar_Retiro_Efectivo]",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                com.Parameters.AddWithValue("@idRetiro", _idRetiro);
+
+                com.ExecuteNonQuery();
+                com.Parameters.Clear();
+                resultado = true;
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                resultado = false;
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+            return resultado;
+        }
+
+        #endregion Retiros
     }
 }
