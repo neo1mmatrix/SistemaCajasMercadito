@@ -12,8 +12,11 @@ namespace Sistema_Mercadito.Pages
     public partial class ReporteCompraDolares : Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
-        private bool _seleccionMetodoPago = false;
         private int _idConsulta = 0;
+
+        //Variable con el proposito que el combobox solo realice la consulta 1 vez
+        //Cuando se selecciona un item
+        private int _ciclo = 0;
 
         public ReporteCompraDolares()
         {
@@ -22,44 +25,36 @@ namespace Sistema_Mercadito.Pages
 
         private void cbReporte_tipoReporte(object sender, SelectionChangedEventArgs e)
         {
-            //ComboBoxItem selectedItem = (ComboBoxItem)cbReporte.SelectedItem;
-            //MessageBox.Show(selectedItem.Content.ToString());
-
             ComboBoxItem selectedItem = (ComboBoxItem)cbReporte.SelectedItem;
             string opcion = selectedItem.Content.ToString();
 
-            //if (_seleccionMetodoPago)
-            //{
-            _seleccionMetodoPago = false;
-
-            switch (opcion)
+            if (_ciclo == 0)
             {
-                case "Ventas":
-                    VistaReporteVentas();
-                    break;
+                switch (opcion)
+                {
+                    case "Ventas":
+                        VistaReporteVentas();
+                        break;
 
-                case "Retiros":
-                    VistaReporteRetiros();
-                    break;
+                    case "Retiros":
+                        VistaReporteRetiros();
+                        break;
 
-                case "Cambio Dólares":
-                    Console.WriteLine(opcion);
-                    ConsultaCompraDolares();
-                    break;
+                    case "Cambio Dólares":
+                        Console.WriteLine(opcion);
+                        ConsultaCompraDolares();
+                        break;
 
-                case "Pagos de Servicios":
-
-                    break;
-
-                default:
-                    Console.WriteLine("Opción inválida");
-                    break;
+                    default:
+                        Console.WriteLine("Opción inválida");
+                        break;
+                }
+                _ciclo++;
             }
-            //}
-            //else
-            //{
-            //    _seleccionMetodoPago = true;
-            //}
+            else if (_ciclo > 0)
+            {
+                _ciclo = 0;
+            }
         }
 
         private void Actualizar(object sender, RoutedEventArgs e)
@@ -93,7 +88,6 @@ namespace Sistema_Mercadito.Pages
             cbReporte.SelectedIndex = 2;
             cbEstado.SelectionChanged += cbEstado_CompraDolares;
             cbReporte.SelectionChanged += cbReporte_tipoReporte;
-            _seleccionMetodoPago = false;
         }
 
         private void cbEstado_CompraDolares(object sender, SelectionChangedEventArgs e)
@@ -101,10 +95,8 @@ namespace Sistema_Mercadito.Pages
             ComboBoxItem selectedItem = (ComboBoxItem)cbEstado.SelectedItem;
             string opcion = selectedItem.Content.ToString();
 
-            if (_seleccionMetodoPago)
+            if (_ciclo == 0)
             {
-                _seleccionMetodoPago = false;
-
                 switch (opcion)
                 {
                     case "Activo":
@@ -119,10 +111,11 @@ namespace Sistema_Mercadito.Pages
                         Console.WriteLine("Opción inválida");
                         break;
                 }
+                _ciclo++;
             }
-            else
+            else if (_ciclo > 0)
             {
-                _seleccionMetodoPago = true;
+                _ciclo = 0;
             }
         }
 

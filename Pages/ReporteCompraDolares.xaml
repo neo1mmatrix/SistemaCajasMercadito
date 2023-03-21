@@ -202,7 +202,6 @@
                     <ComboBoxItem>Ventas</ComboBoxItem>
                     <ComboBoxItem>Retiros</ComboBoxItem>
                     <ComboBoxItem>Cambio Dólares</ComboBoxItem>
-                    <ComboBoxItem>Pagos de Servicios</ComboBoxItem>
                 </ComboBox>
                 <TextBlock
                     Margin="20,0,5,0"

@@ -98,7 +98,9 @@
 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="180" Header="Administrador">
+
                         <DataGridTemplateColumn.CellTemplate>
+
                             <DataTemplate>
                                 <DockPanel>
                                     <!--#region Botones de la tabla-->
@@ -167,6 +169,7 @@
                         Header="Motivo del Retiro">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
+                                <Setter Property="TextBlock.Margin"  Value="20,0,0,0" />
                                 <Setter Property="TextBlock.TextAlignment" Value="Left" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -203,7 +206,6 @@
                     <ComboBoxItem>Ventas</ComboBoxItem>
                     <ComboBoxItem>Retiros</ComboBoxItem>
                     <ComboBoxItem>Cambio Dólares</ComboBoxItem>
-                    <ComboBoxItem>Pagos de Servicios</ComboBoxItem>
                 </ComboBox>
                 <TextBlock
                     Margin="20,0,5,0"

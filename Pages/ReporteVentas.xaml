@@ -244,7 +244,6 @@
                     <ComboBoxItem>Ventas</ComboBoxItem>
                     <ComboBoxItem>Retiros</ComboBoxItem>
                     <ComboBoxItem>Cambio Dólares</ComboBoxItem>
-                    <ComboBoxItem>Pagos de Servicios</ComboBoxItem>
                 </ComboBox>
                 <TextBlock
                     Margin="20,0,5,0"
@@ -262,6 +261,7 @@
                     <ComboBoxItem>Tarjeta</ComboBoxItem>
                     <ComboBoxItem>Dolares</ComboBoxItem>
                     <ComboBoxItem>Sinpe</ComboBoxItem>
+                    <ComboBoxItem>Inactivos</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
 

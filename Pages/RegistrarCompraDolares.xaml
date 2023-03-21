@@ -93,8 +93,8 @@
                         VerticalAlignment="Center"
                         Content="F1 = Comprar"
                         FontSize="15"
-                        Visibility="Visible"
-                        Foreground="White" />
+                        Foreground="White"
+                        Visibility="Visible" />
                 </Border>
 
                 <Border
@@ -110,8 +110,11 @@
                     BorderThickness="0.5"
                     CornerRadius="5"
                     Visibility="Collapsed">
-                    <Button Content="Regresar" Click="btnRegresar_Click" x:Name="btnRegresar1" Visibility="Collapsed">
-                    </Button>
+                    <Button
+                        x:Name="btnRegresar1"
+                        Click="btnRegresar_Click"
+                        Content="Regresar"
+                        Visibility="Collapsed" />
                 </Border>
             </Grid>
 

@@ -17,7 +17,11 @@ namespace Sistema_Mercadito.Pages
     public partial class ReporteVentas : Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
-        private bool _seleccionMetodoPago = false;
+
+        //Variable con el proposito que el combobox solo realice la consulta 1 vez
+        //Cuando se selecciona un item
+        private int _ciclo = 0;
+
         private decimal _SumaColonesPagadosDolares = 0;
         private int _SumaCompraDolares = 0;
 
@@ -75,12 +79,89 @@ namespace Sistema_Mercadito.Pages
             cbReporte.SelectedIndex = 0;
             cbVentas.SelectionChanged += cbVentas_tipoVenta;
             cbReporte.SelectionChanged += cbReporte_tipoReporte;
-            _seleccionMetodoPago = false;
         }
 
         #endregion Eventos
 
         #region Procedimientos
+
+        private void cbReporte_tipoReporte(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = (ComboBoxItem)cbReporte.SelectedItem;
+            string opcion = selectedItem.Content.ToString();
+
+            if (_ciclo == 0)
+            {
+                switch (opcion)
+                {
+                    case "Ventas":
+                        ConsultaVentaDia();
+                        break;
+
+                    case "Retiros":
+                        VistaReporteRetiros();
+                        break;
+
+                    case "Cambio Dólares":
+                        VistaCambioDolares();
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción inválida");
+                        break;
+                }
+                _ciclo++;
+            }
+            else if (_ciclo > 0)
+            {
+                _ciclo = 0;
+            }
+        }
+
+        private void cbVentas_tipoVenta(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = (ComboBoxItem)cbVentas.SelectedItem;
+            string opcion = selectedItem.Content.ToString();
+
+            if (_ciclo == 0)
+            {
+                switch (opcion)
+                {
+                    case "Todos":
+                        ConsultaVentaDia();
+                        break;
+
+                    case "Colones":
+                        TablaEfectivo();
+                        break;
+
+                    case "Tarjeta":
+                        TablaTarjeta();
+                        break;
+
+                    case "Dolares":
+                        TablaDolares();
+                        break;
+
+                    case "Sinpe":
+                        TablaSinpe();
+                        break;
+
+                    case "Inactivos":
+                        TablaInactivos();
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción inválida");
+                        break;
+                }
+                _ciclo++;
+            }
+            else if (_ciclo > 0)
+            {
+                _ciclo = 0;
+            }
+        }
 
         private void ConsultaVentaDia()
         {
@@ -290,16 +371,6 @@ namespace Sistema_Mercadito.Pages
 
         #region Vistas
 
-        private void VistaAbrirCaja()
-        {
-            Window mainWindow = Application.Current.MainWindow;
-            // Acceder a un elemento dentro de la ventana principal
-            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
-
-            Dashboard db = new Dashboard();
-            fContainer.Content = db;
-        }
-
         public void VistaVenta()
         {
             Window mainWindow = Application.Current.MainWindow;
@@ -307,17 +378,6 @@ namespace Sistema_Mercadito.Pages
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
 
             VentasCajas vc = new VentasCajas("Venta");
-            fContainer.Content = vc;
-        }
-
-        private void VistaConsultar()
-        {
-            // Acceder a la ventana principal
-            Window mainWindow = Application.Current.MainWindow;
-            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
-            VentasCajas vc = new VentasCajas("Consulta");
-
-            // Acceder a un elemento dentro de la ventana principal
             fContainer.Content = vc;
         }
 
@@ -341,100 +401,54 @@ namespace Sistema_Mercadito.Pages
             fContainer.Content = vc;
         }
 
+        private void VistaAbrirCaja()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+
+            Dashboard db = new Dashboard();
+            fContainer.Content = db;
+        }
+
+        private void VistaCambioDolares()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            // Acceder a un elemento dentro de la ventana principal
+            Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
+            ReporteCompraDolares rcd = new ReporteCompraDolares();
+            fContainerm.Content = rcd;
+        }
+
+        private void VistaConsultar()
+        {
+            // Acceder a la ventana principal
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            VentasCajas vc = new VentasCajas("Consulta");
+
+            // Acceder a un elemento dentro de la ventana principal
+            fContainer.Content = vc;
+        }
+
+        private void VistaReporteRetiros()
+        {
+            Window mainWindow = Application.Current.MainWindow;
+            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
+            ReporteRetiros rr = new ReporteRetiros();
+            // Acceder a un elemento dentro de la ventana principal
+            fContainer.Content = rr;
+        }
+
         #endregion Vistas
-
-        private void cbReporte_tipoReporte(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBoxItem selectedItem = (ComboBoxItem)cbReporte.SelectedItem;
-            string opcion = selectedItem.Content.ToString();
-
-            if (_seleccionMetodoPago)
-            {
-                _seleccionMetodoPago = false;
-
-                switch (opcion)
-                {
-                    case "Ventas":
-                        ConsultaVentaDia();
-                        break;
-
-                    case "Retiros":
-                        VistaReporteRetiros();
-                        break;
-
-                    case "Cambio Dólares":
-                        VistaCambioDolares();
-                        break;
-
-                    case "Dolares":
-                        //TablaDolares();
-                        break;
-
-                    case "Sinpe":
-                        // TablaSinpe();
-                        break;
-
-                    default:
-                        Console.WriteLine("Opción inválida");
-                        break;
-                }
-            }
-            else
-            {
-                _seleccionMetodoPago = true;
-            }
-        }
-
-        private void cbVentas_tipoVenta(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBoxItem selectedItem = (ComboBoxItem)cbVentas.SelectedItem;
-            string opcion = selectedItem.Content.ToString();
-
-            if (_seleccionMetodoPago)
-            {
-                _seleccionMetodoPago = false;
-
-                switch (opcion)
-                {
-                    case "Todos":
-                        ConsultaVentaDia();
-                        break;
-
-                    case "Colones":
-                        TablaEfectivo();
-                        break;
-
-                    case "Tarjeta":
-                        TablaTarjeta();
-                        break;
-
-                    case "Dolares":
-                        TablaDolares();
-                        break;
-
-                    case "Sinpe":
-                        TablaSinpe();
-                        break;
-
-                    default:
-                        Console.WriteLine("Opción inválida");
-                        break;
-                }
-            }
-            else
-            {
-                _seleccionMetodoPago = true;
-            }
-        }
 
         #region Rellena Tablas
 
         private void TablaDolares()
         {
-            int _activo = 1;
             DataTable dtVentas;
             dtVentas = new DataTable();
-            objetoSql.ConsultaCompraDolaresReporte(ref dtVentas, _activo);
+            objetoSql.ConsultaVentasDolares(ref dtVentas);
             GridDatos.ItemsSource = dtVentas.DefaultView;
         }
 
@@ -443,6 +457,14 @@ namespace Sistema_Mercadito.Pages
             DataTable dtVentas;
             dtVentas = new DataTable();
             objetoSql.ConsultaVentasEfectivo(ref dtVentas);
+            GridDatos.ItemsSource = dtVentas.DefaultView;
+        }
+
+        private void TablaInactivos()
+        {
+            DataTable dtVentas;
+            dtVentas = new DataTable();
+            objetoSql.ConsultaVentasInactivos(ref dtVentas);
             GridDatos.ItemsSource = dtVentas.DefaultView;
         }
 
@@ -463,23 +485,5 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Rellena Tablas
-
-        private void VistaCambioDolares()
-        {
-            Window mainWindow = Application.Current.MainWindow;
-            // Acceder a un elemento dentro de la ventana principal
-            Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
-            ReporteCompraDolares rcd = new ReporteCompraDolares();
-            fContainerm.Content = rcd;
-        }
-
-        private void VistaReporteRetiros()
-        {
-            Window mainWindow = Application.Current.MainWindow;
-            Frame fContainer = (Frame)mainWindow.FindName("fContainer");
-            ReporteRetiros rr = new ReporteRetiros();
-            // Acceder a un elemento dentro de la ventana principal
-            fContainer.Content = rr;
-        }
     }
 }
