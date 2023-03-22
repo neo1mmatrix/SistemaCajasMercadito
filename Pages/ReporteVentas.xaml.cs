@@ -261,6 +261,28 @@ namespace Sistema_Mercadito.Pages
             pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
         }
 
+        private void DetallesRetiros(ref string pConsulta)
+        {
+            //CREA LA TABLA EN HTML
+            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
+
+            //ENCABEZADOS DE LA TABLA
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Efectivo</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dolares</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Motivo</th>";
+
+            //CIERRE DE LA TABLA
+            _tablaEncabezados += "</tr> </thead>";
+
+            string _consulta = "";
+            pConsulta = _tablaEncabezados;
+
+            //Consulta
+            objetoSql.SEL_REPORTE_DETALLE_RETIROS(SharedResources._idCajaAbierta, ref _consulta);
+            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
+        }
+
         private void EnviarCorreo()
         {
             //Variable para crear el contenido del correo en formato HTML
@@ -338,6 +360,27 @@ namespace Sistema_Mercadito.Pages
 
             #endregion Detalles de Ventas
 
+            #region Tabla Retiros
+
+            //Tabla Retiros
+            _detalleCorreoBuilder.Append("<hr>");
+            _detalleCorreoBuilder.Append($"{_NegritaOn}<p style=\"font-size: 36px; text-align: center;\">Retiros</p>{_NegritaOff}");
+            _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}");
+
+            _detalleCorreoBuilder.Append($" <style> ");
+            _detalleCorreoBuilder.Append($" table {{ margin: auto; width: 50%; border-collapse: collapse; font-size: 14px; font-family: Arial, sans-serif; border: 1px solid #2500FF; }} ");
+
+            _detalleCorreoBuilder.Append($"th, td {{ padding: 15px; text-align: left;  border-bottom: 1px solid #ddd;  }} ");
+            _detalleCorreoBuilder.Append($"th:nth-child(3), td:nth-child(3) {{ text-align: right; }}");
+
+            _detalleCorreoBuilder.Append($"th {{ background-color: #6881D1; color: white; }} tr:hover {{ background-color: #f5f5f5; }} ");
+            _detalleCorreoBuilder.Append($" </style> ");
+
+            #endregion Tabla Retiros
+
+            DetallesRetiros(ref _Consulta);
+            _detalleCorreoBuilder.Append($"{_Consulta}");
+
             #region Resumen de ventas
 
             _detalleCorreoBuilder.Append($"{_NuevaLinea}{_NuevaLinea}");
@@ -345,14 +388,26 @@ namespace Sistema_Mercadito.Pages
             _detalleCorreoBuilder.Append($"Pagos Recibidos en Efectivo: {SharedResources._Efectivo.ToString("N2")}{_NuevaLinea}");
             _detalleCorreoBuilder.Append($"Pagos Recibidos en Tarjeta: {SharedResources._Tarjeta.ToString("N2")}{_NuevaLinea}");
             _detalleCorreoBuilder.Append($"Pagos Recibidos en Sinpe: {SharedResources._Sinpe.ToString("N2")}  {_NuevaLinea}");
+            // _detalleCorreoBuilder.Append($"{_NuevaLinea}");
 
+            //Retiros ---------------------------------------------------------------------------------------------
+            _detalleCorreoBuilder.Append($"</p>");
+            _detalleCorreoBuilder.Append($"{_NuevaLinea}<hr>");
+            _detalleCorreoBuilder.Append($"{_NegritaOn}<p style=\"font-size: 16px;\">");
+            _detalleCorreoBuilder.Append($"Retiro{_EspacioVacio}en{_EspacioVacio}Colones{_EspacioVacio}: ₡{_SumaRetirosColones.ToString("N2")}  {_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"Retiro{_EspacioVacio}en{_EspacioVacio}Dólares{_EspacioVacio}: ${_SumaRetirosDolares.ToString("N2")}  {_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"</p>");
+            _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}</p>");
+
+            //Pagos en Dolares ---------------------------------------------------------------------------------------------
             if (SharedResources._Dolares > 0)
             {
-                _detalleCorreoBuilder.Append($"Pagos Recibidos en Dolares: {SharedResources._Dolares.ToString("N2")}{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"Pagos Recibidos en Dólares: {SharedResources._Dolares.ToString("N2")}{_NuevaLinea}");
                 _detalleCorreoBuilder.Append($"Compra de Dolares: {SharedResources._MontoPagoDolares.ToString("N2")}{_NuevaLinea}");
                 _detalleCorreoBuilder.Append($"</p>");
             }
 
+            //Compra de dolares -----------------------------------------------------------------------------------------------------------
             if (_SumaCompraDolares > 0)
             {
                 _detalleCorreoBuilder.Append($"</p>");
@@ -378,7 +433,7 @@ namespace Sistema_Mercadito.Pages
 
             #endregion Conclusion de ventas
 
-            EnviarCorreo("dist.mercadito@gmail.com", "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
+            EnviarCorreo(SharedResources._CfgEmail, "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
         }
 
         #endregion Enviar Correo

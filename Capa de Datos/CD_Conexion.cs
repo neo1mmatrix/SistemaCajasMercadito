@@ -625,6 +625,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
             }
         }
 
+        //EXCLUSIVO PARA CREAR LA TABLA EN HTML Y ENVIAR POR EMAIL
         public void SEL_REPORTE_DETALLE_VENTAS(int pId, ref string pDetalles)
         {
             StringBuilder _detalleBuilder = new StringBuilder();
@@ -669,6 +670,74 @@ namespace Sistema_Mercadito.Capa_de_Datos
                         _detalleBuilder.Append($"<td style=\"text-align: right; color: #26A699; border: 1px solid #26A699;\">{_montoDolares}</td>");
                         _detalleBuilder.Append($"<td style=\"text-align: right; color: #F29727; border: 1px solid #F29727;\">{_montoTarjeta}</td>");
                         _detalleBuilder.Append($"<td style=\"text-align: right; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoSinpe}</td>");
+                        _detalleBuilder.Append($"</tr>");
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error en la consulta sql, más info en el log");
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error, más info en el log");
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                lector?.Close();
+                CerrarConexion();
+            }
+            pDetalles = _detalleBuilder.ToString();
+        }
+
+        //EXCLUSIVO PARA CREAR LA TABLA EN HTML Y ENVIAR POR EMAIL
+        public void SEL_REPORTE_DETALLE_RETIROS(int pId, ref string pDetalles)
+        {
+            StringBuilder _detalleBuilder = new StringBuilder();
+            string _montoEfectivo = "";
+            string _montoDolares = "";
+            string _motivo = "";
+            string _fechaYhora;
+
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("SP_Reporte_Detalle_Retiros", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                if (lector.HasRows)
+                {
+                    while (lector.Read())
+                    {
+                        _montoEfectivo = lector.GetDecimal(0).ToString("N2");
+                        _montoDolares = lector.GetDecimal(1).ToString("N2");
+                        _motivo = lector.GetString(2).ToString();
+                        _fechaYhora = lector.GetDateTime(3).ToString("HH:mm");
+
+                        _detalleBuilder.Append($"<tr>");
+                        _detalleBuilder.Append($"<td style=\"text-align: center; border: 1px solid #59656F;\">{_fechaYhora}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #511F73; border: 1px solid blue;\" >{_montoEfectivo}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #26A699; border: 1px solid #511F73;\">{_montoDolares}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; color: #26A699; border: 1px solid #F29727;\">{_motivo}</td>");
+                        // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F29727; border: 1px solid #F29727;\">{_montoTarjeta}</td>");
+                        // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoSinpe}</td>");
                         _detalleBuilder.Append($"</tr>");
                     }
                 }

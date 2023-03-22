@@ -391,17 +391,18 @@ namespace Sistema_Mercadito.Pages
                 {
                     _NuevaVenta = false;
                     SharedResources._MontoPagar = _Venta;
-                    SharedResources._Efectivo = _Venta;
+                    SharedResources._Efectivo = _Colones;
                     SharedResources._Sinpe = 0;
                     SharedResources._Dolares = 0;
                     SharedResources._Tarjeta = 0;
-                    SharedResources._Vuelto = 0;
+                    SharedResources._Vuelto = _vuelto;
 
+                    VistaVuelto();
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
                                             _Venta,
-                                            0,
-                                            _Venta, //Colones
+                                            _vuelto,
+                                            _Colones, //Colones
                                             0,
                                             0,
                                             0,
