@@ -1,4 +1,5 @@
-﻿using Sistema_Mercadito.Capa_de_Datos;
+﻿using ImprimirTiquetes;
+using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.Data;
 using System.Net;
@@ -25,6 +26,9 @@ namespace Sistema_Mercadito.Pages
         private decimal _SumaColonesPagadosDolares = 0;
         private int _SumaCompraDolares = 0;
 
+        private decimal _SumaRetirosDolares = 0;
+        private decimal _SumaRetirosColones = 0;
+
         public ReporteVentas()
         {
             InitializeComponent();
@@ -43,12 +47,15 @@ namespace Sistema_Mercadito.Pages
         private void btnCerrarCaja_Click(object sender, RoutedEventArgs e)
         {
             objetoSql.SumaCierre();
+            objetoSql.SumaRetiros(ref _SumaRetirosColones, ref _SumaRetirosDolares);
             objetoSql.SumaDolares(ref _SumaCompraDolares, ref _SumaColonesPagadosDolares);
 
             SharedResources._MontoSaldoCajas = SharedResources._MontoSaldoCajas - _SumaColonesPagadosDolares;
             objetoSql.CierreCaja();
 
             objetoSql.ConsultaCaja();
+            Thread hilo2 = new Thread(new ThreadStart(AbrirCaja));
+            hilo2.Start();
             Thread hilo = new Thread(new ThreadStart(EnviarCorreo));
             hilo.Start();
             MessageBox.Show("Cierre Correcto");
@@ -84,6 +91,13 @@ namespace Sistema_Mercadito.Pages
         #endregion Eventos
 
         #region Procedimientos
+
+        private void AbrirCaja()
+        {
+            ImprimeFactura.StartPrint();
+            ImprimeFactura.PrintOpenCasher();
+            ImprimeFactura.EndPrintDrawer();
+        }
 
         private void cbReporte_tipoReporte(object sender, SelectionChangedEventArgs e)
         {

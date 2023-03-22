@@ -830,6 +830,66 @@ namespace Sistema_Mercadito.Capa_de_Datos
             return resultado;
         }
 
+        public string SumaRetiros(ref decimal _sumaColones, ref decimal _sumaDolares)
+        {
+            string resultado = null;
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("SP_Suma_Retiros", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@IdCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                while (lector.Read())
+                {
+                    if (!lector.IsDBNull(0))
+                    {
+                        _sumaColones = lector.GetDecimal(0);
+                        _sumaDolares = lector.GetDecimal(1);
+
+                        resultado = "Continuar";
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se puede cerrar la caja porque no se han realizado ventas");
+                        resultado = "Error";
+                    }
+                }
+                SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                if (lector != null)
+                {
+                    lector.Close();
+                }
+                CerrarConexion();
+            }
+            return resultado;
+        }
+
         #endregion Cierre de Cajas
 
         #region AperturaCajas
