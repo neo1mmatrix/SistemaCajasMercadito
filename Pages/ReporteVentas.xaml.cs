@@ -2,12 +2,16 @@
 using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -15,7 +19,7 @@ namespace Sistema_Mercadito.Pages
     /// Interaction logic for ReporteVentas.xaml
     /// </summary>
     ///
-    public partial class ReporteVentas : Page
+    public partial class ReporteVentas : System.Windows.Controls.Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
 
@@ -32,6 +36,7 @@ namespace Sistema_Mercadito.Pages
         public ReporteVentas()
         {
             InitializeComponent();
+            //CrearDocumentoExcel();
         }
 
         #region Eventos
@@ -50,7 +55,12 @@ namespace Sistema_Mercadito.Pages
             objetoSql.SumaRetiros(ref _SumaRetirosColones, ref _SumaRetirosDolares);
             objetoSql.SumaDolares(ref _SumaCompraDolares, ref _SumaColonesPagadosDolares);
 
-            SharedResources._MontoSaldoCajas = SharedResources._MontoSaldoCajas - _SumaColonesPagadosDolares;
+            SharedResources._MontoRetiroColones = _SumaRetirosColones;
+            SharedResources._MontoRetiroDolares = _SumaRetirosDolares;
+
+            SharedResources._MontoSaldoCajas -= _SumaColonesPagadosDolares;
+            SharedResources._MontoSaldoCajas -= _SumaRetirosColones;
+
             objetoSql.CierreCaja();
 
             objetoSql.ConsultaCaja();
@@ -283,6 +293,28 @@ namespace Sistema_Mercadito.Pages
             pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
         }
 
+        private void DetallesCompraDolares(ref string pConsulta)
+        {
+            //CREA LA TABLA EN HTML
+            string _tablaEncabezados = $"<body> <table> <thead> <tr>";
+
+            //ENCABEZADOS DE LA TABLA
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Hora</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Dólares</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Tipo de Cambio</th>";
+            _tablaEncabezados += "<th style=\"text-align: center; border: 1px solid blue;\" >Equivalen a </th>";
+
+            //CIERRE DE LA TABLA
+            _tablaEncabezados += "</tr> </thead>";
+
+            string _consulta = "";
+            pConsulta = _tablaEncabezados;
+
+            //Consulta
+            objetoSql.SEL_REPORTE_DETALLE_COMPRA_DOLARES(SharedResources._idCajaAbierta, ref _consulta);
+            pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
+        }
+
         private void EnviarCorreo()
         {
             //Variable para crear el contenido del correo en formato HTML
@@ -363,23 +395,45 @@ namespace Sistema_Mercadito.Pages
             #region Tabla Retiros
 
             //Tabla Retiros
-            _detalleCorreoBuilder.Append("<hr>");
-            _detalleCorreoBuilder.Append($"{_NegritaOn}<p style=\"font-size: 36px; text-align: center;\">Retiros</p>{_NegritaOff}");
-            _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}");
+            if (_SumaRetirosColones > 0 || _SumaRetirosDolares > 0)
+            {
+                _detalleCorreoBuilder.Append("<hr>");
+                _detalleCorreoBuilder.Append($"{_NegritaOn}<p style=\"font-size: 36px; text-align: center;\">Retiros</p>{_NegritaOff}");
+                _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}");
 
-            _detalleCorreoBuilder.Append($" <style> ");
-            _detalleCorreoBuilder.Append($" table {{ margin: auto; width: 50%; border-collapse: collapse; font-size: 14px; font-family: Arial, sans-serif; border: 1px solid #2500FF; }} ");
+                _detalleCorreoBuilder.Append($" <style> ");
+                _detalleCorreoBuilder.Append($" table {{ margin: auto; width: 50%; border-collapse: collapse; font-size: 14px; font-family: Arial, sans-serif; border: 1px solid #2500FF; }} ");
 
-            _detalleCorreoBuilder.Append($"th, td {{ padding: 15px; text-align: left;  border-bottom: 1px solid #ddd;  }} ");
-            _detalleCorreoBuilder.Append($"th:nth-child(3), td:nth-child(3) {{ text-align: right; }}");
+                _detalleCorreoBuilder.Append($"th, td {{ padding: 15px; text-align: left;  border-bottom: 1px solid #ddd;  }} ");
+                _detalleCorreoBuilder.Append($"th:nth-child(3), td:nth-child(3) {{ text-align: right; }}");
 
-            _detalleCorreoBuilder.Append($"th {{ background-color: #6881D1; color: white; }} tr:hover {{ background-color: #f5f5f5; }} ");
-            _detalleCorreoBuilder.Append($" </style> ");
+                _detalleCorreoBuilder.Append($"th {{ background-color: #6881D1; color: white; }} tr:hover {{ background-color: #f5f5f5; }} ");
+                _detalleCorreoBuilder.Append($" </style> ");
+
+                DetallesRetiros(ref _Consulta);
+                _detalleCorreoBuilder.Append($"{_Consulta}");
+            }
 
             #endregion Tabla Retiros
 
-            DetallesRetiros(ref _Consulta);
-            _detalleCorreoBuilder.Append($"{_Consulta}");
+            if (_SumaCompraDolares > 0)
+            {
+                _detalleCorreoBuilder.Append("<hr>");
+                _detalleCorreoBuilder.Append($"{_NegritaOn}<p style=\"font-size: 36px; text-align: center;\">Compra de Dólares</p>{_NegritaOff}");
+                _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}");
+
+                _detalleCorreoBuilder.Append($" <style> ");
+                _detalleCorreoBuilder.Append($" table {{ margin: auto; width: 50%; border-collapse: collapse; font-size: 14px; font-family: Arial, sans-serif; border: 1px solid #2500FF; }} ");
+
+                _detalleCorreoBuilder.Append($"th, td {{ padding: 15px; text-align: left;  border-bottom: 1px solid #ddd;  }} ");
+                _detalleCorreoBuilder.Append($"th:nth-child(3), td:nth-child(3) {{ text-align: right; }}");
+
+                _detalleCorreoBuilder.Append($"th {{ background-color: #6881D1; color: white; }} tr:hover {{ background-color: #f5f5f5; }} ");
+                _detalleCorreoBuilder.Append($" </style> ");
+
+                DetallesCompraDolares(ref _Consulta);
+                _detalleCorreoBuilder.Append($"{_Consulta}");
+            }
 
             #region Resumen de ventas
 
@@ -424,7 +478,6 @@ namespace Sistema_Mercadito.Pages
             #region Conclusion de ventas
 
             _detalleCorreoBuilder.Append($"{_NuevaLinea}");
-            //_detalleCorreoBuilder.Append($"{_LetraRojo}{_NegritaOn}Retiros: {FormatNumber(_retiroColones)}{_NegritaOff}{_LetraFin}{_NuevaLinea}")
             _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: {SharedResources._MontoSaldoCajas.ToString("N2")}</p>{_NuevaLinea}{_NuevaLinea}");
 
             _detalleCorreoBuilder.Append("<hr>");
@@ -554,5 +607,46 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Rellena Tablas
+
+        private void CrearDocumentoExcel()
+        {
+            string filePath = @"C:\Logs\ejemplo.xlsx";
+            //SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
+
+            //// Add a WorkbookPart to the document.
+            //WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
+            //workbookpart.Workbook = new Workbook();
+
+            //// Add a WorksheetPart to the WorkbookPart.
+            //WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+            //worksheetPart.Worksheet = new Worksheet(new SheetData());
+
+            //// Add Sheets to the Workbook.
+            //Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
+            //    AppendChild<Sheets>(new Sheets());
+
+            //// Append a new worksheet and associate it with the workbook.
+            //Sheet sheet = new Sheet()
+            //{
+            //    Id = spreadsheetDocument.WorkbookPart.
+            //    GetIdOfPart(worksheetPart),
+            //    SheetId = 1,
+            //    Name = "mySheet"
+            //};
+
+            //SheetData sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
+            //Row row1 = new Row() { RowIndex = 1 };
+            //Cell cellA1 = new Cell() { CellReference = "A1", DataType = CellValues.String };
+            //cellA1.CellValue = new CellValue("Hola Mundo");
+            //row1.AppendChild(cellA1);
+            //sheetData.AppendChild(row1);
+            //sheets.Append(sheet);
+
+            //workbookpart.Workbook.Save();
+
+            //// Close the document.
+            //spreadsheetDocument.Close();
+            //// Creamos una tabla para los productos con un borde sólido
+        }
     }
 }

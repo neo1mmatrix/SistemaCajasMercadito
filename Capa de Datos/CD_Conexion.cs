@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 
 namespace Sistema_Mercadito.Capa_de_Datos
 {
@@ -18,20 +17,72 @@ namespace Sistema_Mercadito.Capa_de_Datos
         //Abre la conexion con la base de datos
         public SqlConnection AbrirConexion()
         {
-            if (con.State == System.Data.ConnectionState.Closed)
+            try
             {
-                con.Open();
+                if (con.State == System.Data.ConnectionState.Closed)
+                {
+                    con.Open();
+                }
             }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                if (ex.ToString().Contains("Error Locating Server/Instance Specified"))
+                {
+                    MessageBox.Show("La base de datos no ha sido Inicializada, se cerrara para evitar errores");
+                    Application.Current.Shutdown();
+                }
+                else
+                {
+                    MessageBox.Show("Error Inesperado en " + ex.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Error Inesperado en " + ex.ToString());
+            }
+
             return con;
         }
 
         //Cierra la conexion
         public SqlConnection CerrarConexion()
         {
-            if (con.State == System.Data.ConnectionState.Open)
+            try
             {
-                con.Close();
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
             }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                if (ex.ToString().Contains("Error Locating Server/Instance Specified"))
+                {
+                    MessageBox.Show("La base de datos no ha sido Inicializada, se cerrara para evitar errores");
+                    Application.Current.Shutdown();
+                }
+                else
+                {
+                    MessageBox.Show("Error Inesperado en " + ex.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Error Inesperado en " + ex.ToString());
+            }
+
             return con;
         }
 
@@ -70,12 +121,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problema al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -120,12 +173,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -159,12 +214,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -193,12 +250,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -227,12 +286,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -261,12 +322,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -295,12 +358,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -382,12 +447,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -416,12 +483,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -451,12 +520,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -501,12 +572,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -537,6 +610,8 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 com.Parameters.AddWithValue("@MontoTarjeta", SharedResources._Tarjeta);
                 com.Parameters.AddWithValue("@MontoPagoDolares", SharedResources._MontoPagoDolares);
                 com.Parameters.AddWithValue("@MontoSaldoCajas", SharedResources._MontoSaldoCajas);
+                com.Parameters.AddWithValue("@MontoRetiroColones", SharedResources._MontoRetiroColones);
+                com.Parameters.AddWithValue("@MontoRetiroDolares", SharedResources._MontoRetiroDolares);
                 com.ExecuteNonQuery();
                 com.Parameters.Clear();
             }
@@ -545,12 +620,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Error en la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Error en " + ex.ToString());
             }
             finally
             {
@@ -606,12 +683,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -635,6 +714,12 @@ namespace Sistema_Mercadito.Capa_de_Datos
             string _montoTarjeta = "";
             string _montoSinpe = "";
             string _fechaYhora;
+
+            decimal totalVenta = 0;
+            decimal totalEfectivo = 0;
+            decimal totalDolares = 0;
+            decimal totalSinpe = 0;
+            decimal totalTarjeta = 0;
 
             // Crear el comando que ejecutará el procedimiento almacenado
             SqlCommand cmd = new SqlCommand("SP_Reporte_Detalle_Ventas", AbrirConexion());
@@ -663,6 +748,12 @@ namespace Sistema_Mercadito.Capa_de_Datos
                         _montoSinpe = lector.GetDecimal(4).ToString("N2");
                         _fechaYhora = lector.GetDateTime(5).ToString("HH:mm");
 
+                        totalVenta += lector.GetDecimal(0);
+                        totalEfectivo += lector.GetDecimal(1);
+                        totalDolares += lector.GetDecimal(2);
+                        totalTarjeta += lector.GetDecimal(3);
+                        totalSinpe += lector.GetDecimal(4);
+
                         _detalleBuilder.Append($"<tr>");
                         _detalleBuilder.Append($"<td style=\"text-align: center; border: 1px solid #59656F;\">{_fechaYhora}</td>");
                         _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: blue; border: 1px solid blue;\" >{_montoVenta}</td>");
@@ -673,6 +764,15 @@ namespace Sistema_Mercadito.Capa_de_Datos
                         _detalleBuilder.Append($"</tr>");
                     }
                 }
+
+                _detalleBuilder.Append($"<tr>");
+                _detalleBuilder.Append($"<td style=\"text-align: center; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{"Totales: "}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\" >{totalVenta.ToString("N2")}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{totalEfectivo.ToString("N2")}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{totalDolares.ToString("N2")}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{totalTarjeta.ToString("N2")}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{totalSinpe.ToString("N2")}</td>");
+                _detalleBuilder.Append($"</tr>");
             }
             catch (SqlException ex)
             {
@@ -686,7 +786,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
-                MessageBox.Show("Paso un error, más info en el log");
+                MessageBox.Show("Paso un error: " + ex.ToString());
             }
             finally
             {
@@ -705,6 +805,9 @@ namespace Sistema_Mercadito.Capa_de_Datos
             string _montoDolares = "";
             string _motivo = "";
             string _fechaYhora;
+
+            decimal totalEfectivo = 0;
+            decimal totalDolares = 0;
 
             // Crear el comando que ejecutará el procedimiento almacenado
             SqlCommand cmd = new SqlCommand("SP_Reporte_Detalle_Retiros", AbrirConexion());
@@ -733,14 +836,111 @@ namespace Sistema_Mercadito.Capa_de_Datos
 
                         _detalleBuilder.Append($"<tr>");
                         _detalleBuilder.Append($"<td style=\"text-align: center; border: 1px solid #59656F;\">{_fechaYhora}</td>");
-                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #511F73; border: 1px solid blue;\" >{_montoEfectivo}</td>");
-                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #26A699; border: 1px solid #511F73;\">{_montoDolares}</td>");
-                        _detalleBuilder.Append($"<td style=\"text-align: right; color: #26A699; border: 1px solid #F29727;\">{_motivo}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #511F73; border: 1px solid #511F73;\" >{_montoEfectivo}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #26A699; border: 1px solid #26A699;\">{_montoDolares}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: left;  font-weight: bold; color: #F24C3D; border: 1px solid #F24C3D;\">{_motivo}</td>");
+                        // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F29727; border: 1px solid #F29727;\">{_montoTarjeta}</td>");
+                        // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoSinpe}</td>");
+                        _detalleBuilder.Append($"</tr>");
+
+                        totalEfectivo += lector.GetDecimal(0);
+                        totalDolares += lector.GetDecimal(1);
+                    }
+                }
+
+                _detalleBuilder.Append($"<tr>");
+                _detalleBuilder.Append($"<td style=\"text-align: center; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{"Totales: "}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\" >{totalEfectivo.ToString("N2")}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right;  font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{totalDolares.ToString("N2")}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right;  font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{""}</td>");
+                // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F29727; border: 1px solid #F29727;\">{_montoTarjeta}</td>");
+                // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoSinpe}</td>");
+                _detalleBuilder.Append($"</tr>");
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error en la consulta sql, más info en el log");
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error, más info en el log");
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+                lector?.Close();
+                CerrarConexion();
+            }
+            pDetalles = _detalleBuilder.ToString();
+        }
+
+        //EXCLUSIVO PARA CREAR LA TABLA EN HTML Y ENVIAR POR EMAIL
+        public void SEL_REPORTE_DETALLE_COMPRA_DOLARES(int pId, ref string pDetalles)
+        {
+            StringBuilder _detalleBuilder = new StringBuilder();
+            string _montoDolares = "";
+            string _montoTipoCambio = "";
+            string _montoEquivale = "";
+            string _fechaYhora;
+
+            int totalDolares = 0;
+            decimal totalEquivale = 0;
+
+            // Crear el comando que ejecutará el procedimiento almacenado
+            SqlCommand cmd = new SqlCommand("[SP_Reporte_Detalle_Compra_Dolares]", AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // Agregar el parámetro de entrada
+            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+
+            // Crear un objeto SqlDataReader para leer los resultados de la consulta
+            SqlDataReader lector = null;
+
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                lector = cmd.ExecuteReader();
+
+                // Leer los resultados de la consulta
+                if (lector.HasRows)
+                {
+                    while (lector.Read())
+                    {
+                        _montoDolares = lector.GetInt32(0).ToString("N2");
+                        _montoTipoCambio = lector.GetDouble(1).ToString("N2");
+                        _montoEquivale = lector.GetDecimal(2).ToString("N2");
+                        _fechaYhora = lector.GetDateTime(3).ToString("HH:mm");
+
+                        totalDolares += lector.GetInt32(0);
+                        totalEquivale += lector.GetDecimal(2);
+
+                        _detalleBuilder.Append($"<tr>");
+                        _detalleBuilder.Append($"<td style=\"text-align: center; border: 1px solid #59656F;\">{_fechaYhora}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #511F73; border: 1px solid #511F73;\" >{_montoDolares}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #26A699; border: 1px solid #26A699;\">{_montoTipoCambio}</td>");
+                        _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoEquivale}</td>");
+                        // _detalleBuilder.Append($"<td style=\"text-align: right; color: #26A699; border: 1px solid #F29727;\">{_motivo}</td>");
                         // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F29727; border: 1px solid #F29727;\">{_montoTarjeta}</td>");
                         // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoSinpe}</td>");
                         _detalleBuilder.Append($"</tr>");
                     }
                 }
+
+                _detalleBuilder.Append($"<tr>");
+                _detalleBuilder.Append($"<td style=\"text-align: center; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{"Totales: "}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\" >{totalDolares.ToString("N2")}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: center; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{"N/A"}</td>");
+                _detalleBuilder.Append($"<td style=\"text-align: right; font-weight: bold; color: #A5003A; border: 1px solid #A5003A;\">{totalEquivale.ToString("N2")}</td>");
+                // _detalleBuilder.Append($"<td style=\"text-align: right; color: #26A699; border: 1px solid #F29727;\">{_motivo}</td>");
+                // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F29727; border: 1px solid #F29727;\">{_montoTarjeta}</td>");
+                // _detalleBuilder.Append($"<td style=\"text-align: right; color: #F24C3D; border: 1px solid #F24C3D;\">{_montoSinpe}</td>");
+                _detalleBuilder.Append($"</tr>");
             }
             catch (SqlException ex)
             {
@@ -819,12 +1019,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -873,19 +1075,28 @@ namespace Sistema_Mercadito.Capa_de_Datos
                         resultado = "Error";
                     }
                 }
-                SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
+                //SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPxagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
+                SharedResources._MontoSaldoCajas = 0;
+                SharedResources._MontoSaldoCajas += SharedResources._MontoInicioCajas;
+                SharedResources._MontoSaldoCajas += SharedResources._Venta;
+
+                SharedResources._MontoSaldoCajas -= SharedResources._Sinpe;
+                SharedResources._MontoSaldoCajas -= SharedResources._Tarjeta;
+                SharedResources._MontoSaldoCajas -= SharedResources._MontoPagoDolares;
             }
             catch (SqlException ex)
             {
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -927,25 +1138,21 @@ namespace Sistema_Mercadito.Capa_de_Datos
 
                         resultado = "Continuar";
                     }
-                    else
-                    {
-                        MessageBox.Show("No se puede cerrar la caja porque no se han realizado ventas");
-                        resultado = "Error";
-                    }
                 }
-                SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
             }
             catch (SqlException ex)
             {
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados:" + ex.ToString());
             }
             finally
             {
@@ -1013,6 +1220,8 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
+
                 resultado = false;
             }
             catch (Exception ex)
@@ -1020,6 +1229,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
                 resultado = false;
             }
             return resultado;
@@ -1055,12 +1265,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -1108,12 +1320,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show(ex.ToString());
             }
             finally
             {
@@ -1150,12 +1364,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -1183,12 +1399,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -1234,6 +1452,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
                 resultado = false;
             }
             catch (Exception ex)
@@ -1241,6 +1460,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
                 resultado = false;
             }
             return resultado;
@@ -1281,6 +1501,8 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
+
                 resultado = false;
             }
             catch (Exception ex)
@@ -1288,6 +1510,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
                 resultado = false;
             }
             return resultado;
@@ -1322,6 +1545,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
                 resultado = false;
             }
             catch (Exception ex)
@@ -1329,6 +1553,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
                 resultado = false;
             }
             finally
@@ -1361,6 +1586,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
                 resultado = false;
             }
             catch (Exception ex)
@@ -1368,6 +1594,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
                 resultado = false;
             }
             finally
@@ -1407,11 +1634,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                             resultado = "Continuar";
                         }
                     }
-                    SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
-                }
-                else
-                {
-                    MessageBox.Show("No habien filas");
+                    //SharedResources._MontoSaldoCajas = (SharedResources._MontoInicioCajas - SharedResources._MontoPagoDolares) + (SharedResources._Efectivo - SharedResources._MontoVueltosCambio);
                 }
             }
             catch (SqlException ex)
@@ -1419,12 +1642,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -1472,6 +1697,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
                 resultado = false;
             }
             catch (Exception ex)
@@ -1479,6 +1705,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
                 resultado = false;
             }
             return resultado;
@@ -1506,12 +1733,14 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
             }
             catch (Exception ex)
             {
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
             }
             finally
             {
@@ -1600,6 +1829,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
                 resultado = false;
             }
             catch (Exception ex)
@@ -1607,6 +1837,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
                 resultado = false;
             }
             finally
@@ -1639,6 +1870,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja la excepción de SQL Server
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas al ejecutar la consulta sql: " + ex.ToString());
                 resultado = false;
             }
             catch (Exception ex)
@@ -1646,6 +1878,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 // Maneja cualquier otra excepción
                 string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
                 SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Problemas encontrados: " + ex.ToString());
                 resultado = false;
             }
             finally

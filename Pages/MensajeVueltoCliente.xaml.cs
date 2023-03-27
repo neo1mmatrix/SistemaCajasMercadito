@@ -192,5 +192,14 @@ namespace Sistema_Mercadito.Pages
         }
 
         #endregion Vistas
+
+        private void EventoRetrocesoPagina(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+            {
+                // Detener la propagación del evento
+                e.Handled = true;
+            }
+        }
     }
 }
