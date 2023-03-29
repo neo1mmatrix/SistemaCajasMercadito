@@ -1,17 +1,18 @@
-﻿using ImprimirTiquetes;
+﻿using DocumentFormat.OpenXml.Office2016.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using ImprimirTiquetes;
 using Sistema_Mercadito.Capa_de_Datos;
+using SpreadsheetLight;
 using System;
 using System.Data;
-using System.Drawing;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -36,7 +37,7 @@ namespace Sistema_Mercadito.Pages
         public ReporteVentas()
         {
             InitializeComponent();
-            //CrearDocumentoExcel();
+            crearDocumentoExcelSpreedlight();
         }
 
         #region Eventos
@@ -608,45 +609,253 @@ namespace Sistema_Mercadito.Pages
 
         #endregion Rellena Tablas
 
-        private void CrearDocumentoExcel()
+        private void crearDocumentoExcelSpreedlight()
         {
+            BuildTheme();
             string filePath = @"C:\Logs\ejemplo.xlsx";
-            //SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
+            SLThemeSettings stSettings = BuildTheme();
 
-            //// Add a WorkbookPart to the document.
-            //WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
-            //workbookpart.Workbook = new Workbook();
+            System.Data.DataTable dt = new System.Data.DataTable();
 
-            //// Add a WorksheetPart to the WorkbookPart.
-            //WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
-            //worksheetPart.Worksheet = new Worksheet(new SheetData());
+            objetoSql.SEL_REPORTE_DETALLE_VENTAS_EXCEL(SharedResources._idCajaAbierta, ref dt);
 
-            //// Add Sheets to the Workbook.
-            //Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
-            //    AppendChild<Sheets>(new Sheets());
+            SLDocument sl = new SLDocument(stSettings);
 
-            //// Append a new worksheet and associate it with the workbook.
-            //Sheet sheet = new Sheet()
-            //{
-            //    Id = spreadsheetDocument.WorkbookPart.
-            //    GetIdOfPart(worksheetPart),
-            //    SheetId = 1,
-            //    Name = "mySheet"
-            //};
+            //SLDocument sl = new SLDocument();
+            SLPageSettings ps = sl.GetPageSettings();
 
-            //SheetData sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
-            //Row row1 = new Row() { RowIndex = 1 };
-            //Cell cellA1 = new Cell() { CellReference = "A1", DataType = CellValues.String };
-            //cellA1.CellValue = new CellValue("Hola Mundo");
-            //row1.AppendChild(cellA1);
-            //sheetData.AppendChild(row1);
-            //sheets.Append(sheet);
+            sl.AddWorksheet("Reporte");
+            sl.SelectWorksheet("Reporte");
+            sl.DeleteWorksheet("Sheet1");
+            // Agrega una nueva hoja de cálculo
 
-            //workbookpart.Workbook.Save();
+            sl.SetCellValue("B3", "Ventas");
 
-            //// Close the document.
-            //spreadsheetDocument.Close();
-            //// Creamos una tabla para los productos con un borde sólido
+            SLStyle styleTitulo = sl.CreateStyle();
+            styleTitulo.Font.FontName = "Harrington";
+            styleTitulo.Font.FontSize = 24;
+            styleTitulo.Alignment.Horizontal = HorizontalAlignmentValues.Center;
+            styleTitulo.Alignment.Vertical = VerticalAlignmentValues.Center;
+            styleTitulo.Font.FontColor = System.Drawing.Color.Blue;
+
+            styleTitulo.Font.Bold = true;
+            styleTitulo.Font.Italic = true;
+            styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
+
+            SLStyle styleFila1 = sl.CreateStyle();
+            styleFila1.Font.FontName = "Calibri";
+            styleFila1.Font.FontSize = 16;
+
+            SLStyle styleFila2 = sl.CreateStyle();
+            styleFila2.Font.FontName = "Calibri";
+            styleFila2.Font.FontSize = 16;
+            styleFila2.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent2Color, SLThemeColorIndexValues.Accent2Color);
+
+            sl.SetCellStyle("B3", styleTitulo);
+            sl.SetColumnWidth("B2", 15);
+            sl.SetRowHeight(3, 40);
+            sl.SetColumnWidth("C2", 15);
+            sl.SetColumnWidth("D2", 15);
+            sl.SetColumnWidth("E2", 15);
+            sl.SetColumnWidth("F2", 15);
+            sl.SetColumnWidth("G2", 15);
+            sl.SetColumnWidth("H2", 15);
+            sl.SetColumnWidth("I2", 30);
+            sl.SetColumnWidth("J2", 30);
+            sl.SetColumnWidth("K2", 50);
+
+            sl.MergeWorksheetCells("B3", "K3");
+
+            int iStartRowIndex = 4;
+            int iStartColumnIndex = 2;
+
+            sl.ImportDataTable(iStartRowIndex, iStartColumnIndex, dt, true);
+            // The next part is optional, but it shows how you can set a table on your
+            // data based on your DataTable's dimensions.
+
+            // + 1 because the header row is included
+            // - 1 because it's a counting thing, because the start row is counted.
+            int iEndRowIndex = iStartRowIndex + dt.Rows.Count + 1 - 1;
+            // - 1 because it's a counting thing, because the start column is counted.
+            int iEndColumnIndex = iStartColumnIndex + dt.Columns.Count - 1;
+
+            SLTable table = sl.CreateTable(iStartRowIndex, iStartColumnIndex, iEndRowIndex, iEndColumnIndex);
+            table.SetTableStyle(SLTableStyleTypeValues.Medium13);
+            table.HasTotalRow = true;
+            table.SetTotalRowFunction(1, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(2, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(3, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(4, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(5, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(6, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(7, SLTotalsRowFunctionValues.Sum);
+
+            sl.InsertTable(table);
+
+            SLStyle styleTable = sl.CreateStyle();
+            styleTable.FormatCode = "yyyy/mm/dd hh:mm:ss";
+            sl.SetColumnStyle(9, styleTable);
+
+            sl.SetCellStyle("B" + iStartColumnIndex, "I" + iEndRowIndex + 1, styleFila1);
+
+            styleTable.FormatCode = "#,##0";
+            sl.SetColumnStyle(2, styleTable);
+            sl.SetColumnStyle(3, styleTable);
+            sl.SetColumnStyle(4, styleTable);
+            sl.SetColumnStyle(5, styleTable);
+            sl.SetColumnStyle(6, styleTable);
+            sl.SetColumnStyle(7, styleTable);
+            sl.SetColumnStyle(8, styleTable);
+            sl.SetColumnStyle(10, styleFila1);
+            sl.SetColumnStyle(11, styleFila1);
+
+            //SLStyle headerstyle = sl.CreateStyle();
+            //headerstyle.Font.Bold = true;
+            //headerstyle.Font.FontColor = System.Drawing.Color.IndianRed;
+            //headerstyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Light2Color, SLThemeColorIndexValues.Light2Color);
+            //sl.SetCellStyle(4, 9, headerstyle);
+            // sl.SaveAs("ImportDataTable.xlsx");
+
+            //Datos
+
+            //sl.SetColumnWidth(1, 100);
+
+            //sl.SetCellValue("B1", "Age");
+            //sl.SetCellValue("C1", "Gender");
+
+            //// Add the data rows
+            //sl.SetCellValue("A2", "John");
+            //sl.SetCellValue("B2", 25);
+            //sl.SetCellValue("C2", "Male");
+            //sl.SetCellValue("A3", "Jane");
+            //sl.SetCellValue("B3", 30);
+            //sl.SetCellValue("C3", "Female");
+
+            //// Add the footer row
+            //sl.SetCellValue("A4", "Total:");
+            //sl.SetCellValue("B4", "=SUM(B2:B3)");
+
+            // Guarda el libro de trabajo
+            sl.SaveAs(filePath);
+        }
+
+        private SLThemeSettings BuildTheme()
+        {
+            SLThemeSettings theme = new SLThemeSettings();
+
+            theme.ThemeName = "RDSColourTheme";
+            //theme.MajorLatinFont = "Impact";
+            //theme.MinorLatinFont = "Harrington";
+            // this is recommended to be pure white
+            theme.Light1Color = System.Drawing.Color.White;
+            // this is recommended to be pure black
+            theme.Dark1Color = System.Drawing.Color.Black;
+            theme.Light2Color = System.Drawing.Color.LightGray;
+            theme.Dark2Color = System.Drawing.Color.IndianRed;
+            theme.Accent1Color = System.Drawing.ColorTranslator.FromHtml("#a4c2f4");
+            theme.Accent2Color = System.Drawing.ColorTranslator.FromHtml("#c9daf8");
+            theme.Accent3Color = System.Drawing.Color.Yellow;
+            theme.Accent4Color = System.Drawing.Color.LawnGreen;
+            theme.Accent5Color = System.Drawing.Color.DeepSkyBlue;
+            theme.Accent6Color = System.Drawing.ColorTranslator.FromHtml("#00ffff");
+            theme.Hyperlink = System.Drawing.Color.Blue;
+            theme.FollowedHyperlinkColor = System.Drawing.Color.Purple;
+
+            return theme;
+        }
+
+        private void fusionaceldas()
+        {
+            SLDocument sl = new SLDocument();
+
+            sl.SetCellValue("B2", "This is a merged cell");
+
+            // merge all cells in the cell range B2:G8
+            sl.MergeWorksheetCells("B2", "G8");
+
+            // merge all cells from rows 10 through 12, columns 4 through 6
+            // This is basically the cell range D10:F12
+            sl.MergeWorksheetCells(10, 4, 12, 6);
+            sl.SetCellValue("B14", "Hola Mundo");
+            sl.MergeWorksheetCells(14, 2, 14, 9);
+
+            // merge alls cells from rows 15 through 4, columns 12 through 9
+            // Note that the order of the corresponding row and column indices
+            // doesn't matter. This is the cell range I4:L15
+            //  sl.MergeWorksheetCells(15, 12, 4, 9);
+
+            // unmerge the cell range D10:F12
+            //  sl.UnmergeWorksheetCells("D10", "F12");
+
+            sl.SaveAs("MergeCells.xlsx");
+
+            Console.WriteLine("End of program");
+            Console.ReadLine();
+        }
+
+        private void tablaExcel()
+        {
+            SLDocument sl = new SLDocument();
+
+            int i, j;
+            for (i = 2; i <= 12; ++i)
+            {
+                for (j = 2; j <= 6; ++j)
+                {
+                    if (i == 2)
+                    {
+                        sl.SetCellValue(i, j, string.Format("Col{0}", j));
+                    }
+                    else
+                    {
+                        sl.SetCellValue(i, j, i * j);
+                    }
+                }
+            }
+
+            // tabular data ranges from B2:F12, inclusive of a header row
+            SLTable tbl = sl.CreateTable("B2", "F12");
+            tbl.SetTableStyle(SLTableStyleTypeValues.Medium9);
+            sl.InsertTable(tbl);
+
+            for (i = 2; i <= 12; ++i)
+            {
+                for (j = 9; j <= 15; ++j)
+                {
+                    if (i == 2)
+                    {
+                        sl.SetCellValue(i, j, string.Format("Col{0}", j));
+                    }
+                    else
+                    {
+                        sl.SetCellValue(i, j, i * j);
+                    }
+                }
+            }
+
+            tbl = sl.CreateTable("I2", "O12");
+
+            tbl.HasTotalRow = true;
+            // 1st table column, column I
+            tbl.SetTotalRowLabel(1, "Totals");
+            // 7th table column, column O
+            tbl.SetTotalRowFunction(7, SLTotalsRowFunctionValues.Sum);
+            tbl.SetTableStyle(SLTableStyleTypeValues.Dark4);
+
+            tbl.HasBandedColumns = true;
+            tbl.HasBandedRows = true;
+            tbl.HasFirstColumnStyled = true;
+            tbl.HasLastColumnStyled = true;
+
+            // sort by the 3rd table column (column K) in descending order
+            tbl.Sort(3, false);
+
+            sl.InsertTable(tbl);
+
+            sl.SaveAs("Tablesligth4.xlsx");
+
+            Console.WriteLine("End of program");
+            Console.ReadLine();
         }
     }
 }
