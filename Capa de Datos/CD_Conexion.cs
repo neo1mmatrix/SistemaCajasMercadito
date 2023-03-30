@@ -836,6 +836,84 @@ namespace Sistema_Mercadito.Capa_de_Datos
             }
         }
 
+        public void SEL_REPORTE_DETALLE_RETIROS_EXCEL(int pId, ref DataTable pDtVentas)
+        {
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                AbrirConexion();
+
+                SqlDataAdapter da = new SqlDataAdapter("SP_Reporte_Detalle_Retiros_Excel", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                pDtVentas = new DataTable();
+                da.Fill(pDtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error en la consulta sql, más info en el log");
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error: " + ex.ToString());
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+
+                CerrarConexion();
+            }
+        }
+
+        public void SEL_REPORTE_DETALLE_COMPRA_DOLARES_EXCEL(int pId, ref DataTable pDtVentas)
+        {
+            try
+            {
+                // Ejecutar el comando y obtener el lector de datos
+                AbrirConexion();
+
+                SqlDataAdapter da = new SqlDataAdapter("[SP_Reporte_Detalle_Compra_Dolares_Excel]", AbrirConexion());
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+                DataSet ds = new DataSet();
+                ds.Clear();
+                da.Fill(ds);
+
+                pDtVentas = new DataTable();
+                da.Fill(pDtVentas);
+            }
+            catch (SqlException ex)
+            {
+                // Maneja la excepción de SQL Server
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error al insertar el registro: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error en la consulta sql, más info en el log");
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier otra excepción
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Paso un error: " + ex.ToString());
+            }
+            finally
+            {
+                // Cerrar el lector de datos y la conexión a la base de datos
+
+                CerrarConexion();
+            }
+        }
+
         //EXCLUSIVO PARA CREAR LA TABLA EN HTML Y ENVIAR POR EMAIL
         public void SEL_REPORTE_DETALLE_RETIROS(int pId, ref string pDetalles)
         {

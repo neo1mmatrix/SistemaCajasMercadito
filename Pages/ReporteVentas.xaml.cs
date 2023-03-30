@@ -37,7 +37,9 @@ namespace Sistema_Mercadito.Pages
         public ReporteVentas()
         {
             InitializeComponent();
-            crearDocumentoExcelSpreedlight();
+            CrearReporteExcelVentas();
+            CrearReporteExcelRetiros();
+            CrearReporteExcelCompraDolares();
         }
 
         #region Eventos
@@ -609,7 +611,7 @@ namespace Sistema_Mercadito.Pages
 
         #endregion Rellena Tablas
 
-        private void crearDocumentoExcelSpreedlight()
+        private void CrearReporteExcelVentas()
         {
             BuildTheme();
             string filePath = @"C:\Logs\ejemplo.xlsx";
@@ -624,32 +626,25 @@ namespace Sistema_Mercadito.Pages
             //SLDocument sl = new SLDocument();
             SLPageSettings ps = sl.GetPageSettings();
 
-            sl.AddWorksheet("Reporte");
-            sl.SelectWorksheet("Reporte");
+            sl.AddWorksheet("Ventas");
+            sl.SelectWorksheet("Ventas");
             sl.DeleteWorksheet("Sheet1");
             // Agrega una nueva hoja de cálculo
 
             sl.SetCellValue("B3", "Ventas");
 
             SLStyle styleTitulo = sl.CreateStyle();
-            styleTitulo.Font.FontName = "Harrington";
+            styleTitulo.Font.FontName = "Congenial";
             styleTitulo.Font.FontSize = 24;
             styleTitulo.Alignment.Horizontal = HorizontalAlignmentValues.Center;
             styleTitulo.Alignment.Vertical = VerticalAlignmentValues.Center;
             styleTitulo.Font.FontColor = System.Drawing.Color.Blue;
-
             styleTitulo.Font.Bold = true;
-            styleTitulo.Font.Italic = true;
             styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
 
             SLStyle styleFila1 = sl.CreateStyle();
-            styleFila1.Font.FontName = "Calibri";
+            styleFila1.Font.FontName = "Verdana";
             styleFila1.Font.FontSize = 16;
-
-            SLStyle styleFila2 = sl.CreateStyle();
-            styleFila2.Font.FontName = "Calibri";
-            styleFila2.Font.FontSize = 16;
-            styleFila2.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent2Color, SLThemeColorIndexValues.Accent2Color);
 
             sl.SetCellStyle("B3", styleTitulo);
             sl.SetColumnWidth("B2", 15);
@@ -708,33 +703,186 @@ namespace Sistema_Mercadito.Pages
             sl.SetColumnStyle(8, styleTable);
             sl.SetColumnStyle(10, styleFila1);
             sl.SetColumnStyle(11, styleFila1);
+            // Guarda el libro de trabajo
+            sl.SaveAs(filePath);
+        }
 
-            //SLStyle headerstyle = sl.CreateStyle();
-            //headerstyle.Font.Bold = true;
-            //headerstyle.Font.FontColor = System.Drawing.Color.IndianRed;
-            //headerstyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Light2Color, SLThemeColorIndexValues.Light2Color);
-            //sl.SetCellStyle(4, 9, headerstyle);
-            // sl.SaveAs("ImportDataTable.xlsx");
+        private void CrearReporteExcelRetiros()
+        {
+            BuildTheme();
+            string filePath = @"C:\Logs\ejemplo.xlsx";
+            SLThemeSettings stSettings = BuildTheme();
 
-            //Datos
+            System.Data.DataTable dt = new System.Data.DataTable();
 
-            //sl.SetColumnWidth(1, 100);
+            objetoSql.SEL_REPORTE_DETALLE_RETIROS_EXCEL(SharedResources._idCajaAbierta, ref dt);
 
-            //sl.SetCellValue("B1", "Age");
-            //sl.SetCellValue("C1", "Gender");
+            SLDocument sl = new SLDocument(filePath, "Ventas");
 
-            //// Add the data rows
-            //sl.SetCellValue("A2", "John");
-            //sl.SetCellValue("B2", 25);
-            //sl.SetCellValue("C2", "Male");
-            //sl.SetCellValue("A3", "Jane");
-            //sl.SetCellValue("B3", 30);
-            //sl.SetCellValue("C3", "Female");
+            //SLDocument sl = new SLDocument();
+            SLPageSettings ps = sl.GetPageSettings();
 
-            //// Add the footer row
-            //sl.SetCellValue("A4", "Total:");
-            //sl.SetCellValue("B4", "=SUM(B2:B3)");
+            sl.AddWorksheet("Retiros");
+            sl.SelectWorksheet("Retiros");
 
+            SLStyle styleFila1 = sl.CreateStyle();
+            styleFila1.Font.FontName = "Verdana";
+            styleFila1.Font.FontSize = 16;
+
+            //511F73
+            sl.SetColumnWidth("B2", 20);
+            sl.SetRowHeight(3, 40);
+            sl.SetColumnWidth("C2", 20);
+            sl.SetColumnWidth("D2", 50);
+            sl.SetColumnWidth("E2", 37);
+            sl.SetColumnWidth("F2", 17);
+
+            sl.MergeWorksheetCells("B3", "F3");
+
+            int iStartRowIndex = 4;
+            int iStartColumnIndex = 2;
+
+            sl.ImportDataTable(iStartRowIndex, iStartColumnIndex, dt, true);
+            // The next part is optional, but it shows how you can set a table on your
+            // data based on your DataTable's dimensions.
+
+            // + 1 because the header row is included
+            // - 1 because it's a counting thing, because the start row is counted.
+            int iEndRowIndex = iStartRowIndex + dt.Rows.Count + 1 - 1;
+            // - 1 because it's a counting thing, because the start column is counted.
+            int iEndColumnIndex = iStartColumnIndex + dt.Columns.Count - 1;
+
+            SLTable table = sl.CreateTable(iStartRowIndex, iStartColumnIndex, iEndRowIndex, iEndColumnIndex);
+            table.SetTableStyle(SLTableStyleTypeValues.Medium13);
+            table.HasTotalRow = true;
+            table.SetTotalRowFunction(1, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(2, SLTotalsRowFunctionValues.Sum);
+
+            sl.InsertTable(table);
+
+            SLStyle styleFecha = sl.CreateStyle();
+            styleFecha.FormatCode = "yyyy/mm/dd hh:mm:ss";
+            sl.SetColumnStyle(5, styleFecha);
+
+            sl.SetCellStyle("B" + iStartColumnIndex, "I" + iEndRowIndex + 1, styleFila1);
+
+            SLStyle styleTable = sl.CreateStyle();
+            styleTable.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleTable.Font.FontName = "Verdana";
+            styleTable.Font.FontSize = 16;
+            styleTable.FormatCode = "#,##0";
+
+            sl.SetColumnStyle(2, styleTable);
+
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            sl.SetColumnStyle(3, styleTable);
+
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            sl.SetColumnStyle(4, styleTable);
+
+            SLStyle styleTitulo = sl.CreateStyle();
+            styleTitulo.Font.FontName = "Congenial";
+            styleTitulo.Font.FontSize = 24;
+            styleTitulo.Alignment.Horizontal = HorizontalAlignmentValues.Center;
+            styleTitulo.Alignment.Vertical = VerticalAlignmentValues.Center;
+            styleTitulo.Font.FontColor = System.Drawing.Color.Blue;
+            styleTitulo.Font.Bold = true;
+            styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
+            sl.SetCellValue("B3", "Retiros");
+            sl.SetCellStyle("B3", styleTitulo);
+            sl.SetRowHeight(4, 100, 25);
+
+            // Guarda el libro de trabajo
+            sl.SaveAs(filePath);
+        }
+
+        private void CrearReporteExcelCompraDolares()
+        {
+            BuildTheme();
+            string filePath = @"C:\Logs\ejemplo.xlsx";
+            SLThemeSettings stSettings = BuildTheme();
+
+            System.Data.DataTable dt = new System.Data.DataTable();
+
+            objetoSql.SEL_REPORTE_DETALLE_COMPRA_DOLARES_EXCEL(SharedResources._idCajaAbierta, ref dt);
+
+            SLDocument sl = new SLDocument(filePath, "Dolares Comprados");
+
+            //SLDocument sl = new SLDocument();
+            SLPageSettings ps = sl.GetPageSettings();
+
+            sl.AddWorksheet("Compra Dolares");
+            sl.SelectWorksheet("Compra Dolares");
+            // Agrega una nueva hoja de cálculo
+
+            sl.MergeWorksheetCells("B3", "F3");
+            sl.SetRowHeight(4, 100, 25);
+
+            SLStyle styleFila1 = sl.CreateStyle();
+            styleFila1.Font.FontName = "Verdana";
+            styleFila1.Font.FontSize = 16;
+
+            sl.SetColumnWidth("B2", 17);
+            sl.SetRowHeight(3, 40);
+            sl.SetColumnWidth("C2", 17);
+            sl.SetColumnWidth("D2", 22);
+            sl.SetColumnWidth("E2", 37);
+            sl.SetColumnWidth("F2", 17);
+
+            int iStartRowIndex = 4;
+            int iStartColumnIndex = 2;
+
+            sl.ImportDataTable(iStartRowIndex, iStartColumnIndex, dt, true);
+            // The next part is optional, but it shows how you can set a table on your
+            // data based on your DataTable's dimensions.
+
+            // + 1 because the header row is included
+            // - 1 because it's a counting thing, because the start row is counted.
+            int iEndRowIndex = iStartRowIndex + dt.Rows.Count + 1 - 1;
+            // - 1 because it's a counting thing, because the start column is counted.
+            int iEndColumnIndex = iStartColumnIndex + dt.Columns.Count - 1;
+
+            SLTable table = sl.CreateTable(iStartRowIndex, iStartColumnIndex, iEndRowIndex, iEndColumnIndex);
+            table.SetTableStyle(SLTableStyleTypeValues.Medium13);
+            table.HasTotalRow = true;
+            table.SetTotalRowFunction(1, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(2, SLTotalsRowFunctionValues.Sum);
+            table.SetTotalRowFunction(3, SLTotalsRowFunctionValues.Sum);
+
+            sl.InsertTable(table);
+
+            SLStyle styleTable = sl.CreateStyle();
+            styleTable.FormatCode = "yyyy/mm/dd hh:mm:ss";
+            styleTable.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            sl.SetColumnStyle(5, styleTable);
+
+            sl.SetCellStyle("B" + iStartColumnIndex, "I" + iEndRowIndex + 1, styleFila1);
+
+            styleTable.FormatCode = "#,##0";
+            styleTable.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleTable.Font.FontName = "Verdana";
+            styleTable.Font.FontSize = 16;
+            sl.SetColumnStyle(2, styleTable);
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            sl.SetColumnStyle(3, styleTable);
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            sl.SetColumnStyle(4, styleTable);
+
+            styleFila1.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            sl.SetColumnStyle(6, styleFila1);
+
+            SLStyle styleTitulo = sl.CreateStyle();
+            styleTitulo.Font.FontName = "Congenial";
+            styleTitulo.Font.FontSize = 24;
+            styleTitulo.Alignment.Vertical = VerticalAlignmentValues.Center;
+            styleTitulo.Alignment.Horizontal = HorizontalAlignmentValues.Center;
+            styleTitulo.Font.FontColor = System.Drawing.Color.Blue;
+            styleTitulo.Font.Bold = true;
+            styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
+            sl.SetCellStyle("B3", styleTitulo);
+            sl.SetCellValue("B3", "Compra de Dolares");
             // Guarda el libro de trabajo
             sl.SaveAs(filePath);
         }
