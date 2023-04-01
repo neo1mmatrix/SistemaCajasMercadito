@@ -37,9 +37,6 @@ namespace Sistema_Mercadito.Pages
         public ReporteVentas()
         {
             InitializeComponent();
-            CrearReporteExcelVentas();
-            CrearReporteExcelRetiros();
-            CrearReporteExcelCompraDolares();
         }
 
         #region Eventos
@@ -69,6 +66,7 @@ namespace Sistema_Mercadito.Pages
             objetoSql.ConsultaCaja();
             Thread hilo2 = new Thread(new ThreadStart(AbrirCaja));
             hilo2.Start();
+
             Thread hilo = new Thread(new ThreadStart(EnviarCorreo));
             hilo.Start();
             MessageBox.Show("Cierre Correcto");
@@ -320,6 +318,45 @@ namespace Sistema_Mercadito.Pages
 
         private void EnviarCorreo()
         {
+            //Console.WriteLine("NOMBRE DE LA EMPRESA " + SharedResources._CfgNombreEmpresa.ToString());
+            //Console.WriteLine("Fecha de Apertura: " + SharedResources._FechaCajaAbierta.ToString());
+            //Console.WriteLine("Fecha de Cierre: " + SharedResources._FechaCajaCierre.ToString());
+
+            //Console.WriteLine("Monto Inicio: " + SharedResources._MontoInicioCajas.ToString());
+            //Console.WriteLine("Pagos Recibidos en Efectivo: " + SharedResources._Efectivo.ToString());
+            //Console.WriteLine("Pagos Recibidos en Tarjeta: " + SharedResources._Tarjeta.ToString());
+            //Console.WriteLine("Pagos Recibidos en Sinpe: " + SharedResources._Sinpe.ToString());
+
+            //Console.WriteLine("Retiro en Colones: ₡ " + _SumaRetirosColones.ToString());
+            //Console.WriteLine("Retiro en Dólares: $ " + _SumaRetirosDolares.ToString());
+
+            //Console.WriteLine("Pagos Recibidos en Dólares: " + SharedResources._Dolares.ToString());
+            //Console.WriteLine("Compra de Dolares: " + SharedResources._MontoPagoDolares.ToString());
+
+            //Console.WriteLine("Compra de Dólares: " + _SumaCompraDolares.ToString());
+            //Console.WriteLine("Pago por los Dólares: " + _SumaColonesPagadosDolares.ToString());
+
+            //Console.WriteLine("Total en Cajas: " + SharedResources._MontoSaldoCajas.ToString());
+            //Console.WriteLine("Venta Total = " + SharedResources._Venta.ToString());
+
+            CrearReporteExcelVentas(SharedResources._CfgNombreEmpresa,
+                                    SharedResources._FechaCajaAbierta,
+                                    SharedResources._FechaCajaCierre,
+                                    SharedResources._MontoInicioCajas,
+                                    SharedResources._Efectivo,
+                                    SharedResources._Tarjeta,
+                                    SharedResources._Sinpe,
+                                    SharedResources._Dolares,
+                                    SharedResources._MontoPagoDolares,
+                                    _SumaRetirosColones,
+                                    _SumaRetirosDolares,
+                                    _SumaCompraDolares,
+                                    _SumaColonesPagadosDolares,
+                                    SharedResources._MontoSaldoCajas,
+                                    SharedResources._Venta);
+            CrearReporteExcelRetiros();
+            CrearReporteExcelCompraDolares();
+
             //Variable para crear el contenido del correo en formato HTML
             StringBuilder _detalleCorreoBuilder = new StringBuilder();
 
@@ -611,7 +648,21 @@ namespace Sistema_Mercadito.Pages
 
         #endregion Rellena Tablas
 
-        private void CrearReporteExcelVentas()
+        private void CrearReporteExcelVentas(string pNombreEmpresa,
+                                             DateTime pFechaApertura,
+                                             DateTime pFechaCierre,
+                                             decimal pMontoInicio,
+                                             decimal pMontoEfectivo,
+                                             decimal pMontoTarjeta,
+                                             decimal pMontoSinpe,
+                                             decimal pMontoDolares,
+                                             decimal pMontoDolaresPagados,
+                                             decimal pRetiroColones,
+                                             decimal pRetiroDolares,
+                                             decimal pDolaresComprados,
+                                             decimal pDolaresCompradosEnColones,
+                                             decimal pTotalEnCajas,
+                                             decimal pTotalVentas)
         {
             BuildTheme();
             string filePath = @"C:\Logs\ejemplo.xlsx";
@@ -630,38 +681,36 @@ namespace Sistema_Mercadito.Pages
             sl.SelectWorksheet("Ventas");
             sl.DeleteWorksheet("Sheet1");
             // Agrega una nueva hoja de cálculo
+            sl.SetRowHeight(1, 500, 25);
 
-            sl.SetCellValue("B3", "Ventas");
-
-            SLStyle styleTitulo = sl.CreateStyle();
-            styleTitulo.Font.FontName = "Congenial";
-            styleTitulo.Font.FontSize = 24;
-            styleTitulo.Alignment.Horizontal = HorizontalAlignmentValues.Center;
-            styleTitulo.Alignment.Vertical = VerticalAlignmentValues.Center;
-            styleTitulo.Font.FontColor = System.Drawing.Color.Blue;
-            styleTitulo.Font.Bold = true;
-            styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
+            sl.SetCellValue("B2", "Fecha de Apertura: ");
+            sl.MergeWorksheetCells("B2", "C2");
+            sl.SetCellValue("B3", "Fecha de Cierre: ");
+            sl.MergeWorksheetCells("B3", "C3");
+            sl.SetCellValue("D2", pFechaApertura);
+            sl.MergeWorksheetCells("D2", "E2");
+            sl.SetCellValue("D3", pFechaCierre);
+            sl.MergeWorksheetCells("D3", "E3");
 
             SLStyle styleFila1 = sl.CreateStyle();
-            styleFila1.Font.FontName = "Verdana";
+            styleFila1.Font.FontName = "Calibri";
             styleFila1.Font.FontSize = 16;
 
-            sl.SetCellStyle("B3", styleTitulo);
-            sl.SetColumnWidth("B2", 15);
-            sl.SetRowHeight(3, 40);
-            sl.SetColumnWidth("C2", 15);
-            sl.SetColumnWidth("D2", 15);
-            sl.SetColumnWidth("E2", 15);
-            sl.SetColumnWidth("F2", 15);
-            sl.SetColumnWidth("G2", 15);
-            sl.SetColumnWidth("H2", 15);
-            sl.SetColumnWidth("I2", 30);
+            sl.SetColumnWidth("B2", 20);
+            sl.SetRowHeight(5, 40);
+            sl.SetColumnWidth("C2", 20);
+            sl.SetColumnWidth("D2", 17);
+            sl.SetColumnWidth("E2", 17);
+            sl.SetColumnWidth("F2", 17);
+            sl.SetColumnWidth("G2", 17);
+            sl.SetColumnWidth("H2", 17);
+            sl.SetColumnWidth("I2", 37);
             sl.SetColumnWidth("J2", 30);
             sl.SetColumnWidth("K2", 50);
 
-            sl.MergeWorksheetCells("B3", "K3");
+            sl.MergeWorksheetCells("B5", "K5");
 
-            int iStartRowIndex = 4;
+            int iStartRowIndex = 6;
             int iStartColumnIndex = 2;
 
             sl.ImportDataTable(iStartRowIndex, iStartColumnIndex, dt, true);
@@ -687,22 +736,190 @@ namespace Sistema_Mercadito.Pages
 
             sl.InsertTable(table);
 
-            SLStyle styleTable = sl.CreateStyle();
-            styleTable.FormatCode = "yyyy/mm/dd hh:mm:ss";
-            sl.SetColumnStyle(9, styleTable);
+            SLStyle styleFecha = sl.CreateStyle();
+            styleFecha.FormatCode = "yyyy/mm/dd hh:mm:ss";
+            styleFecha.SetHorizontalAlignment(HorizontalAlignmentValues.Center);
+            styleFecha.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            styleFecha.Font.FontSize = 16;
+            sl.SetColumnStyle(9, styleFecha);
 
             sl.SetCellStyle("B" + iStartColumnIndex, "I" + iEndRowIndex + 1, styleFila1);
 
+            //Estilos de las Columanas de la tabla
+            //Ventas
+            SLStyle styleTable = sl.CreateStyle();
+            styleTable.Font.FontSize = 16;
+            styleTable.Alignment.Vertical = VerticalAlignmentValues.Center;
             styleTable.FormatCode = "#,##0";
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#0004ae"));
+
+            styleTable.Font.Bold = true;
             sl.SetColumnStyle(2, styleTable);
+            //Efectivo
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#511F73"));
+
+            styleTable.Font.Bold = false;
             sl.SetColumnStyle(3, styleTable);
+            //Tarjeta
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#26A699"));
             sl.SetColumnStyle(4, styleTable);
+            //Sinpe
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#F29727"));
             sl.SetColumnStyle(5, styleTable);
+            //Dolares
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
             sl.SetColumnStyle(6, styleTable);
+            //Tipo de Cambio
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
             sl.SetColumnStyle(7, styleTable);
+            //Equivalen a
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
             sl.SetColumnStyle(8, styleTable);
-            sl.SetColumnStyle(10, styleFila1);
-            sl.SetColumnStyle(11, styleFila1);
+            //Fecha
+            styleFecha.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            sl.SetColumnStyle(9, styleFecha);
+            //Activo
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            sl.SetColumnStyle(10, styleTable);
+            //Motivo de borrado
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            sl.SetColumnStyle(11, styleTable);
+
+            //Resumen del Reporte
+            //Ventas
+            sl.SetCellValue("B" + (iEndRowIndex + 4), "Monto Inicial: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 4), pMontoInicio);
+            sl.SetCellValue("B" + (iEndRowIndex + 5), "Pagos en Efectivo: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 5), pMontoEfectivo);
+            sl.SetCellValue("B" + (iEndRowIndex + 6), "Pagos en Tarjeta: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 6), pMontoTarjeta);
+            sl.SetCellValue("B" + (iEndRowIndex + 7), "Pagos en Sinpe: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 7), pMontoSinpe);
+            // sl.SetCellValue("B" + (iEndRowIndex + 7), );
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 4), "C" + (iEndRowIndex + 4));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 5), "C" + (iEndRowIndex + 5));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 6), "C" + (iEndRowIndex + 6));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 7), "C" + (iEndRowIndex + 7));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 4), "E" + (iEndRowIndex + 4));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 5), "E" + (iEndRowIndex + 5));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 6), "E" + (iEndRowIndex + 6));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 7), "E" + (iEndRowIndex + 7));
+
+            sl.SetCellValue("B" + (iEndRowIndex + 9), "Pagos en Dolares: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 9), pMontoDolares);
+            sl.SetCellValue("B" + (iEndRowIndex + 10), "Equivalen a: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 10), pMontoDolaresPagados);
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 9), "C" + (iEndRowIndex + 9));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 10), "C" + (iEndRowIndex + 10));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 9), "E" + (iEndRowIndex + 9));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 10), "E" + (iEndRowIndex + 10));
+
+            //Retiros
+            sl.SetCellValue("B" + (iEndRowIndex + 12), "Retiro de Colones ₡: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 12), pRetiroColones);
+            sl.SetCellValue("B" + (iEndRowIndex + 13), "Retiro de Dolares $: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 13), pRetiroDolares);
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 12), "C" + (iEndRowIndex + 12));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 13), "C" + (iEndRowIndex + 13));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 12), "E" + (iEndRowIndex + 12));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 13), "E" + (iEndRowIndex + 13));
+
+            //Cambio de Dolares
+            sl.SetCellValue("B" + (iEndRowIndex + 15), "Cambio de Dolares $: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 15), pDolaresComprados);
+            sl.SetCellValue("B" + (iEndRowIndex + 16), "Equivalen a ₡: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 16), pDolaresCompradosEnColones);
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 15), "C" + (iEndRowIndex + 15));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 16), "C" + +(iEndRowIndex + 16));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 15), "E" + (iEndRowIndex + 15));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 16), "E" + +(iEndRowIndex + 16));
+
+            //Total en cajas
+            //Venta Total
+            sl.SetCellValue("B" + (iEndRowIndex + 18), "Total en Cajas $: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 18), pTotalEnCajas);
+            sl.SetCellValue("B" + (iEndRowIndex + 19), "Venta Total $: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 19), pTotalVentas);
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 18), "C" + (iEndRowIndex + 18));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 19), "C" + +(iEndRowIndex + 19));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 18), "E" + (iEndRowIndex + 18));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 19), "E" + +(iEndRowIndex + 19));
+
+            SLStyle styleTitulo = sl.CreateStyle();
+            styleTitulo.Font.FontName = "Congenial";
+            styleTitulo.Font.FontSize = 24;
+            styleTitulo.Alignment.Horizontal = HorizontalAlignmentValues.Center;
+            styleTitulo.Alignment.Vertical = VerticalAlignmentValues.Center;
+            styleTitulo.Font.FontColor = System.Drawing.Color.Blue;
+            styleTitulo.Font.Bold = true;
+            styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
+            sl.SetCellValue("B5", "Ventas " + pNombreEmpresa);
+            sl.SetCellStyle("B5", styleTitulo);
+
+            SLStyle styleBorde1 = sl.CreateStyle();
+            //Color del Borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#0004ae"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#0004ae"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#0004ae"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#0004ae"));
+            sl.SetCellStyle("B" + iStartRowIndex, "B" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            sl.SetCellStyle("C" + iStartRowIndex, "C" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            sl.SetCellStyle("D" + iStartRowIndex, "D" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F29727"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F29727"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F29727"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F29727"));
+            sl.SetCellStyle("E" + iStartRowIndex, "E" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            sl.SetCellStyle("F" + iStartRowIndex, "F" + (iEndRowIndex + 1), styleBorde1);
+            sl.SetCellStyle("G" + iStartRowIndex, "G" + (iEndRowIndex + 1), styleBorde1);
+            sl.SetCellStyle("H" + iStartRowIndex, "H" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            sl.SetCellStyle("I" + iStartRowIndex, "I" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            sl.SetCellStyle("J" + iStartRowIndex, "J" + (iEndRowIndex + 1), styleBorde1);
+            sl.SetCellStyle("K" + iStartRowIndex, "K" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            sl.SetCellStyle("B2", "E3", styleBorde1);
+            sl.SetCellStyle("B" + (iEndRowIndex + 4), "E" + (iEndRowIndex + 7), styleBorde1);
+            sl.SetCellStyle("B" + (iEndRowIndex + 9), "E" + (iEndRowIndex + 10), styleBorde1);
+            sl.SetCellStyle("B" + (iEndRowIndex + 12), "E" + (iEndRowIndex + 13), styleBorde1);
+            sl.SetCellStyle("B" + (iEndRowIndex + 15), "E" + (iEndRowIndex + 16), styleBorde1);
+            sl.SetCellStyle("B" + (iEndRowIndex + 18), "E" + (iEndRowIndex + 19), styleBorde1);
+
+            sl.SetCellStyle("B2", styleFila1);
+            sl.SetCellStyle("B3", styleFila1);
+
+            sl.SetCellStyle("D2", styleFecha);
+            sl.SetCellStyle("D3", styleFecha);
+
             // Guarda el libro de trabajo
             sl.SaveAs(filePath);
         }
@@ -726,7 +943,7 @@ namespace Sistema_Mercadito.Pages
             sl.SelectWorksheet("Retiros");
 
             SLStyle styleFila1 = sl.CreateStyle();
-            styleFila1.Font.FontName = "Verdana";
+            styleFila1.Font.FontName = "Calibri";
             styleFila1.Font.FontSize = 16;
 
             //511F73
@@ -762,6 +979,9 @@ namespace Sistema_Mercadito.Pages
 
             SLStyle styleFecha = sl.CreateStyle();
             styleFecha.FormatCode = "yyyy/mm/dd hh:mm:ss";
+            styleFecha.SetHorizontalAlignment(HorizontalAlignmentValues.Center);
+            styleFecha.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            styleFecha.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#59656F"));
             sl.SetColumnStyle(5, styleFecha);
 
             sl.SetCellStyle("B" + iStartColumnIndex, "I" + iEndRowIndex + 1, styleFila1);
@@ -769,7 +989,7 @@ namespace Sistema_Mercadito.Pages
             SLStyle styleTable = sl.CreateStyle();
             styleTable.SetVerticalAlignment(VerticalAlignmentValues.Center);
             styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#511F73"));
-            styleTable.Font.FontName = "Verdana";
+            styleTable.Font.FontName = "Calibri";
             styleTable.Font.FontSize = 16;
             styleTable.FormatCode = "#,##0";
 
@@ -780,6 +1000,9 @@ namespace Sistema_Mercadito.Pages
 
             styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
             sl.SetColumnStyle(4, styleTable);
+
+            styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            sl.SetColumnStyle(6, styleTable);
 
             SLStyle styleTitulo = sl.CreateStyle();
             styleTitulo.Font.FontName = "Congenial";
@@ -792,6 +1015,38 @@ namespace Sistema_Mercadito.Pages
             sl.SetCellValue("B3", "Retiros");
             sl.SetCellStyle("B3", styleTitulo);
             sl.SetRowHeight(4, 100, 25);
+
+            SLStyle styleBorde1 = sl.CreateStyle();
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            sl.SetCellStyle("B" + iStartRowIndex, "B" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            sl.SetCellStyle("C" + iStartRowIndex, "C" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            sl.SetCellStyle("D" + iStartRowIndex, "D" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            sl.SetCellStyle("E" + iStartRowIndex, "E" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            sl.SetCellStyle("F" + iStartRowIndex, "F" + (iEndRowIndex + 1), styleBorde1);
 
             // Guarda el libro de trabajo
             sl.SaveAs(filePath);
@@ -820,7 +1075,7 @@ namespace Sistema_Mercadito.Pages
             sl.SetRowHeight(4, 100, 25);
 
             SLStyle styleFila1 = sl.CreateStyle();
-            styleFila1.Font.FontName = "Verdana";
+            styleFila1.Font.FontName = "Calibri";
             styleFila1.Font.FontSize = 16;
 
             sl.SetColumnWidth("B2", 17);
@@ -852,17 +1107,20 @@ namespace Sistema_Mercadito.Pages
 
             sl.InsertTable(table);
 
-            SLStyle styleTable = sl.CreateStyle();
-            styleTable.FormatCode = "yyyy/mm/dd hh:mm:ss";
-            styleTable.SetVerticalAlignment(VerticalAlignmentValues.Center);
-            sl.SetColumnStyle(5, styleTable);
+            SLStyle styleFecha = sl.CreateStyle();
+            styleFecha.FormatCode = "yyyy/mm/dd hh:mm:ss";
+            styleFecha.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            styleFecha.SetHorizontalAlignment(HorizontalAlignmentValues.Center);
+            styleFecha.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            sl.SetColumnStyle(5, styleFecha);
 
             sl.SetCellStyle("B" + iStartColumnIndex, "I" + iEndRowIndex + 1, styleFila1);
 
+            SLStyle styleTable = sl.CreateStyle();
             styleTable.FormatCode = "#,##0";
             styleTable.SetVerticalAlignment(VerticalAlignmentValues.Center);
             styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#511F73"));
-            styleTable.Font.FontName = "Verdana";
+            styleTable.Font.FontName = "Calibri";
             styleTable.Font.FontSize = 16;
             sl.SetColumnStyle(2, styleTable);
             styleTable.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#26A699"));
@@ -871,6 +1129,7 @@ namespace Sistema_Mercadito.Pages
             sl.SetColumnStyle(4, styleTable);
 
             styleFila1.SetVerticalAlignment(VerticalAlignmentValues.Center);
+            styleFila1.SetFontColor(System.Drawing.ColorTranslator.FromHtml("#A5003A"));
             sl.SetColumnStyle(6, styleFila1);
 
             SLStyle styleTitulo = sl.CreateStyle();
@@ -883,6 +1142,40 @@ namespace Sistema_Mercadito.Pages
             styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
             sl.SetCellStyle("B3", styleTitulo);
             sl.SetCellValue("B3", "Compra de Dolares");
+
+            SLStyle styleBorde1 = sl.CreateStyle();
+            //Color del Borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#511F73"));
+            sl.SetCellStyle("B" + iStartRowIndex, "B" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#26A699"));
+            sl.SetCellStyle("C" + iStartRowIndex, "C" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#F24C3D"));
+            sl.SetCellStyle("D" + iStartRowIndex, "D" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#59656F"));
+            sl.SetCellStyle("E" + iStartRowIndex, "E" + (iEndRowIndex + 1), styleBorde1);
+            //Color del borde
+            styleBorde1.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            styleBorde1.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.ColorTranslator.FromHtml("#A5003A"));
+            sl.SetCellStyle("F" + iStartRowIndex, "F" + (iEndRowIndex + 1), styleBorde1);
+
+            sl.SelectWorksheet("Ventas");
             // Guarda el libro de trabajo
             sl.SaveAs(filePath);
         }
