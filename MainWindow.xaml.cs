@@ -318,6 +318,13 @@ namespace Sistema_Mercadito
                 // Si la carpeta "Logs" no existe, crearla
                 Directory.CreateDirectory(logsFolderPath);
             }
+
+            string path = @"C:\ReporteCajas";
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
 
         #endregion Funciones

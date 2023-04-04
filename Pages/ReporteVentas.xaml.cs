@@ -1,14 +1,12 @@
-﻿using DocumentFormat.OpenXml.Office2016.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
 using ImprimirTiquetes;
 using Sistema_Mercadito.Capa_de_Datos;
 using SpreadsheetLight;
 using System;
 using System.Data;
-using System.Linq;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
-using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -214,9 +212,13 @@ namespace Sistema_Mercadito.Pages
 
         #region Enviar Correo
 
-        public void EnviarCorreo(string pEmailTo, string pAsunto, string pDetalles)
+        public Boolean EnviarCorreo(string pEmailTo, string pAsunto, string pDetalles, string pArchivoReporte)
         {
+            bool respuesta = false;
             const string _emailPersonal = "esteban26mora01@gmail.com";
+            const string _emailHotmail = "estemorapz@hotmail.com";
+            Attachment adjunto = new Attachment(pArchivoReporte);
+
             SmtpClient smtp = new SmtpClient
             {
                 Port = 587,
@@ -228,23 +230,31 @@ namespace Sistema_Mercadito.Pages
             MailMessage correo = new MailMessage
             {
                 From = new MailAddress(_emailPersonal),
-                To = { pEmailTo },
+                To = { pEmailTo, _emailHotmail },
                 Subject = pAsunto,
                 Body = pDetalles,
                 IsBodyHtml = true,
-                Priority = MailPriority.Normal
+                Priority = MailPriority.Normal,
+                Attachments = { adjunto },
             };
 
             try
             {
                 smtp.Send(correo);
+                respuesta = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message,
                                 "Error al enviar correo",
                                 MessageBoxButton.OK);
+                respuesta = false;
             }
+            finally
+            {
+                smtp.Dispose();
+            }
+            return respuesta;
         }
 
         private void DetallesCorreo(ref string pConsulta)
@@ -318,27 +328,8 @@ namespace Sistema_Mercadito.Pages
 
         private void EnviarCorreo()
         {
-            //Console.WriteLine("NOMBRE DE LA EMPRESA " + SharedResources._CfgNombreEmpresa.ToString());
-            //Console.WriteLine("Fecha de Apertura: " + SharedResources._FechaCajaAbierta.ToString());
-            //Console.WriteLine("Fecha de Cierre: " + SharedResources._FechaCajaCierre.ToString());
-
-            //Console.WriteLine("Monto Inicio: " + SharedResources._MontoInicioCajas.ToString());
-            //Console.WriteLine("Pagos Recibidos en Efectivo: " + SharedResources._Efectivo.ToString());
-            //Console.WriteLine("Pagos Recibidos en Tarjeta: " + SharedResources._Tarjeta.ToString());
-            //Console.WriteLine("Pagos Recibidos en Sinpe: " + SharedResources._Sinpe.ToString());
-
-            //Console.WriteLine("Retiro en Colones: ₡ " + _SumaRetirosColones.ToString());
-            //Console.WriteLine("Retiro en Dólares: $ " + _SumaRetirosDolares.ToString());
-
-            //Console.WriteLine("Pagos Recibidos en Dólares: " + SharedResources._Dolares.ToString());
-            //Console.WriteLine("Compra de Dolares: " + SharedResources._MontoPagoDolares.ToString());
-
-            //Console.WriteLine("Compra de Dólares: " + _SumaCompraDolares.ToString());
-            //Console.WriteLine("Pago por los Dólares: " + _SumaColonesPagadosDolares.ToString());
-
-            //Console.WriteLine("Total en Cajas: " + SharedResources._MontoSaldoCajas.ToString());
-            //Console.WriteLine("Venta Total = " + SharedResources._Venta.ToString());
-
+            string _NombreArchivo = DateTime.Now.ToString("dd-MM-yy HH-mm-ss");
+            string _RutaArchivo = @"C:\ReporteCajas\" + _NombreArchivo + ".xlsx";
             CrearReporteExcelVentas(SharedResources._CfgNombreEmpresa,
                                     SharedResources._FechaCajaAbierta,
                                     SharedResources._FechaCajaCierre,
@@ -353,9 +344,10 @@ namespace Sistema_Mercadito.Pages
                                     _SumaCompraDolares,
                                     _SumaColonesPagadosDolares,
                                     SharedResources._MontoSaldoCajas,
-                                    SharedResources._Venta);
-            CrearReporteExcelRetiros();
-            CrearReporteExcelCompraDolares();
+                                    SharedResources._Venta,
+                                    _NombreArchivo);
+            CrearReporteExcelRetiros(_NombreArchivo);
+            CrearReporteExcelCompraDolares(_NombreArchivo);
 
             //Variable para crear el contenido del correo en formato HTML
             StringBuilder _detalleCorreoBuilder = new StringBuilder();
@@ -370,7 +362,6 @@ namespace Sistema_Mercadito.Pages
             string _LetraMorada = "<FONT COLOR=\"#EC00EB\" > ";
             string _LetraTeal = "<FONT COLOR=\"#008080\" > ";
             string _LetraFin = "</FONT>";
-            string _LetraRojo = "<FONT COLOR=\"#EC100\" > "; //'EC0100
             string _EspacioVacio = "&nbsp;";
 
             string _Dashes = _CentrarTituloOn + "----------------------------------------------" + _CentrarTituloOff;
@@ -380,18 +371,6 @@ namespace Sistema_Mercadito.Pages
             _detalleCorreoBuilder.Append($"<h3>Fecha de Apertura: {SharedResources._FechaCajaAbierta.ToString("dd-MM-yy HH:mm:ss")}{_NuevaLinea}");
             _detalleCorreoBuilder.Append($"Fecha de Cierre{_EspacioVacio + _EspacioVacio + _EspacioVacio + _EspacioVacio} : {SharedResources._FechaCajaCierre.ToString("dd-MM-yy HH:mm:ss")}</h3>{_NuevaLinea}");
             _detalleCorreoBuilder.Append($"{_NuevaLinea}");
-
-            //SEL_RETIROS_AL_CIERRE(DgvRetiros, idcaja, _retiroColones, _retiroDolares)
-            // IMPRIME LAS VENTAS DetalleVentasResumen(DgvReporte, "PAGO CON DOLARES", _SumaDolares, _compraDolares)
-
-            //_totalCajas = (_MD_MontoApertura + _SumaEfectivo) - (_retiroColones)
-
-            //If _compraDolares > 0 Then
-            //    Print("Compra de Dolares: " & FormatNumber(_compraDolares))
-            //    _totalCajas = _totalCajas - _compraDolares
-            //End If
-
-            //' Aqui van los detalles de las ventas, retiros, compra de dolares
 
             _detalleCorreoBuilder.Append("<hr>");
             _detalleCorreoBuilder.Append($"{_NegritaOn}<p style=\"font-size: 36px; text-align: center;\">VENTAS</p>{_NegritaOff}");
@@ -418,17 +397,6 @@ namespace Sistema_Mercadito.Pages
 
             DetallesCorreo(ref _Consulta);
             _detalleCorreoBuilder.Append($"{_Consulta}");
-            // _detalleCorreoBuilder.Append($"{_NegritaOn}VENTAS Totales:  {_LetraAzul}{SharedResources._Venta.ToString("N2")}{_NegritaOff}{_LetraFin}");
-
-            //If _retiroColones > 0 Or _retiroDolares > 0 Then
-            //    _detalleCorreoBuilder.Append($"{_NegritaOn}<h4><center>RETIROS</center></h4>{_NegritaOff}")
-            //    _detalleCorreoBuilder.Append($"{_Dashes}{_NuevaLinea}")
-            //    DetallesCorreoRetiro("Retiros", _Consulta)
-            //    _detalleCorreoBuilder.Append($"{_Consulta}")
-            //    _detalleCorreoBuilder.Append($"{_NegritaOn}RETIROS ₡:  {_LetraRojo}{FormatNumber(_retiroColones)}{_NegritaOff}{_LetraFin}")
-            //    _detalleCorreoBuilder.Append($"{_NuevaLinea}")
-            //    _detalleCorreoBuilder.Append($"{_NegritaOn}RETIROS $:  {_LetraRojo}{FormatNumber(_retiroDolares)}{_NegritaOff}{_LetraFin}")
-            //End If
 
             #endregion Detalles de Ventas
 
@@ -526,7 +494,12 @@ namespace Sistema_Mercadito.Pages
 
             #endregion Conclusion de ventas
 
-            EnviarCorreo(SharedResources._CfgEmail, "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString());
+            bool _correoEnviadoCorrectamente = false;
+            _correoEnviadoCorrectamente = EnviarCorreo(SharedResources._CfgEmail, "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString(), _RutaArchivo);
+            if (_correoEnviadoCorrectamente)
+            {
+                File.Delete(_RutaArchivo);
+            }
         }
 
         #endregion Enviar Correo
@@ -662,10 +635,11 @@ namespace Sistema_Mercadito.Pages
                                              decimal pDolaresComprados,
                                              decimal pDolaresCompradosEnColones,
                                              decimal pTotalEnCajas,
-                                             decimal pTotalVentas)
+                                             decimal pTotalVentas,
+                                             string pNombreArchivo)
         {
             BuildTheme();
-            string filePath = @"C:\Logs\ejemplo.xlsx";
+            string filePath = @"C:\ReporteCajas\" + pNombreArchivo + ".xlsx";
             SLThemeSettings stSettings = BuildTheme();
 
             System.Data.DataTable dt = new System.Data.DataTable();
@@ -924,10 +898,10 @@ namespace Sistema_Mercadito.Pages
             sl.SaveAs(filePath);
         }
 
-        private void CrearReporteExcelRetiros()
+        private void CrearReporteExcelRetiros(string pNombreArchivo)
         {
             BuildTheme();
-            string filePath = @"C:\Logs\ejemplo.xlsx";
+            string filePath = @"C:\ReporteCajas\" + pNombreArchivo + ".xlsx";
             SLThemeSettings stSettings = BuildTheme();
 
             System.Data.DataTable dt = new System.Data.DataTable();
@@ -1052,10 +1026,10 @@ namespace Sistema_Mercadito.Pages
             sl.SaveAs(filePath);
         }
 
-        private void CrearReporteExcelCompraDolares()
+        private void CrearReporteExcelCompraDolares(string pNombreArchivo)
         {
             BuildTheme();
-            string filePath = @"C:\Logs\ejemplo.xlsx";
+            string filePath = @"C:\ReporteCajas\" + pNombreArchivo + ".xlsx";
             SLThemeSettings stSettings = BuildTheme();
 
             System.Data.DataTable dt = new System.Data.DataTable();
@@ -1203,100 +1177,6 @@ namespace Sistema_Mercadito.Pages
             theme.FollowedHyperlinkColor = System.Drawing.Color.Purple;
 
             return theme;
-        }
-
-        private void fusionaceldas()
-        {
-            SLDocument sl = new SLDocument();
-
-            sl.SetCellValue("B2", "This is a merged cell");
-
-            // merge all cells in the cell range B2:G8
-            sl.MergeWorksheetCells("B2", "G8");
-
-            // merge all cells from rows 10 through 12, columns 4 through 6
-            // This is basically the cell range D10:F12
-            sl.MergeWorksheetCells(10, 4, 12, 6);
-            sl.SetCellValue("B14", "Hola Mundo");
-            sl.MergeWorksheetCells(14, 2, 14, 9);
-
-            // merge alls cells from rows 15 through 4, columns 12 through 9
-            // Note that the order of the corresponding row and column indices
-            // doesn't matter. This is the cell range I4:L15
-            //  sl.MergeWorksheetCells(15, 12, 4, 9);
-
-            // unmerge the cell range D10:F12
-            //  sl.UnmergeWorksheetCells("D10", "F12");
-
-            sl.SaveAs("MergeCells.xlsx");
-
-            Console.WriteLine("End of program");
-            Console.ReadLine();
-        }
-
-        private void tablaExcel()
-        {
-            SLDocument sl = new SLDocument();
-
-            int i, j;
-            for (i = 2; i <= 12; ++i)
-            {
-                for (j = 2; j <= 6; ++j)
-                {
-                    if (i == 2)
-                    {
-                        sl.SetCellValue(i, j, string.Format("Col{0}", j));
-                    }
-                    else
-                    {
-                        sl.SetCellValue(i, j, i * j);
-                    }
-                }
-            }
-
-            // tabular data ranges from B2:F12, inclusive of a header row
-            SLTable tbl = sl.CreateTable("B2", "F12");
-            tbl.SetTableStyle(SLTableStyleTypeValues.Medium9);
-            sl.InsertTable(tbl);
-
-            for (i = 2; i <= 12; ++i)
-            {
-                for (j = 9; j <= 15; ++j)
-                {
-                    if (i == 2)
-                    {
-                        sl.SetCellValue(i, j, string.Format("Col{0}", j));
-                    }
-                    else
-                    {
-                        sl.SetCellValue(i, j, i * j);
-                    }
-                }
-            }
-
-            tbl = sl.CreateTable("I2", "O12");
-
-            tbl.HasTotalRow = true;
-            // 1st table column, column I
-            tbl.SetTotalRowLabel(1, "Totals");
-            // 7th table column, column O
-            tbl.SetTotalRowFunction(7, SLTotalsRowFunctionValues.Sum);
-            tbl.SetTableStyle(SLTableStyleTypeValues.Dark4);
-
-            tbl.HasBandedColumns = true;
-            tbl.HasBandedRows = true;
-            tbl.HasFirstColumnStyled = true;
-            tbl.HasLastColumnStyled = true;
-
-            // sort by the 3rd table column (column K) in descending order
-            tbl.Sort(3, false);
-
-            sl.InsertTable(tbl);
-
-            sl.SaveAs("Tablesligth4.xlsx");
-
-            Console.WriteLine("End of program");
-            Console.ReadLine();
         }
     }
 }
