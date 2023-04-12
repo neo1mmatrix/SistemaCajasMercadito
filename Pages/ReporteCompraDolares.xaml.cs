@@ -1,6 +1,7 @@
 ﻿using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.Data;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,7 +13,9 @@ namespace Sistema_Mercadito.Pages
     public partial class ReporteCompraDolares : Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
+        private System.Timers.Timer timer = new System.Timers.Timer(1000);
         private int _idConsulta = 0;
+        private int _CuentaRegresiva = 0;
 
         //Variable con el proposito que el combobox solo realice la consulta 1 vez
         //Cuando se selecciona un item
@@ -21,6 +24,7 @@ namespace Sistema_Mercadito.Pages
         public ReporteCompraDolares()
         {
             InitializeComponent();
+            CerrarReporte();
         }
 
         private void cbReporte_tipoReporte(object sender, SelectionChangedEventArgs e)
@@ -212,6 +216,28 @@ namespace Sistema_Mercadito.Pages
 
             txtDolares.Text = "$ " + _totalDolares.ToString("N0");
             txtEquivalenA.Text = "₡ " + _totalMontoPagado.ToString("N0");
+        }
+
+        private void CerrarReporte()
+        {
+            timer.AutoReset = true; // No se reinicia automáticamente después de la primera vez
+            timer.Elapsed += OnTimerElapsed;
+            timer.Start();
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            _CuentaRegresiva += 1;
+            if (_CuentaRegresiva == 90)
+            {
+                timer.Stop();
+                timer.Dispose();
+                // En el evento Elapsed del temporizador, navega a la nueva página
+                Dispatcher.Invoke(() =>
+                {
+                    VistaReporteVentas();
+                });
+            }
         }
     }
 }

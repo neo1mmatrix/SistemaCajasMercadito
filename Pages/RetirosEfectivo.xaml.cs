@@ -1,11 +1,14 @@
-﻿using ImprimirTiquetes;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using ImprimirTiquetes;
 using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -14,9 +17,11 @@ namespace Sistema_Mercadito.Pages
     /// </summary>
     public partial class RetirosEfectivo : Page
     {
+        private System.Timers.Timer timer = new System.Timers.Timer(1000);
         private readonly CD_Conexion objetoSql = new CD_Conexion();
         private string _Estado = "";
         private int _idConsulta = 0;
+        private int _CuentaRegresiva = 0;
 
         public RetirosEfectivo(string estado, int id)
         {
@@ -36,9 +41,7 @@ namespace Sistema_Mercadito.Pages
             {
                 Eliminar();
             }
-            else
-            {
-            }
+            CerrarRetiros();
         }
 
         #region Eventos
@@ -322,6 +325,28 @@ namespace Sistema_Mercadito.Pages
                 txtEfectivo.Focus();
                 txtEfectivo.SelectAll();
                 e.Handled = true;
+            }
+        }
+
+        private void CerrarRetiros()
+        {
+            timer.AutoReset = true; // No se reinicia automáticamente después de la primera vez
+            timer.Elapsed += OnTimerElapsed;
+            timer.Start();
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            _CuentaRegresiva += 1;
+            if (_CuentaRegresiva == 90)
+            {
+                timer.Stop();
+                timer.Dispose();
+                // En el evento Elapsed del temporizador, navega a la nueva página
+                Dispatcher.Invoke(() =>
+                {
+                    VistaVentas();
+                });
             }
         }
     }

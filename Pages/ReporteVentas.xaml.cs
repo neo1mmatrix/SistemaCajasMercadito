@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,6 +22,8 @@ namespace Sistema_Mercadito.Pages
     public partial class ReporteVentas : System.Windows.Controls.Page
     {
         private readonly CD_Conexion objetoSql = new CD_Conexion();
+        private System.Timers.Timer timer = new System.Timers.Timer(1000);
+        private int _CuentaRegresiva = 0;
 
         //Variable con el proposito que el combobox solo realice la consulta 1 vez
         //Cuando se selecciona un item
@@ -35,6 +38,7 @@ namespace Sistema_Mercadito.Pages
         public ReporteVentas()
         {
             InitializeComponent();
+            CerrarReporte();
         }
 
         #region Eventos
@@ -486,7 +490,8 @@ namespace Sistema_Mercadito.Pages
             #region Conclusion de ventas
 
             _detalleCorreoBuilder.Append($"{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: {SharedResources._MontoSaldoCajas.ToString("N2")}</p>{_NuevaLinea}{_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: ₡ {SharedResources._MontoSaldoCajas.ToString("N2")}</p>{_NuevaLinea}{_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: $ {SharedResources._MontoSaldoCajas.ToString("N2")}</p>{_NuevaLinea}{_NuevaLinea}");
 
             _detalleCorreoBuilder.Append("<hr>");
             _detalleCorreoBuilder.Append($"{_CentrarTituloOn}{_LetraMorada}<p style=\"font-size: 36px;\">Venta Total = {SharedResources._Venta.ToString("N2")}{_NuevaLinea}{_LetraFin}</p>{_CentrarTituloOff}");
@@ -498,6 +503,7 @@ namespace Sistema_Mercadito.Pages
             _correoEnviadoCorrectamente = EnviarCorreo(SharedResources._CfgEmail, "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString(), _RutaArchivo);
             if (_correoEnviadoCorrectamente)
             {
+                Thread.Sleep(15000);
                 File.Delete(_RutaArchivo);
             }
         }
@@ -1177,6 +1183,28 @@ namespace Sistema_Mercadito.Pages
             theme.FollowedHyperlinkColor = System.Drawing.Color.Purple;
 
             return theme;
+        }
+
+        private void CerrarReporte()
+        {
+            timer.AutoReset = true; // No se reinicia automáticamente después de la primera vez
+            timer.Elapsed += OnTimerElapsed;
+            timer.Start();
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            _CuentaRegresiva += 1;
+            if (_CuentaRegresiva == 90)
+            {
+                timer.Stop();
+                timer.Dispose();
+                // En el evento Elapsed del temporizador, navega a la nueva página
+                Dispatcher.Invoke(() =>
+                {
+                    VistaVenta();
+                });
+            }
         }
     }
 }
