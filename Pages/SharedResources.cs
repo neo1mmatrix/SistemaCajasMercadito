@@ -24,6 +24,7 @@ namespace Sistema_Mercadito.Pages
         public static string _FechaFormateada { get; set; }
         public static decimal _MontoPagoDolares { get; set; }
         public static decimal _MontoSaldoCajas { get; set; }
+        public static int _MontoSaldoDolaresCajas { get; set; }
 
         public static DateTime _FechaCajaAbierta { get; set; }
         public static DateTime _FechaCajaCierre { get; set; }

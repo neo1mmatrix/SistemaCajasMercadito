@@ -60,6 +60,8 @@ namespace Sistema_Mercadito.Pages
             SharedResources._MontoRetiroColones = _SumaRetirosColones;
             SharedResources._MontoRetiroDolares = _SumaRetirosDolares;
 
+            SharedResources._MontoSaldoDolaresCajas = Convert.ToInt32(SharedResources._Dolares) + _SumaCompraDolares - Convert.ToInt32(_SumaRetirosDolares);
+
             SharedResources._MontoSaldoCajas -= _SumaColonesPagadosDolares;
             SharedResources._MontoSaldoCajas -= _SumaRetirosColones;
 
@@ -257,6 +259,7 @@ namespace Sistema_Mercadito.Pages
             finally
             {
                 smtp.Dispose();
+                adjunto.Dispose();
             }
             return respuesta;
         }
@@ -348,6 +351,7 @@ namespace Sistema_Mercadito.Pages
                                     _SumaCompraDolares,
                                     _SumaColonesPagadosDolares,
                                     SharedResources._MontoSaldoCajas,
+                                    SharedResources._MontoSaldoDolaresCajas,
                                     SharedResources._Venta,
                                     _NombreArchivo);
             CrearReporteExcelRetiros(_NombreArchivo);
@@ -365,6 +369,8 @@ namespace Sistema_Mercadito.Pages
             string _LetraAzul = "<FONT COLOR=\"#1E81B0\"> ";
             string _LetraMorada = "<FONT COLOR=\"#EC00EB\" > ";
             string _LetraTeal = "<FONT COLOR=\"#008080\" > ";
+            string _LetraVerde = "<FONT COLOR=\"#00572b\" > ";
+            string _LetraMaron = "<FONT COLOR=\"#7e0000\" > ";
             string _LetraFin = "</FONT>";
             string _EspacioVacio = "&nbsp;";
 
@@ -453,45 +459,42 @@ namespace Sistema_Mercadito.Pages
             _detalleCorreoBuilder.Append($"<p style=\"font-size: 16px;\"> Monto Inicio: {SharedResources._MontoInicioCajas.ToString("N2")} {_NuevaLinea}");
             _detalleCorreoBuilder.Append($"Pagos Recibidos en Efectivo: {SharedResources._Efectivo.ToString("N2")}{_NuevaLinea}");
             _detalleCorreoBuilder.Append($"Pagos Recibidos en Tarjeta: {SharedResources._Tarjeta.ToString("N2")}{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"Pagos Recibidos en Sinpe: {SharedResources._Sinpe.ToString("N2")}  {_NuevaLinea}");
-            // _detalleCorreoBuilder.Append($"{_NuevaLinea}");
-
-            //Retiros ---------------------------------------------------------------------------------------------
-            _detalleCorreoBuilder.Append($"</p>");
-            _detalleCorreoBuilder.Append($"{_NuevaLinea}<hr>");
-            _detalleCorreoBuilder.Append($"{_NegritaOn}<p style=\"font-size: 16px;\">");
-            _detalleCorreoBuilder.Append($"Retiro{_EspacioVacio}en{_EspacioVacio}Colones{_EspacioVacio}: ₡{_SumaRetirosColones.ToString("N2")}  {_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"Retiro{_EspacioVacio}en{_EspacioVacio}Dólares{_EspacioVacio}: ${_SumaRetirosDolares.ToString("N2")}  {_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"</p>");
-            _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}</p>");
+            _detalleCorreoBuilder.Append($"Pagos Recibidos en Sinpe: {SharedResources._Sinpe.ToString("N2")}");
+            _detalleCorreoBuilder.Append($"</p><hr>");
 
             //Pagos en Dolares ---------------------------------------------------------------------------------------------
             if (SharedResources._Dolares > 0)
             {
-                _detalleCorreoBuilder.Append($"Pagos Recibidos en Dólares: {SharedResources._Dolares.ToString("N2")}{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"<p style=\"font-size: 16px;\"> {_LetraVerde} Pagos Recibidos en Dólares: {SharedResources._Dolares.ToString("N2")}{_NuevaLinea}");
                 _detalleCorreoBuilder.Append($"Compra de Dolares: {SharedResources._MontoPagoDolares.ToString("N2")}{_NuevaLinea}");
                 _detalleCorreoBuilder.Append($"</p>");
             }
 
+            //Retiros ---------------------------------------------------------------------------------------------
+
+            _detalleCorreoBuilder.Append($"<hr>");
+            _detalleCorreoBuilder.Append($"{_NegritaOn}{_LetraMaron}<p style=\"font-size: 16px;\">");
+            _detalleCorreoBuilder.Append($"Retiro{_EspacioVacio}en{_EspacioVacio}Colones{_EspacioVacio}: ₡{_SumaRetirosColones.ToString("N2")}  {_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"Retiro{_EspacioVacio}en{_EspacioVacio}Dólares{_EspacioVacio}: ${_SumaRetirosDolares.ToString("N2")}  {_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"</p>");
+
             //Compra de dolares -----------------------------------------------------------------------------------------------------------
             if (_SumaCompraDolares > 0)
             {
-                _detalleCorreoBuilder.Append($"</p>");
-                _detalleCorreoBuilder.Append($"{_NuevaLinea}<hr>{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"<hr>");
                 _detalleCorreoBuilder.Append($"{_LetraAzul}{_NegritaOn}<p style=\"font-size: 16px;\">");
                 _detalleCorreoBuilder.Append($"Compra{_EspacioVacio} de{_EspacioVacio} Dólares{_EspacioVacio}: ${_SumaCompraDolares.ToString("N2")}  {_NuevaLinea}");
-                _detalleCorreoBuilder.Append($"Pago por los Dólares: ₡{_SumaColonesPagadosDolares.ToString("N2")}{_NegritaOff + _LetraFin + _NuevaLinea + _NuevaLinea}");
+                _detalleCorreoBuilder.Append($"Pago por los Dólares: ₡{_SumaColonesPagadosDolares.ToString("N2")}{_NegritaOff + _LetraFin}");
                 _detalleCorreoBuilder.Append($"</p>");
-                _detalleCorreoBuilder.Append($"<hr>{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"<hr>");
             }
 
             #endregion Resumen de ventas
 
             #region Conclusion de ventas
 
-            _detalleCorreoBuilder.Append($"{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: ₡ {SharedResources._MontoSaldoCajas.ToString("N2")}</p>{_NuevaLinea}{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: $ {SharedResources._MontoSaldoCajas.ToString("N2")}</p>{_NuevaLinea}{_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: ₡ {SharedResources._MontoSaldoCajas.ToString("N2")}{_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"{_LetraVerde}Total en Cajas: $ {SharedResources._MontoSaldoDolaresCajas.ToString("N2")}</p>");
 
             _detalleCorreoBuilder.Append("<hr>");
             _detalleCorreoBuilder.Append($"{_CentrarTituloOn}{_LetraMorada}<p style=\"font-size: 36px;\">Venta Total = {SharedResources._Venta.ToString("N2")}{_NuevaLinea}{_LetraFin}</p>{_CentrarTituloOff}");
@@ -503,8 +506,32 @@ namespace Sistema_Mercadito.Pages
             _correoEnviadoCorrectamente = EnviarCorreo(SharedResources._CfgEmail, "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString(), _RutaArchivo);
             if (_correoEnviadoCorrectamente)
             {
-                Thread.Sleep(15000);
-                File.Delete(_RutaArchivo);
+                string logMessage = "";
+                try
+                {
+                    File.Delete(_RutaArchivo);
+                }
+                catch (IOException ex)
+                {
+                    // Manejo de la excepción de E/S (IOException)
+                    logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                    SharedResources.ManejoErrores(logMessage);
+                    MessageBox.Show("Ocurrió un error de E/S al eliminar el archivo: " + ex.Message);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    // Manejo de la excepción de acceso no autorizado (UnauthorizedAccessException)
+                    logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                    SharedResources.ManejoErrores(logMessage);
+                    MessageBox.Show("No se tiene acceso autorizado para eliminar el archivo: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de cualquier otra excepción no esperada
+                    logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                    SharedResources.ManejoErrores(logMessage);
+                    MessageBox.Show("Ocurrió un error inesperado al eliminar el archivo: " + ex.Message);
+                }
             }
         }
 
@@ -641,6 +668,7 @@ namespace Sistema_Mercadito.Pages
                                              decimal pDolaresComprados,
                                              decimal pDolaresCompradosEnColones,
                                              decimal pTotalEnCajas,
+                                             decimal pTotalDolaresEnCajas,
                                              decimal pTotalVentas,
                                              string pNombreArchivo)
         {
@@ -816,14 +844,18 @@ namespace Sistema_Mercadito.Pages
 
             //Total en cajas
             //Venta Total
-            sl.SetCellValue("B" + (iEndRowIndex + 18), "Total en Cajas $: ");
+            sl.SetCellValue("B" + (iEndRowIndex + 18), "Total en Cajas ₡: ");
             sl.SetCellValue("D" + (iEndRowIndex + 18), pTotalEnCajas);
-            sl.SetCellValue("B" + (iEndRowIndex + 19), "Venta Total $: ");
-            sl.SetCellValue("D" + (iEndRowIndex + 19), pTotalVentas);
+            sl.SetCellValue("B" + (iEndRowIndex + 19), "Total en Cajas $: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 19), pTotalDolaresEnCajas);
+            sl.SetCellValue("B" + (iEndRowIndex + 20), "Venta Total ₡: ");
+            sl.SetCellValue("D" + (iEndRowIndex + 20), pTotalVentas);
             sl.MergeWorksheetCells("B" + (iEndRowIndex + 18), "C" + (iEndRowIndex + 18));
             sl.MergeWorksheetCells("B" + (iEndRowIndex + 19), "C" + +(iEndRowIndex + 19));
+            sl.MergeWorksheetCells("B" + (iEndRowIndex + 20), "C" + +(iEndRowIndex + 20));
             sl.MergeWorksheetCells("D" + (iEndRowIndex + 18), "E" + (iEndRowIndex + 18));
             sl.MergeWorksheetCells("D" + (iEndRowIndex + 19), "E" + +(iEndRowIndex + 19));
+            sl.MergeWorksheetCells("D" + (iEndRowIndex + 20), "E" + +(iEndRowIndex + 20));
 
             SLStyle styleTitulo = sl.CreateStyle();
             styleTitulo.Font.FontName = "Congenial";
@@ -892,7 +924,7 @@ namespace Sistema_Mercadito.Pages
             sl.SetCellStyle("B" + (iEndRowIndex + 9), "E" + (iEndRowIndex + 10), styleBorde1);
             sl.SetCellStyle("B" + (iEndRowIndex + 12), "E" + (iEndRowIndex + 13), styleBorde1);
             sl.SetCellStyle("B" + (iEndRowIndex + 15), "E" + (iEndRowIndex + 16), styleBorde1);
-            sl.SetCellStyle("B" + (iEndRowIndex + 18), "E" + (iEndRowIndex + 19), styleBorde1);
+            sl.SetCellStyle("B" + (iEndRowIndex + 18), "E" + (iEndRowIndex + 20), styleBorde1);
 
             sl.SetCellStyle("B2", styleFila1);
             sl.SetCellStyle("B3", styleFila1);

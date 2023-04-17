@@ -612,6 +612,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
                 com.Parameters.AddWithValue("@MontoSaldoCajas", SharedResources._MontoSaldoCajas);
                 com.Parameters.AddWithValue("@MontoRetiroColones", SharedResources._MontoRetiroColones);
                 com.Parameters.AddWithValue("@MontoRetiroDolares", SharedResources._MontoRetiroDolares);
+                com.Parameters.AddWithValue("@MontoSaldoDolares", SharedResources._MontoSaldoDolaresCajas);
                 com.ExecuteNonQuery();
                 com.Parameters.Clear();
             }
