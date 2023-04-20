@@ -35,9 +35,12 @@ namespace Sistema_Mercadito.Pages
         private decimal _SumaRetirosDolares = 0;
         private decimal _SumaRetirosColones = 0;
 
+        private int _CajaAbiertaId = 0;
+
         public ReporteVentas()
         {
             InitializeComponent();
+            _CajaAbiertaId = SharedResources._idCajaAbierta;
             CerrarReporte();
         }
 
@@ -74,7 +77,7 @@ namespace Sistema_Mercadito.Pages
             Thread hilo = new Thread(new ThreadStart(EnviarCorreo));
             hilo.Start();
             MessageBox.Show("Cierre Correcto");
-            SharedResources.LimpiaVariables();
+
             VistaAbrirCaja();
         }
 
@@ -218,12 +221,13 @@ namespace Sistema_Mercadito.Pages
 
         #region Enviar Correo
 
-        public Boolean EnviarCorreo(string pEmailTo, string pAsunto, string pDetalles, string pArchivoReporte)
+        public Boolean EnviarCorreo(string pEmailTo, string pAsunto, string pDetalles, string pArchivoReporte, string pArchivoLog)
         {
             bool respuesta = false;
             const string _emailPersonal = "esteban26mora01@gmail.com";
             const string _emailHotmail = "estemorapz@hotmail.com";
             Attachment adjunto = new Attachment(pArchivoReporte);
+            Attachment adjuntoLog = new Attachment(pArchivoLog);
 
             SmtpClient smtp = new SmtpClient
             {
@@ -241,7 +245,7 @@ namespace Sistema_Mercadito.Pages
                 Body = pDetalles,
                 IsBodyHtml = true,
                 Priority = MailPriority.Normal,
-                Attachments = { adjunto },
+                Attachments = { adjunto, adjuntoLog },
             };
 
             try
@@ -260,6 +264,7 @@ namespace Sistema_Mercadito.Pages
             {
                 smtp.Dispose();
                 adjunto.Dispose();
+                adjuntoLog.Dispose();
             }
             return respuesta;
         }
@@ -285,7 +290,7 @@ namespace Sistema_Mercadito.Pages
             pConsulta = _tablaEncabezados;
 
             //Consulta
-            objetoSql.SEL_REPORTE_DETALLE_VENTAS(SharedResources._idCajaAbierta, ref _consulta);
+            objetoSql.SEL_REPORTE_DETALLE_VENTAS(_CajaAbiertaId, ref _consulta);
             pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
         }
 
@@ -307,7 +312,7 @@ namespace Sistema_Mercadito.Pages
             pConsulta = _tablaEncabezados;
 
             //Consulta
-            objetoSql.SEL_REPORTE_DETALLE_RETIROS(SharedResources._idCajaAbierta, ref _consulta);
+            objetoSql.SEL_REPORTE_DETALLE_RETIROS(_CajaAbiertaId, ref _consulta);
             pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
         }
 
@@ -329,7 +334,7 @@ namespace Sistema_Mercadito.Pages
             pConsulta = _tablaEncabezados;
 
             //Consulta
-            objetoSql.SEL_REPORTE_DETALLE_COMPRA_DOLARES(SharedResources._idCajaAbierta, ref _consulta);
+            objetoSql.SEL_REPORTE_DETALLE_COMPRA_DOLARES(_CajaAbiertaId, ref _consulta);
             pConsulta = $"{pConsulta}{_consulta}</table> </body> <br>";
         }
 
@@ -337,6 +342,7 @@ namespace Sistema_Mercadito.Pages
         {
             string _NombreArchivo = DateTime.Now.ToString("dd-MM-yy HH-mm-ss");
             string _RutaArchivo = @"C:\ReporteCajas\" + _NombreArchivo + ".xlsx";
+            string _RutaArchivoLog = @"C:\Logs\HtmlTabla.txt";
             CrearReporteExcelVentas(SharedResources._CfgNombreEmpresa,
                                     SharedResources._FechaCajaAbierta,
                                     SharedResources._FechaCajaCierre,
@@ -374,10 +380,23 @@ namespace Sistema_Mercadito.Pages
             string _LetraFin = "</FONT>";
             string _EspacioVacio = "&nbsp;";
 
+            string _FechaConsulta = DateTime.Now.ToString("dd/MM/yy HH:mm:ss");
+
+            string _MontoInicio = SharedResources._MontoInicioCajas.ToString("N2");
+            string _PagosEfectivo = SharedResources._Efectivo.ToString("N2");
+            string _PagosSinpe = SharedResources._Sinpe.ToString("N2");
+            string _PagosTarjeta = SharedResources._Tarjeta.ToString("N2");
+
+            string _PagosRecibidosDolares = SharedResources._Dolares.ToString("N2");
+            string _MontoPagoDolares = SharedResources._MontoPagoDolares.ToString("N2");
+
+            string _TotalCajas = SharedResources._MontoSaldoCajas.ToString("N2");
+            string _TotalCajasDolares = SharedResources._MontoSaldoDolaresCajas.ToString("N2");
+            string _VentaTotal = SharedResources._Venta.ToString("N2");
             string _Dashes = _CentrarTituloOn + "----------------------------------------------" + _CentrarTituloOff;
 
             _detalleCorreoBuilder.Append($"{_NuevaLinea}{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"<h2>{_CentrarTituloOn}{_LetraTeal}{SharedResources._CfgNombreEmpresa}{_CentrarTituloOff}{_LetraFin}</h2>");
+            _detalleCorreoBuilder.Append($"<h1 style=\"font-size:36px;\">{_CentrarTituloOn}{_LetraTeal}{SharedResources._CfgNombreEmpresa}{_CentrarTituloOff}{_LetraFin}</h2>");
             _detalleCorreoBuilder.Append($"<h3>Fecha de Apertura: {SharedResources._FechaCajaAbierta.ToString("dd-MM-yy HH:mm:ss")}{_NuevaLinea}");
             _detalleCorreoBuilder.Append($"Fecha de Cierre{_EspacioVacio + _EspacioVacio + _EspacioVacio + _EspacioVacio} : {SharedResources._FechaCajaCierre.ToString("dd-MM-yy HH:mm:ss")}</h3>{_NuevaLinea}");
             _detalleCorreoBuilder.Append($"{_NuevaLinea}");
@@ -405,7 +424,12 @@ namespace Sistema_Mercadito.Pages
 
             #region Detalles de Ventas
 
+            string logMessage = $" {_FechaConsulta} Reporte Html \n idcaja =  {_CajaAbiertaId} \n\n";
+            SharedResources.TxtDetalleTabla(logMessage);
+
             DetallesCorreo(ref _Consulta);
+            logMessage = $" {_FechaConsulta} Consulta Detalles de Ventas: \n {_Consulta} \n\n";
+            SharedResources.TxtDetalleTabla(logMessage);
             _detalleCorreoBuilder.Append($"{_Consulta}");
 
             #endregion Detalles de Ventas
@@ -429,6 +453,8 @@ namespace Sistema_Mercadito.Pages
                 _detalleCorreoBuilder.Append($" </style> ");
 
                 DetallesRetiros(ref _Consulta);
+                logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Consulta Detalles de Retiros: \n {_Consulta} \n\n";
+                SharedResources.TxtDetalleTabla(logMessage);
                 _detalleCorreoBuilder.Append($"{_Consulta}");
             }
 
@@ -450,23 +476,26 @@ namespace Sistema_Mercadito.Pages
                 _detalleCorreoBuilder.Append($" </style> ");
 
                 DetallesCompraDolares(ref _Consulta);
+                logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Consulta Detalles de Compra Dolares: \n {_Consulta} \n\n";
+                SharedResources.TxtDetalleTabla(logMessage);
                 _detalleCorreoBuilder.Append($"{_Consulta}");
             }
 
             #region Resumen de ventas
 
             _detalleCorreoBuilder.Append($"{_NuevaLinea}{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"<p style=\"font-size: 16px;\"> Monto Inicio: {SharedResources._MontoInicioCajas.ToString("N2")} {_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"Pagos Recibidos en Efectivo: {SharedResources._Efectivo.ToString("N2")}{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"Pagos Recibidos en Tarjeta: {SharedResources._Tarjeta.ToString("N2")}{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"Pagos Recibidos en Sinpe: {SharedResources._Sinpe.ToString("N2")}");
-            _detalleCorreoBuilder.Append($"</p><hr>");
+            _detalleCorreoBuilder.Append($"<p style=\"font-size: 16px;\"> Monto Inicio: {_MontoInicio} {_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"Pagos Recibidos en Efectivo: {_PagosEfectivo}{_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"Pagos Recibidos en Tarjeta: {_PagosTarjeta}{_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"Pagos Recibidos en Sinpe: {_PagosSinpe}");
+            _detalleCorreoBuilder.Append($"</p>");
 
             //Pagos en Dolares ---------------------------------------------------------------------------------------------
             if (SharedResources._Dolares > 0)
             {
-                _detalleCorreoBuilder.Append($"<p style=\"font-size: 16px;\"> {_LetraVerde} Pagos Recibidos en Dólares: {SharedResources._Dolares.ToString("N2")}{_NuevaLinea}");
-                _detalleCorreoBuilder.Append($"Compra de Dolares: {SharedResources._MontoPagoDolares.ToString("N2")}{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"<hr>");
+                _detalleCorreoBuilder.Append($"<p style=\"font-size: 16px;\">{_LetraVerde} Pagos Recibidos en Dólares: {_PagosRecibidosDolares}{_NuevaLinea}");
+                _detalleCorreoBuilder.Append($"Compra de Dolares: {_MontoPagoDolares}{_NuevaLinea}");
                 _detalleCorreoBuilder.Append($"</p>");
             }
 
@@ -486,30 +515,32 @@ namespace Sistema_Mercadito.Pages
                 _detalleCorreoBuilder.Append($"Compra{_EspacioVacio} de{_EspacioVacio} Dólares{_EspacioVacio}: ${_SumaCompraDolares.ToString("N2")}  {_NuevaLinea}");
                 _detalleCorreoBuilder.Append($"Pago por los Dólares: ₡{_SumaColonesPagadosDolares.ToString("N2")}{_NegritaOff + _LetraFin}");
                 _detalleCorreoBuilder.Append($"</p>");
-                _detalleCorreoBuilder.Append($"<hr>");
             }
 
             #endregion Resumen de ventas
 
             #region Conclusion de ventas
 
-            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: ₡ {SharedResources._MontoSaldoCajas.ToString("N2")}{_NuevaLinea}");
-            _detalleCorreoBuilder.Append($"{_LetraVerde}Total en Cajas: $ {SharedResources._MontoSaldoDolaresCajas.ToString("N2")}</p>");
+            _detalleCorreoBuilder.Append($"<hr>");
+            _detalleCorreoBuilder.Append($"<p style=\"font-size: 24px;\"> Total en Cajas: ₡ {_TotalCajas}{_NuevaLinea}");
+            _detalleCorreoBuilder.Append($"{_LetraVerde}Total en Cajas: $ {_TotalCajasDolares}</p>");
 
             _detalleCorreoBuilder.Append("<hr>");
-            _detalleCorreoBuilder.Append($"{_CentrarTituloOn}{_LetraMorada}<p style=\"font-size: 36px;\">Venta Total = {SharedResources._Venta.ToString("N2")}{_NuevaLinea}{_LetraFin}</p>{_CentrarTituloOff}");
+            _detalleCorreoBuilder.Append($"{_CentrarTituloOn}{_LetraMorada}<p style=\"font-size: 36px;\">Venta Total = {_VentaTotal}{_NuevaLinea}{_LetraFin}</p>{_CentrarTituloOff}");
             _detalleCorreoBuilder.Append("<hr>");
 
             #endregion Conclusion de ventas
 
             bool _correoEnviadoCorrectamente = false;
-            _correoEnviadoCorrectamente = EnviarCorreo(SharedResources._CfgEmail, "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString(), _RutaArchivo);
+            _correoEnviadoCorrectamente = EnviarCorreo(SharedResources._CfgEmail, "Reporte de Detalle de Ventas", _detalleCorreoBuilder.ToString(), _RutaArchivo, _RutaArchivoLog);
             if (_correoEnviadoCorrectamente)
             {
-                string logMessage = "";
+                logMessage = "";
                 try
                 {
                     File.Delete(_RutaArchivo);
+                    File.Delete(_RutaArchivoLog);
+                    SharedResources.LimpiaVariables();
                 }
                 catch (IOException ex)
                 {
@@ -571,6 +602,7 @@ namespace Sistema_Mercadito.Pages
 
         private void VistaAbrirCaja()
         {
+            timer.Stop();
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
@@ -689,7 +721,7 @@ namespace Sistema_Mercadito.Pages
             sl.SelectWorksheet("Ventas");
             sl.DeleteWorksheet("Sheet1");
             // Agrega una nueva hoja de cálculo
-            sl.SetRowHeight(1, 500, 25);
+            sl.SetRowHeight(1, 800, 25);
 
             sl.SetCellValue("B2", "Fecha de Apertura: ");
             sl.MergeWorksheetCells("B2", "C2");
@@ -1026,7 +1058,7 @@ namespace Sistema_Mercadito.Pages
             styleTitulo.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent6Color, SLThemeColorIndexValues.Accent6Color);
             sl.SetCellValue("B3", "Retiros");
             sl.SetCellStyle("B3", styleTitulo);
-            sl.SetRowHeight(4, 100, 25);
+            sl.SetRowHeight(4, 500, 25);
 
             SLStyle styleBorde1 = sl.CreateStyle();
             //Color del borde
@@ -1084,7 +1116,7 @@ namespace Sistema_Mercadito.Pages
             // Agrega una nueva hoja de cálculo
 
             sl.MergeWorksheetCells("B3", "F3");
-            sl.SetRowHeight(4, 100, 25);
+            sl.SetRowHeight(4, 500, 25);
 
             SLStyle styleFila1 = sl.CreateStyle();
             styleFila1.Font.FontName = "Calibri";

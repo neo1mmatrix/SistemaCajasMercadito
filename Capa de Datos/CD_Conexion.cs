@@ -727,7 +727,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
             cmd.CommandType = CommandType.StoredProcedure;
 
             // Agregar el parámetro de entrada
-            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = pId;
 
             // Crear un objeto SqlDataReader para leer los resultados de la consulta
             SqlDataReader lector = null;
@@ -932,7 +932,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
             cmd.CommandType = CommandType.StoredProcedure;
 
             // Agregar el parámetro de entrada
-            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = pId;
 
             // Crear un objeto SqlDataReader para leer los resultados de la consulta
             SqlDataReader lector = null;
@@ -1015,7 +1015,7 @@ namespace Sistema_Mercadito.Capa_de_Datos
             cmd.CommandType = CommandType.StoredProcedure;
 
             // Agregar el parámetro de entrada
-            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = SharedResources._idCajaAbierta;
+            cmd.Parameters.Add("@idCaja", SqlDbType.Int).Value = pId;
 
             // Crear un objeto SqlDataReader para leer los resultados de la consulta
             SqlDataReader lector = null;

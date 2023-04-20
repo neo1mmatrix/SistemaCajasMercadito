@@ -44,6 +44,14 @@ namespace Sistema_Mercadito.Pages
             File.AppendAllText(filePath, error);
         }
 
+        public static void TxtDetalleTabla(string HtmlTabla)
+        {
+            string filePath = "C:\\Logs\\HtmlTabla.txt";
+
+            // Agregar la cadena de registro de error al archivo
+            File.AppendAllText(filePath, HtmlTabla);
+        }
+
         public static void LimpiaVariables()
         {
             _idCajaAbierta = 0;
