@@ -15,10 +15,14 @@ namespace Sistema_Mercadito.Pages
     public partial class MensajeVueltoCliente : Page
     {
         private bool _CargaDatos = false;
+        private decimal _Monto_a_Cobrar = 0;
+        private bool _TxtEditable = false;
 
-        public MensajeVueltoCliente()
+        public MensajeVueltoCliente(decimal MontoPagar)
         {
             InitializeComponent();
+            _Monto_a_Cobrar = MontoPagar;
+            _TxtEditable = false;
         }
 
         #region Eventos de Controles
@@ -89,6 +93,7 @@ namespace Sistema_Mercadito.Pages
         private void txtMouseDobleClick(object sender, MouseButtonEventArgs e)
         {
             txtEfectivo.IsReadOnly = false;
+            _TxtEditable = true;
         }
 
         //EVITA QUE CAPTURE EL ESPACIO EN EL CAMPO NUMERICO, EJEM: "2 4 555"
@@ -121,7 +126,7 @@ namespace Sistema_Mercadito.Pages
                 if (txtEfectivo.Text.Length > 0 && _CargaDatos)
                 {
                     _EfectivoTemporal = decimal.Parse(txtEfectivo.Text, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign);
-                    _VueltoTemporal = _EfectivoTemporal - SharedResources._MontoPagar;
+                    _VueltoTemporal = _EfectivoTemporal - _Monto_a_Cobrar;
                     txtVuelto.Text = _VueltoTemporal.ToString("N2");
                 }
             }
@@ -194,10 +199,10 @@ namespace Sistema_Mercadito.Pages
         #endregion Vistas
 
         private void EventoRetrocesoPagina(object sender, KeyEventArgs e)
+
         {
-            if (e.Key == Key.Back)
+            if (e.Key == Key.Back && !_TxtEditable)
             {
-                // Detener la propagación del evento
                 e.Handled = true;
             }
         }

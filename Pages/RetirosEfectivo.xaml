@@ -78,6 +78,14 @@
 
             <!--#endregion-->
             <!--#region TEXTBLOCKS-->
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="10"
+                Margin="10,0,0,0"
+                VerticalContentAlignment="Center"
+                Content=""  Foreground="#343949"
+                x:Name="lbContador" />
             <TextBlock
                 Grid.Row="3"
                 Grid.Column="1"
@@ -176,8 +184,8 @@
                 Content="Regresar"
                 FontWeight="Bold"
                 Foreground="#005736"
-                Style="{DynamicResource ButtonStyleGlobal}"
                 PreviewKeyDown="PreviewKeyDownTabbutton"
+                Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="10"
                 Visibility="Collapsed" />
             <Button
@@ -189,9 +197,9 @@
                 Content="Abrir Caja"
                 FontWeight="Bold"
                 Foreground="Navy"
+                PreviewKeyDown="PreviewKeyDownTabbutton"
                 Style="{DynamicResource ButtonStyleGlobal}"
                 TabIndex="8"
-                PreviewKeyDown="PreviewKeyDownTabbutton"
                 Visibility="Visible" />
             <!--#endregion-->
             <!--#region Campos de Texto Montos-->

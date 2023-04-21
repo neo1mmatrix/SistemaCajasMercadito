@@ -26,6 +26,7 @@ namespace Sistema_Mercadito.Pages
         public RetirosEfectivo(string estado, int id)
         {
             InitializeComponent();
+            lbContador.Visibility = Visibility.Hidden;
             _Estado = estado;
             _idConsulta = id;
 
@@ -333,11 +334,17 @@ namespace Sistema_Mercadito.Pages
             timer.AutoReset = true; // No se reinicia automáticamente después de la primera vez
             timer.Elapsed += OnTimerElapsed;
             timer.Start();
+            lbContador.Visibility = Visibility.Visible;
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _CuentaRegresiva += 1;
+            Dispatcher.Invoke(() =>
+            {
+                test(90 - _CuentaRegresiva);
+            });
+
             if (_CuentaRegresiva == 90)
             {
                 timer.Stop();
@@ -348,6 +355,11 @@ namespace Sistema_Mercadito.Pages
                     VistaVentas();
                 });
             }
+        }
+
+        private void test(int falta)
+        {
+            lbContador.Content = falta.ToString();
         }
     }
 }

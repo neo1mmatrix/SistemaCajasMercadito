@@ -286,7 +286,6 @@ namespace Sistema_Mercadito.Pages
             _tablaEncabezados += "</tr> </thead>";
 
             string _consulta = "";
-            string _consultaRetiro = "";
             pConsulta = _tablaEncabezados;
 
             //Consulta

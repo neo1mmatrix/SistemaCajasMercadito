@@ -1,16 +1,15 @@
 ﻿using ImprimirTiquetes;
 using Sistema_Mercadito.Capa_de_Datos;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Navigation;
 using System.Windows.Threading;
-using System.Windows;
-using System;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -38,6 +37,7 @@ namespace Sistema_Mercadito.Pages
         private Boolean _ValoresCargados = false;
         private decimal _Venta = 0;
         private decimal _Vuelto = 0;
+        private decimal _Monto_a_Cobrar = 0;
 
         private Dictionary<int, string> mesesEnEspanol = new Dictionary<int, string>()
         {
@@ -328,7 +328,7 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._Vuelto = _Vuelto;
                     SharedResources._MontoPagoDolares = _MontoPagoDolares;
                     SharedResources._TipoCambio = _TipoCambio;
-
+                    _Monto_a_Cobrar = _Venta;
                     VistaVuelto();
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
@@ -396,8 +396,7 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._Dolares = 0;
                     SharedResources._Tarjeta = 0;
                     SharedResources._Vuelto = _vuelto;
-
-                    VistaVuelto();
+                    _Monto_a_Cobrar = _Venta;
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
                                             _Venta,
@@ -454,6 +453,7 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._Dolares = 0;
                     SharedResources._Tarjeta = 0;
                     SharedResources._Vuelto = 0;
+                    _Monto_a_Cobrar = _Venta;
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
@@ -500,6 +500,7 @@ namespace Sistema_Mercadito.Pages
                     SharedResources._Dolares = 0;
                     SharedResources._Tarjeta = _Tarjeta;
                     SharedResources._Vuelto = 0;
+                    _Monto_a_Cobrar = _Venta;
 
                     // REGISTRAR LA VENTA EN LA BASE DE DATOS
                     objetoSql.RegistraVenta(SharedResources._idCajaAbierta,
@@ -734,7 +735,7 @@ namespace Sistema_Mercadito.Pages
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
-            MensajeVueltoCliente mvc = new MensajeVueltoCliente();
+            MensajeVueltoCliente mvc = new MensajeVueltoCliente(_Monto_a_Cobrar);
             fContainerm.Content = mvc;
         }
 
