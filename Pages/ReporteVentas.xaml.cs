@@ -258,6 +258,8 @@ namespace Sistema_Mercadito.Pages
                 MessageBox.Show("Error: " + ex.Message,
                                 "Error al enviar correo",
                                 MessageBoxButton.OK);
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
                 respuesta = false;
             }
             finally

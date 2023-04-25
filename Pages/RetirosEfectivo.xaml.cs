@@ -1,7 +1,9 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
+﻿//using DocumentFormat.OpenXml.Vml;
 using ImprimirTiquetes;
 using Sistema_Mercadito.Capa_de_Datos;
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Timers;
@@ -130,6 +132,7 @@ namespace Sistema_Mercadito.Pages
 
         private void txtPreviewKeyDownEvent(object sender, KeyEventArgs e)
         {
+            _CuentaRegresiva = 0;
             if (((TextBox)sender).Text.Length < 1)
             {
                 return;
@@ -360,6 +363,14 @@ namespace Sistema_Mercadito.Pages
         private void test(int falta)
         {
             lbContador.Content = falta.ToString();
+        }
+
+        private void lostFocusMotivo(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtMotivo.Text))
+            {
+                txtMotivo.Text = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(txtMotivo.Text));
+            }
         }
     }
 }

@@ -130,6 +130,7 @@
                         KeyDown="AtajoTeclado"
                         MaxLength="100"
                         TabIndex="3"
+                        LostFocus="lostFocusMotivo"
                         Text="" />
                 </Grid>
             </Border>
