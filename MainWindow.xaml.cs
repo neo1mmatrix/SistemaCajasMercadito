@@ -1,9 +1,14 @@
-﻿using Sistema_Mercadito.Capa_de_Datos;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Presentation;
+using Sistema_Mercadito.Capa_de_Datos;
 using Sistema_Mercadito.Pages;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Net.Mail;
+using System.Net;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -289,6 +294,13 @@ namespace Sistema_Mercadito
             {
                 objetoSql.ConsultaConfiguracion();
                 checkOpenCasher();
+                int countFiles = ExistenReportesAntiguos();
+                if (countFiles > 0)
+                {
+                    // MessageBox.Show("Hay " + countFiles + " reportes sin enviar, desea enviarlos ya?");
+                    Thread hilo = new Thread(new ThreadStart(EnviarReportesAntiguos));
+                    hilo.Start();
+                }
             }
         }
 
@@ -431,6 +443,118 @@ namespace Sistema_Mercadito
         {
             Popup.Visibility = Visibility.Collapsed;
             Popup.IsOpen = false;
+        }
+
+        private int ExistenReportesAntiguos()
+        {
+            int _archivos = 0;
+
+            string path = @"C:\ReporteCajas"; // Ruta de la carpeta
+
+            foreach (string file in Directory.GetFiles(path))
+            {
+                if (Path.GetExtension(file) == ".xlsx")
+                {
+                    _archivos++;
+                }
+            }
+
+            Console.WriteLine("La carpeta contiene {0} archivos .xlsx", _archivos);
+
+            return _archivos;
+        }
+
+        private void EnviarReportesAntiguos()
+        {
+            string folderPath = @"C:\ReporteCajas"; // Ruta de la carpeta que contiene los archivos
+
+            const string _emailPersonal = "esteban26mora01@gmail.com";
+            const string _emailHotmail = "estemorapz@hotmail.com";
+
+            SmtpClient smtp = new SmtpClient
+            {
+                Port = 587,
+                Host = "smtp.gmail.com",
+                Credentials = new NetworkCredential(_emailPersonal, "phuebfaoyoxxehxg"),
+                EnableSsl = true
+            };
+
+            MailMessage correo = new MailMessage
+            {
+                From = new MailAddress(_emailPersonal),
+                To = { SharedResources._CfgEmail, _emailHotmail },
+                Subject = "Archivos adjuntos",
+                Body = "Se adjuntan los Reportes Pendientes del envio por correo electronico.",
+                IsBodyHtml = true,
+                Priority = MailPriority.Normal,
+            };
+
+            foreach (string file in Directory.GetFiles(folderPath))
+            {
+                if (Path.GetExtension(file) == ".xlsx") // Solo se adjuntan archivos que tengan la extensión .txt
+                {
+                    Attachment attachment = new Attachment(file);
+                    correo.Attachments.Add(attachment);
+                }
+            }
+
+            try
+            {
+                smtp.Send(correo);
+                correo.Attachments.Dispose();
+                EliminarReportesAntiguos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message,
+                                "Error al enviar correo",
+                                MessageBoxButton.OK);
+                string logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+            }
+            finally
+            {
+                smtp.Dispose();
+            }
+        }
+
+        private void EliminarReportesAntiguos()
+        {
+            string logMessage = "";
+            try
+            {
+                string folderPath = @"C:\ReporteCajas"; // Ruta de la carpeta a eliminar archivos
+
+                // Obtiene todos los archivos de la carpeta
+                string[] filePaths = Directory.GetFiles(folderPath);
+
+                // Itera a través de todos los archivos y los elimina
+                foreach (string filePath in filePaths)
+                {
+                    File.Delete(filePath);
+                }
+            }
+            catch (IOException ex)
+            {
+                // Manejo de la excepción de E/S (IOException)
+                logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Ocurrió un error de E/S al eliminar el archivo: " + ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                // Manejo de la excepción de acceso no autorizado (UnauthorizedAccessException)
+                logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("No se tiene acceso autorizado para eliminar el archivo: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de cualquier otra excepción no esperada
+                logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Error Message: {ex.Message} \nStack Trace: {ex.StackTrace}\n";
+                SharedResources.ManejoErrores(logMessage);
+                MessageBox.Show("Ocurrió un error inesperado al eliminar el archivo: " + ex.Message);
+            }
         }
     }
 }
