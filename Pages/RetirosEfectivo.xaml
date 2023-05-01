@@ -131,6 +131,7 @@
                         MaxLength="100"
                         TabIndex="3"
                         LostFocus="lostFocusMotivo"
+                        PreviewKeyDown="PreviewKeyDMotivo"
                         Text="" />
                 </Grid>
             </Border>

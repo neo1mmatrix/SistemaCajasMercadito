@@ -367,10 +367,16 @@ namespace Sistema_Mercadito.Pages
 
         private void lostFocusMotivo(object sender, RoutedEventArgs e)
         {
+            string _minusculas = txtMotivo.Text.ToLower();
             if (!string.IsNullOrEmpty(txtMotivo.Text))
             {
-                txtMotivo.Text = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(txtMotivo.Text));
+                txtMotivo.Text = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(_minusculas));
             }
+        }
+
+        private void PreviewKeyDMotivo(object sender, KeyEventArgs e)
+        {
+            _CuentaRegresiva = 0;
         }
     }
 }
