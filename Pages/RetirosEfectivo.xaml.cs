@@ -3,13 +3,13 @@ using ImprimirTiquetes;
 using Sistema_Mercadito.Capa_de_Datos;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace Sistema_Mercadito.Pages
@@ -24,6 +24,7 @@ namespace Sistema_Mercadito.Pages
         private string _Estado = "";
         private int _idConsulta = 0;
         private int _CuentaRegresiva = 0;
+        private int _EsperaSegundos = 90;
 
         public RetirosEfectivo(string estado, int id)
         {
@@ -345,10 +346,10 @@ namespace Sistema_Mercadito.Pages
             _CuentaRegresiva += 1;
             Dispatcher.Invoke(() =>
             {
-                test(90 - _CuentaRegresiva);
+                test(_EsperaSegundos - _CuentaRegresiva);
             });
 
-            if (_CuentaRegresiva == 90)
+            if (_CuentaRegresiva == _EsperaSegundos)
             {
                 timer.Stop();
                 timer.Dispose();
@@ -362,7 +363,38 @@ namespace Sistema_Mercadito.Pages
 
         private void test(int falta)
         {
-            lbContador.Content = falta.ToString();
+            System.Drawing.Color color = System.Drawing.Color.FromArgb(52, 57, 73); // rojo
+
+            // Crear un objeto SolidColorBrush
+            SolidColorBrush brush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
+
+            if (falta == 15)
+            {
+                lbContador.Foreground = System.Windows.Media.Brushes.Red;
+            }
+            else if (falta > 15)
+            {
+                lbContador.Foreground = brush;
+            }
+            if (falta < 15)
+            {
+                if (lbContador.Foreground == Brushes.Red)
+                {
+                    lbContador.Foreground = Brushes.White;
+                }
+                else
+                {
+                    lbContador.Foreground = Brushes.Red;
+                }
+            }
+            if (falta < 10)
+            {
+                lbContador.Content = "0" + falta.ToString();
+            }
+            else
+            {
+                lbContador.Content = falta.ToString();
+            }
         }
 
         private void lostFocusMotivo(object sender, RoutedEventArgs e)

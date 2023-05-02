@@ -118,6 +118,7 @@
 
                     <TextBox
                         x:Name="txtMotivo"
+                        Style="{DynamicResource TextBoxStyleNumb}"
                         Margin="0,0,10,0"
                         Padding="10,0,0,0"
                         HorizontalContentAlignment="Left"
