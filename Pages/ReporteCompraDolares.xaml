@@ -257,6 +257,14 @@
                 Grid.RowSpan="16"
                 Grid.Column="0"
                 Grid.ColumnSpan="13" />
+            <Label
+                x:Name="lbContador"
+                Grid.Row="13"
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                VerticalContentAlignment="Center"
+                Content=""
+                Foreground="#343949" />
         </Grid>
     </Border>
 </Page>

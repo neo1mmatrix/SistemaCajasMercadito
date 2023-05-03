@@ -12,6 +12,7 @@ using System.Threading;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -24,6 +25,7 @@ namespace Sistema_Mercadito.Pages
         private readonly CD_Conexion objetoSql = new CD_Conexion();
         private System.Timers.Timer timer = new System.Timers.Timer(1000);
         private int _CuentaRegresiva = 0;
+        private int _EsperaSegundos = 90;
 
         //Variable con el proposito que el combobox solo realice la consulta 1 vez
         //Cuando se selecciona un item
@@ -85,7 +87,6 @@ namespace Sistema_Mercadito.Pages
         {
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
-
             VistaConsultar();
         }
 
@@ -93,7 +94,6 @@ namespace Sistema_Mercadito.Pages
         {
             int id = (int)((Button)sender).CommandParameter;
             SharedResources._idVenta = id;
-
             VistaVentaEliminar();
         }
 
@@ -154,7 +154,7 @@ namespace Sistema_Mercadito.Pages
         {
             ComboBoxItem selectedItem = (ComboBoxItem)cbVentas.SelectedItem;
             string opcion = selectedItem.Content.ToString();
-
+            _CuentaRegresiva = 0;
             if (_ciclo == 0)
             {
                 switch (opcion)
@@ -211,7 +211,6 @@ namespace Sistema_Mercadito.Pages
                 GridDatos.ItemsSource = dtVentas.DefaultView;
             }
             else
-
             {
                 VistaVenta();
             }
@@ -573,6 +572,7 @@ namespace Sistema_Mercadito.Pages
 
         public void VistaVenta()
         {
+            PararTimer();
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
@@ -583,6 +583,7 @@ namespace Sistema_Mercadito.Pages
 
         public void VistaVentaActualizar()
         {
+            PararTimer();
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
@@ -593,6 +594,7 @@ namespace Sistema_Mercadito.Pages
 
         public void VistaVentaEliminar()
         {
+            PararTimer();
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
@@ -603,7 +605,7 @@ namespace Sistema_Mercadito.Pages
 
         private void VistaAbrirCaja()
         {
-            timer.Stop();
+            PararTimer();
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
@@ -614,6 +616,7 @@ namespace Sistema_Mercadito.Pages
 
         private void VistaCambioDolares()
         {
+            PararTimer();
             Window mainWindow = Application.Current.MainWindow;
             // Acceder a un elemento dentro de la ventana principal
             Frame fContainerm = (Frame)mainWindow.FindName("fContainer");
@@ -623,6 +626,7 @@ namespace Sistema_Mercadito.Pages
 
         private void VistaConsultar()
         {
+            PararTimer();
             // Acceder a la ventana principal
             Window mainWindow = Application.Current.MainWindow;
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
@@ -634,6 +638,7 @@ namespace Sistema_Mercadito.Pages
 
         private void VistaReporteRetiros()
         {
+            PararTimer();
             Window mainWindow = Application.Current.MainWindow;
             Frame fContainer = (Frame)mainWindow.FindName("fContainer");
             ReporteRetiros rr = new ReporteRetiros();
@@ -1260,16 +1265,74 @@ namespace Sistema_Mercadito.Pages
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _CuentaRegresiva += 1;
-            if (_CuentaRegresiva == 90)
+            //Console.WriteLine("Timer en Reporte ventas = " + _CuentaRegresiva);
+            Dispatcher.Invoke(() =>
+            {
+                ChequeaSegundosFaltantes(_EsperaSegundos - _CuentaRegresiva);
+            });
+            if (_CuentaRegresiva == _EsperaSegundos)
             {
                 timer.Stop();
                 timer.Dispose();
+                _CuentaRegresiva = 0;
                 // En el evento Elapsed del temporizador, navega a la nueva página
                 Dispatcher.Invoke(() =>
                 {
                     VistaVenta();
                 });
             }
+        }
+
+        private void ChequeaSegundosFaltantes(int falta)
+        {
+            System.Drawing.Color color = System.Drawing.Color.FromArgb(52, 57, 73); // rojo
+
+            // Crear un objeto SolidColorBrush
+            SolidColorBrush brush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
+
+            if (falta == 15)
+            {
+                lbContador.Foreground = System.Windows.Media.Brushes.Red;
+            }
+            else if (falta > 15)
+            {
+                lbContador.Foreground = brush;
+            }
+            if (falta < 15)
+            {
+                if (lbContador.Foreground == Brushes.Red)
+                {
+                    lbContador.Foreground = Brushes.White;
+                }
+                else
+                {
+                    lbContador.Foreground = Brushes.Red;
+                }
+            }
+            if (falta < 10)
+            {
+                lbContador.Content = "0" + falta.ToString();
+            }
+            else
+            {
+                lbContador.Content = falta.ToString();
+            }
+        }
+
+        private void ReseteaEsperea(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            _CuentaRegresiva = 0;
+        }
+
+        private void ReseteaEspera(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _CuentaRegresiva = 0;
+        }
+
+        private void PararTimer()
+        {
+            timer.Stop();
+            timer.Dispose();
         }
     }
 }

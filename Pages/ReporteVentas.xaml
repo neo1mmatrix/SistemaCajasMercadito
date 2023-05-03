@@ -91,6 +91,7 @@
                 HeadersVisibility="Column"
                 HorizontalGridLinesBrush="#1C1B1F"
                 IsReadOnly="True"
+                PreviewKeyDown="ReseteaEsperea"
                 RowBackground="Transparent"
                 SelectionMode="Single"
                 Style="{DynamicResource GridReporteVentasStyle}">
@@ -253,8 +254,8 @@
                 <ComboBox
                     x:Name="cbVentas"
                     Width="140"
-                    SelectionChanged="cbVentas_tipoVenta"
                     Padding="20,5,0,0"
+                    SelectionChanged="cbVentas_tipoVenta"
                     Style="{DynamicResource ComboBoxStyle1}">
                     <ComboBoxItem>Todos</ComboBoxItem>
                     <ComboBoxItem>Colones</ComboBoxItem>
@@ -348,12 +349,13 @@
                 Text="SINPE" />
 
             <Label
+                x:Name="lbContador"
                 Grid.Row="13"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 VerticalContentAlignment="Center"
-                Content=""  Foreground="#343949"
-                x:Name="lbContador" />
+                Content=""
+                Foreground="#343949" />
 
             <Frame
                 x:Name="FrameReporte"
