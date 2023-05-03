@@ -17,7 +17,7 @@
 
     <Border Background="{DynamicResource SecundaryBackgroundColor}" CornerRadius="5">
 
-        <Grid Background="Transparent" x:Name="gridDatos">
+        <Grid x:Name="gridDatos" Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="15" />
                 <ColumnDefinition Width="100" />
@@ -164,12 +164,11 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="150"
-
                         Binding="{Binding Motivo}"
                         Header="Motivo del Retiro">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
-                                <Setter Property="TextBlock.Margin"  Value="20,0,0,0" />
+                                <Setter Property="TextBlock.Margin" Value="20,0,0,0" />
                                 <Setter Property="TextBlock.TextAlignment" Value="Left" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -261,12 +260,13 @@
                 Grid.ColumnSpan="13" />
 
             <Label
+                x:Name="lbContador"
                 Grid.Row="13"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 VerticalContentAlignment="Center"
-                Content=""  Foreground="#343949"
-                x:Name="lbContador" />
+                Content=""
+                Foreground="#343949" />
         </Grid>
     </Border>
 </Page>

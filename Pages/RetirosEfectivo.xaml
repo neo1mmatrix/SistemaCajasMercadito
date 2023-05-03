@@ -80,12 +80,13 @@
             <!--#region TEXTBLOCKS-->
 
             <Label
+                x:Name="lbContador"
                 Grid.Row="1"
                 Grid.Column="10"
                 Margin="10,0,0,0"
                 VerticalContentAlignment="Center"
-                Content=""  Foreground="#343949"
-                x:Name="lbContador" />
+                Content=""
+                Foreground="#343949" />
             <TextBlock
                 Grid.Row="3"
                 Grid.Column="1"
@@ -118,7 +119,6 @@
 
                     <TextBox
                         x:Name="txtMotivo"
-                        Style="{DynamicResource TextBoxStyleNumb}"
                         Margin="0,0,10,0"
                         Padding="10,0,0,0"
                         HorizontalContentAlignment="Left"
@@ -129,10 +129,11 @@
                         FontWeight="Bold"
                         Foreground="Wheat"
                         KeyDown="AtajoTeclado"
-                        MaxLength="100"
-                        TabIndex="3"
                         LostFocus="lostFocusMotivo"
+                        MaxLength="100"
                         PreviewKeyDown="PreviewKeyDMotivo"
+                        Style="{DynamicResource TextBoxStyleNumb}"
+                        TabIndex="3"
                         Text="" />
                 </Grid>
             </Border>

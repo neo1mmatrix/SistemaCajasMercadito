@@ -226,7 +226,7 @@ namespace Sistema_Mercadito.Pages
             const string _emailPersonal = "esteban26mora01@gmail.com";
             const string _emailHotmail = "estemorapz@hotmail.com";
             Attachment adjunto = new Attachment(pArchivoReporte);
-            Attachment adjuntoLog = new Attachment(pArchivoLog);
+            //Attachment adjuntoLog = new Attachment(pArchivoLog);
 
             SmtpClient smtp = new SmtpClient
             {
@@ -244,7 +244,8 @@ namespace Sistema_Mercadito.Pages
                 Body = pDetalles,
                 IsBodyHtml = true,
                 Priority = MailPriority.Normal,
-                Attachments = { adjunto, adjuntoLog },
+                Attachments = { adjunto },
+                //Attachments = { adjunto, adjuntoLog },
             };
 
             try
@@ -265,7 +266,7 @@ namespace Sistema_Mercadito.Pages
             {
                 smtp.Dispose();
                 adjunto.Dispose();
-                adjuntoLog.Dispose();
+                //adjuntoLog.Dispose();
             }
             return respuesta;
         }
@@ -342,7 +343,8 @@ namespace Sistema_Mercadito.Pages
         {
             string _NombreArchivo = DateTime.Now.ToString("dd-MM-yy HH-mm-ss");
             string _RutaArchivo = @"C:\ReporteCajas\" + _NombreArchivo + ".xlsx";
-            string _RutaArchivoLog = @"C:\Logs\HtmlTabla.txt";
+            //string _RutaArchivoLog = @"C:\Logs\HtmlTabla.txt";
+            string _RutaArchivoLog = "";
             CrearReporteExcelVentas(SharedResources._CfgNombreEmpresa,
                                     SharedResources._FechaCajaAbierta,
                                     SharedResources._FechaCajaCierre,
@@ -424,12 +426,13 @@ namespace Sistema_Mercadito.Pages
 
             #region Detalles de Ventas
 
-            string logMessage = $" {_FechaConsulta} Reporte Html \n idcaja =  {_CajaAbiertaId} \n\n";
-            SharedResources.TxtDetalleTabla(logMessage);
+            string logMessage = "";
+            //string logMessage = $" {_FechaConsulta} Reporte Html \n idcaja =  {_CajaAbiertaId} \n\n";
+            //SharedResources.TxtDetalleTabla(logMessage);
 
             DetallesCorreo(ref _Consulta);
-            logMessage = $" {_FechaConsulta} Consulta Detalles de Ventas: \n {_Consulta} \n\n";
-            SharedResources.TxtDetalleTabla(logMessage);
+            //logMessage = $" {_FechaConsulta} Consulta Detalles de Ventas: \n {_Consulta} \n\n";
+            //SharedResources.TxtDetalleTabla(logMessage);
             _detalleCorreoBuilder.Append($"{_Consulta}");
 
             #endregion Detalles de Ventas
@@ -453,8 +456,8 @@ namespace Sistema_Mercadito.Pages
                 _detalleCorreoBuilder.Append($" </style> ");
 
                 DetallesRetiros(ref _Consulta);
-                logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Consulta Detalles de Retiros: \n {_Consulta} \n\n";
-                SharedResources.TxtDetalleTabla(logMessage);
+                //logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Consulta Detalles de Retiros: \n {_Consulta} \n\n";
+                //SharedResources.TxtDetalleTabla(logMessage);
                 _detalleCorreoBuilder.Append($"{_Consulta}");
             }
 
@@ -476,8 +479,8 @@ namespace Sistema_Mercadito.Pages
                 _detalleCorreoBuilder.Append($" </style> ");
 
                 DetallesCompraDolares(ref _Consulta);
-                logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Consulta Detalles de Compra Dolares: \n {_Consulta} \n\n";
-                SharedResources.TxtDetalleTabla(logMessage);
+                //logMessage = $" {DateTime.Now.ToString("dd/MM/yy HH:mm:ss")} Consulta Detalles de Compra Dolares: \n {_Consulta} \n\n";
+                //SharedResources.TxtDetalleTabla(logMessage);
                 _detalleCorreoBuilder.Append($"{_Consulta}");
             }
 
@@ -539,7 +542,7 @@ namespace Sistema_Mercadito.Pages
                 try
                 {
                     File.Delete(_RutaArchivo);
-                    File.Delete(_RutaArchivoLog);
+                    //File.Delete(_RutaArchivoLog);
                     SharedResources.LimpiaVariables();
                 }
                 catch (IOException ex)
