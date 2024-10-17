@@ -42,10 +42,10 @@
 
             <PasswordBox
                 x:Name="pbContrasena"
-                Padding="5,0,0,0"
                 Grid.Row="2"
                 Height="30"
                 Margin="10"
+                Padding="5,0,0,0"
                 PreviewKeyDown="PreviewKeyDown" />
             <Button
                 x:Name="btnAcceder"

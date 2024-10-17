@@ -1,0 +1,72 @@
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\TiquetesDB.db
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\Sistema Mercadito.exe.config
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\Sistema Mercadito.exe.manifest
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\Sistema Mercadito.application
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\Sistema Mercadito.exe
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\Sistema Mercadito.pdb
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\ImprimirTiquetes.exe
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\SpreadsheetLight.dll
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\System.Drawing.Common.dll
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\System.Data.SQLite.dll
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\ImprimirTiquetes.pdb
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\ImprimirTiquetes.xml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\ImprimirTiquetes.exe.config
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\bin\Debug\SpreadsheetLight.xml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.csproj.AssemblyReference.cache
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Assets\Icons.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\RegistrarVentas.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ReporteVentas.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Styles\DictionaryComboBox.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Styles\DictionaryGlobalButton.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Styles\DictionaryObjects.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Styles\GlobalTextBoxNumb.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Styles\MainStyle.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Themes\DarkTheme.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\App.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Assets\UserControl1.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Controls\MenuItem.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Controls\UserPopup.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\MainWindow.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\CierreCajas.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ClaveAcceso.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\Configuracion.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\Dashboard.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\Home.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\MensajeVueltoCliente.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\RegistrarCompraDolares.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\RegistrarVentas.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ReporteCompraDolares.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ReporteRetiros.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ReporteVentas.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\RetirosEfectivo.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\TestingPage.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\App.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito_MarkupCompile.cache
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito_MarkupCompile.lref
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Assets\UserControl1.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Controls\MenuItem.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Controls\UserPopup.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\MainWindow.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\CierreCajas.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ClaveAcceso.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\Configuracion.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\Dashboard.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\Home.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\MensajeVueltoCliente.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\RegistrarCompraDolares.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ReporteCompraDolares.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\ReporteRetiros.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\RetirosEfectivo.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Pages\TestingPage.baml
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.g.resources
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema_Mercadito.Properties.Resources.resources
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.csproj.GenerateResource.cache
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.csproj.CoreCompileInputs.cache
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.exe.manifest
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.application
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema .83F583D0.Up2Date
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.exe
+C:\Proyectos Temporales VS\Sistema-Mercadito-victus\obj\Debug\Sistema Mercadito.pdb

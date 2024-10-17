@@ -15,9 +15,10 @@
     <Grid Background="Aqua">
 
         <Button
-            Width="200"
             Height="80"
+            Margin="300,187,153,183"
             Click="btnCierreCajasClick"
-            Content="Cerrar Cajas" />
+            Content="Cerrar Cajas esta pagina es primitiva, al final nunca se uso"
+            RenderTransformOrigin="0.5,0.5" />
     </Grid>
 </Page>

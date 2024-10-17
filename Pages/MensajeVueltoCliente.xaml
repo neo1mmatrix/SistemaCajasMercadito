@@ -215,14 +215,14 @@
                 Foreground="#116530"
                 GotFocus="ColonesGotFocus"
                 IsReadOnly="True"
-                LostFocus="txtLostFocus"
+                LostFocus="TxtLostFocus"
                 MaxLength="15"
-                MouseDoubleClick="txtMouseDobleClick"
-                PreviewKeyDown="txtPreviewKeyDownEvent"
+                MouseDoubleClick="TxtMouseDobleClick"
+                PreviewKeyDown="TxtPreviewKeyDownEvent"
                 PreviewMouseLeftButtonUp="SeleccionaTextoClick"
                 PreviewTextInput="NumberValidationTextBox"
                 Style="{DynamicResource TextBoxStyleNumb}"
-                TextChanged="txtTextChanged" />
+                TextChanged="TxtTextChanged" />
 
             <!--#endregion-->
             <!--#region BUTTON-->
@@ -233,7 +233,7 @@
                 Grid.ColumnSpan="5"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                Click="btnAceptar_Click"
+                Click="BtnAceptar_Click"
                 Content="Aceptar"
                 FontSize="20"
                 FontWeight="ExtraBold"

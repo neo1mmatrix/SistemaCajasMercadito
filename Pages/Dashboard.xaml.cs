@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace Sistema_Mercadito.Pages
 {
@@ -28,7 +27,7 @@ namespace Sistema_Mercadito.Pages
 
         #region Controles de Eventos
 
-        private void btnIniciar_Click(object sender, RoutedEventArgs e)
+        private void BtnIniciar_Click(object sender, RoutedEventArgs e)
         {
             GuardaCajaAbierta();
         }
@@ -62,73 +61,73 @@ namespace Sistema_Mercadito.Pages
             ((TextBox)sender).SelectAll();
         }
 
-        private void tx5_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt5_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 5;
             MultiplicaMonto(e, cantidad, tb5, txt5);
         }
 
-        private void txt10_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt10_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 10;
             MultiplicaMonto(e, cantidad, tb10, txt10);
         }
 
-        private void txt10_TextChanged_1(object sender, TextChangedEventArgs e)
+        private void Txt10_TextChanged_1(object sender, TextChangedEventArgs e)
         {
             int cantidad = 10;
             MultiplicaMonto(e, cantidad, tb10, txt10);
         }
 
-        private void txt100_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt100_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 100;
             MultiplicaMonto(e, cantidad, tb100, txt100);
         }
 
-        private void txt10mil_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt10mil_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 10_000;
             MultiplicaMonto(e, cantidad, tb10mil, txt10mil);
         }
 
-        private void txt1mil_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt1mil_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 1_000;
             MultiplicaMonto(e, cantidad, tb1mil, txt1mil);
         }
 
-        private void txt20mil_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt20mil_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 20_000;
             MultiplicaMonto(e, cantidad, tb20mil, txt20mil);
         }
 
-        private void txt25_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt25_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 25;
             MultiplicaMonto(e, cantidad, tb25, txt25);
         }
 
-        private void txt2mil_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt2mil_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 2_000;
             MultiplicaMonto(e, cantidad, tb2mil, txt2mil);
         }
 
-        private void txt50_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt50_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 50;
             MultiplicaMonto(e, cantidad, tb50, txt50);
         }
 
-        private void txt500_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt500_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 500;
             MultiplicaMonto(e, cantidad, tb500, txt500);
         }
 
-        private void txt5mil_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt5mil_TextChanged(object sender, TextChangedEventArgs e)
         {
             int cantidad = 5_000;
             MultiplicaMonto(e, cantidad, tb5mil, txt5mil);
@@ -136,13 +135,13 @@ namespace Sistema_Mercadito.Pages
 
         // SELECCIONA TODO EL TEXTO CUANDO EL CAMPO
         // DE TEXTO CAE EN EL FOCO
-        private void txtFocusEvent(object sender, RoutedEventArgs e)
+        private void TxtFocusEvent(object sender, RoutedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
             textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
         }
 
-        private void txtLostFocus(object sender, RoutedEventArgs e)
+        private void TxtLostFocus(object sender, RoutedEventArgs e)
         {
             if (((TextBox)sender).Text.Length == 0)
             {
@@ -151,7 +150,7 @@ namespace Sistema_Mercadito.Pages
         }
 
         //EVITA QUE CAPTURE EL ESPACIO EN EL CAMPO NUMERICO, EJEM: "2 4 555"
-        private void txtPreviewKeyDownEvent(object sender, KeyEventArgs e)
+        private void TxtPreviewKeyDownEvent(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
             {
@@ -198,52 +197,36 @@ namespace Sistema_Mercadito.Pages
 
         private void GuardaCajaAbierta()
         {
-            // isOpen Hace que el estado de la factura este abierta
             bool registro = false;
 
-            int _billetes20Mil = 0;
-            int _billetes10Mil = 0;
-            int _billetes5Mil = 0;
-            int _billetes2Mil = 0;
-            int _billetes1Mil = 0;
-
-            int _monedas500 = 0;
-            int _monedas100 = 0;
-            int _monedas50 = 0;
-            int _monedas25 = 0;
-            int _monedas10 = 0;
-            int _monedas5 = 0;
-            DateTime _fecha = DateTime.Now;
-
-            int _montoInicio = 0;
             try
             {
-                _billetes20Mil = int.Parse(tb20mil.Text, NumberStyles.AllowThousands);
-                _billetes10Mil = int.Parse(tb10mil.Text, NumberStyles.AllowThousands);
-                _billetes5Mil = int.Parse(tb5mil.Text, NumberStyles.AllowThousands);
-                _billetes2Mil = int.Parse(tb2mil.Text, NumberStyles.AllowThousands);
-                _billetes1Mil = int.Parse(tb1mil.Text, NumberStyles.AllowThousands);
+                // Validar y convertir los valores de billetes y monedas
+                if (!TryParseControlText(tb20mil, out int billetes20Mil, "Valor incorrecto para billetes de 20 mil")) return;
+                if (!TryParseControlText(tb10mil, out int billetes10Mil, "Valor incorrecto para billetes de 10 mil")) return;
+                if (!TryParseControlText(tb5mil, out int billetes5Mil, "Valor incorrecto para billetes de 5 mil")) return;
+                if (!TryParseControlText(tb2mil, out int billetes2Mil, "Valor incorrecto para billetes de 2 mil")) return;
+                if (!TryParseControlText(tb1mil, out int billetes1Mil, "Valor incorrecto para billetes de 1 mil")) return;
 
-                _monedas500 = int.Parse(tb500.Text, NumberStyles.AllowThousands);
-                _monedas100 = int.Parse(tb100.Text, NumberStyles.AllowThousands);
-                _monedas50 = int.Parse(tb50.Text, NumberStyles.AllowThousands);
-                _monedas25 = int.Parse(tb25.Text, NumberStyles.AllowThousands);
-                _monedas10 = int.Parse(tb10.Text, NumberStyles.AllowThousands);
-                _monedas5 = int.Parse(tb5.Text, NumberStyles.AllowThousands);
+                if (!TryParseControlText(tb500, out int monedas500, "Valor incorrecto para monedas de 500")) return;
+                if (!TryParseControlText(tb100, out int monedas100, "Valor incorrecto para monedas de 100")) return;
+                if (!TryParseControlText(tb50, out int monedas50, "Valor incorrecto para monedas de 50")) return;
+                if (!TryParseControlText(tb25, out int monedas25, "Valor incorrecto para monedas de 25")) return;
+                if (!TryParseControlText(tb10, out int monedas10, "Valor incorrecto para monedas de 10")) return;
+                if (!TryParseControlText(tb5, out int monedas5, "Valor incorrecto para monedas de 5")) return;
 
-                _montoInicio = int.Parse(tbTotal.Text, NumberStyles.AllowThousands);
+                if (!TryParseControlText(tbTotal, out int montoInicio, "Valor incorrecto para el monto inicial")) return;
 
-                if (_montoInicio > 0)
+                if (montoInicio > 0)
                 {
-                    registro = objetoSql.AperturaCaja(_montoInicio, _billetes20Mil, _billetes10Mil, _billetes5Mil, _billetes2Mil, _billetes1Mil,
-                        _monedas500, _monedas100, _monedas50, _monedas25, _monedas10, _monedas5);
+                    registro = objetoSql.AperturaCaja(montoInicio, billetes20Mil, billetes10Mil, billetes5Mil, billetes2Mil, billetes1Mil,
+                        monedas500, monedas100, monedas50, monedas25, monedas10, monedas5);
                 }
 
                 if (registro)
                 {
                     MessageBox.Show("Bienvenido");
                     objetoSql.ConsultaCajaAbierta();
-
                     VistaRegistrarVentas();
                 }
             }
@@ -251,7 +234,22 @@ namespace Sistema_Mercadito.Pages
             {
                 MessageBox.Show(ex.ToString());
             }
+
+
         }
+
+        private bool TryParseControlText(dynamic control, out int result, string errorMessage)
+        {
+            string text = control.Text;
+            if (!int.TryParse(text, NumberStyles.AllowThousands, null, out result))
+            {
+                MessageBox.Show(errorMessage);
+                return false;
+            }
+            return true;
+        }
+
+
 
         private void SumaMontos()
         {

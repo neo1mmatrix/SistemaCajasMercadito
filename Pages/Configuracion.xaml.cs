@@ -34,16 +34,16 @@ namespace Sistema_Mercadito.Pages
 
         #region Eventos
 
-        private void btnActualizar_Click(object sender, RoutedEventArgs e)
+        private void BtnActualizar_Click(object sender, RoutedEventArgs e)
         {
             ActualizarConfig();
         }
 
-        private void btnCerrar_Click(object sender, RoutedEventArgs e)
+        private void BtnCerrar_Click(object sender, RoutedEventArgs e)
         {
         }
 
-        private void btnGuardar_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnGuardar_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (CompruebaCampos())
             {

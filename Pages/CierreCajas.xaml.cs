@@ -8,6 +8,7 @@ namespace Sistema_Mercadito.Pages
 {
     /// <summary>
     /// Lógica de interacción para CierreCajas.xaml
+    /// ESTA NUNCA SE USO, AL PRINCIPIO SOLO SE CREO COMO UN LIENSO VACIO
     /// </summary>
     public partial class CierreCajas : Page
     {

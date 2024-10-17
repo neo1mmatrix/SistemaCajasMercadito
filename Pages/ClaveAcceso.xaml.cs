@@ -13,10 +13,13 @@ namespace Sistema_Mercadito.Pages
         {
             InitializeComponent();
         }
-
+        //Da acceso a los diferentes privilegios segun la clave ingresada
+        // 1 Vista Reportes 8858
+        // 2 Vista Retiros 0287
         private void OnLoginClicked(object sender, RoutedEventArgs e)
         {
-            string contra = pbContrasena.Password;
+            //Al parecer nuca se utilizo la variable siguiente
+            //string contra = pbContrasena.Password;
             if (pbContrasena.Password == "8858")
             {
                 MessageBox.Show("Bienvenido");

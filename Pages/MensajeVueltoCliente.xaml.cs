@@ -27,7 +27,7 @@ namespace Sistema_Mercadito.Pages
 
         #region Eventos de Controles
 
-        private void btnAceptar_Click(object sender, RoutedEventArgs e)
+        private void BtnAceptar_Click(object sender, RoutedEventArgs e)
         {
             SharedResources.LimpiaVariablesVentas();
             VistaVentas();
@@ -63,13 +63,13 @@ namespace Sistema_Mercadito.Pages
 
         // SELECCIONA TODO EL TEXTO CUANDO EL CAMPO
         // DE TEXTO CAE EN EL FOCO
-        private void txtFocusEvent(object sender, RoutedEventArgs e)
+        private void TxtFocusEvent(object sender, RoutedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
             textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
         }
 
-        private void txtLostFocus(object sender, RoutedEventArgs e)
+        private void TxtLostFocus(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -90,14 +90,14 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void txtMouseDobleClick(object sender, MouseButtonEventArgs e)
+        private void TxtMouseDobleClick(object sender, MouseButtonEventArgs e)
         {
             txtEfectivo.IsReadOnly = false;
             _TxtEditable = true;
         }
 
         //EVITA QUE CAPTURE EL ESPACIO EN EL CAMPO NUMERICO, EJEM: "2 4 555"
-        private void txtPreviewKeyDownEvent(object sender, KeyEventArgs e)
+        private void TxtPreviewKeyDownEvent(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
             {
@@ -105,7 +105,7 @@ namespace Sistema_Mercadito.Pages
             }
         }
 
-        private void txtTextChanged(object sender, TextChangedEventArgs e)
+        private void TxtTextChanged(object sender, TextChangedEventArgs e)
         {
             if (((TextBox)sender).Text.Length > 0)
             {

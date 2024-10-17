@@ -1,0 +1,160 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|c:\\proyectos temporales vs\\sistema-mercadito-victus\\pages\\dashboard.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\dashboard.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\dashboard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\dashboard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\mensajevueltocliente.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\mensajevueltocliente.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\mensajevueltocliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\mensajevueltocliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\home.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\home.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\configuracion.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\configuracion.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\configuracion.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\configuracion.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\claveacceso.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\claveacceso.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\pages\\claveacceso.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{32A23A72-96CD-4B98-86AA-2D0DCA9FF5A0}|Sistema Mercadito.csproj|solutionrelative:pages\\claveacceso.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MensajeVueltoCliente.xaml.cs",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\MensajeVueltoCliente.xaml.cs",
+              "RelativeDocumentMoniker": "Pages\\MensajeVueltoCliente.xaml.cs",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\MensajeVueltoCliente.xaml.cs",
+              "RelativeToolTip": "Pages\\MensajeVueltoCliente.xaml.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAwGsAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-17T14:52:18.431Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MensajeVueltoCliente.xaml",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\MensajeVueltoCliente.xaml",
+              "RelativeDocumentMoniker": "Pages\\MensajeVueltoCliente.xaml",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\MensajeVueltoCliente.xaml",
+              "RelativeToolTip": "Pages\\MensajeVueltoCliente.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-17T14:50:57.287Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Home.xaml",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Home.xaml",
+              "RelativeDocumentMoniker": "Pages\\Home.xaml",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Home.xaml",
+              "RelativeToolTip": "Pages\\Home.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-17T14:19:13.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Dashboard.xaml.cs",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Dashboard.xaml.cs",
+              "RelativeDocumentMoniker": "Pages\\Dashboard.xaml.cs",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Dashboard.xaml.cs",
+              "RelativeToolTip": "Pages\\Dashboard.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-17T14:12:30.758Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Dashboard.xaml",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Dashboard.xaml",
+              "RelativeDocumentMoniker": "Pages\\Dashboard.xaml",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Dashboard.xaml",
+              "RelativeToolTip": "Pages\\Dashboard.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-17T14:10:04.472Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Configuracion.xaml.cs",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Configuracion.xaml.cs",
+              "RelativeDocumentMoniker": "Pages\\Configuracion.xaml.cs",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Configuracion.xaml.cs",
+              "RelativeToolTip": "Pages\\Configuracion.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-17T14:05:44.709Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Configuracion.xaml",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Configuracion.xaml",
+              "RelativeDocumentMoniker": "Pages\\Configuracion.xaml",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\Configuracion.xaml",
+              "RelativeToolTip": "Pages\\Configuracion.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-17T14:05:40.134Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ClaveAcceso.xaml.cs",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\ClaveAcceso.xaml.cs",
+              "RelativeDocumentMoniker": "Pages\\ClaveAcceso.xaml.cs",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\ClaveAcceso.xaml.cs",
+              "RelativeToolTip": "Pages\\ClaveAcceso.xaml.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAUwBQAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-17T13:16:06.453Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ClaveAcceso.xaml",
+              "DocumentMoniker": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\ClaveAcceso.xaml",
+              "RelativeDocumentMoniker": "Pages\\ClaveAcceso.xaml",
+              "ToolTip": "C:\\Proyectos Temporales VS\\Sistema-Mercadito-victus\\Pages\\ClaveAcceso.xaml",
+              "RelativeToolTip": "Pages\\ClaveAcceso.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-17T13:15:44.202Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

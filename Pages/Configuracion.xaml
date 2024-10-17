@@ -144,7 +144,7 @@
                 Grid.Column="6"
                 Grid.ColumnSpan="2"
                 Margin="5"
-                Click="btnGuardar_Click"
+                Click="BtnGuardar_Click"
                 Content="Guardar" />
             <Button
                 x:Name="btnActualizar"
@@ -152,7 +152,7 @@
                 Grid.Column="6"
                 Grid.ColumnSpan="2"
                 Margin="5"
-                Click="btnActualizar_Click"
+                Click="BtnActualizar_Click"
                 Content="Actualizar"
                 Visibility="Collapsed" />
             <Button
@@ -161,7 +161,7 @@
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
                 Margin="5"
-                Click="btnCerrar_Click"
+                Click="BtnCerrar_Click"
                 Content="Cerrar" />
             <!--#endregion-->
         </Grid>

@@ -6984,8 +6984,8 @@ namespace Sistema_Mercadito.dbSistemaMercaditoDataSetTableAdapters {
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
             this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[TbCaja] ([DateOpen], [DateClose], [numero]) VALUES (@DateOpen," +
-                " @DateClose, @numero);\r\nSELECT IdCaja, DateOpen, DateClose, numero FROM TbCaja W" +
-                "HERE (IdCaja = SCOPE_IDENTITY())";
+                " @DateClose, @numero);\nSELECT IdCaja, DateOpen, DateClose, numero FROM TbCaja WH" +
+                "ERE (IdCaja = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DateOpen", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "DateOpen", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DateClose", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "DateClose", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -7546,12 +7546,12 @@ SELECT IdCajaRegist, FechaAbierta, MontoApertura, MontoVenta, MontoSinpe, MontoT
                 " AND ((@IsNull_Moneda25 = 1 AND [Moneda25] IS NULL) OR ([Moneda25] = @Original_M" +
                 "oneda25)) AND ((@IsNull_Moneda10 = 1 AND [Moneda10] IS NULL) OR ([Moneda10] = @O" +
                 "riginal_Moneda10)) AND ((@IsNull_Moneda5 = 1 AND [Moneda5] IS NULL) OR ([Moneda5" +
-                "] = @Original_Moneda5)));\r\nSELECT IdCajaRegist, FechaAbierta, MontoApertura, Mon" +
-                "toVenta, MontoSinpe, MontoTarjeta, MontoDolares, MontoPagoServicios, MontoCompra" +
-                "Dolares, MontoRetiroDolares, MontoRetiroColones, FechaCierre, SaldoCajas, Activo" +
-                ", IsOpen, Billete20Mil, Billete10Mil, BIllete5Mil, Billete2Mil, Billete1Mil, Mon" +
-                "eda500, Moneda100, Moneda50, Moneda25, Moneda10, Moneda5 FROM TbCajaRegist WHERE" +
-                " (IdCajaRegist = @IdCajaRegist)";
+                "] = @Original_Moneda5)));\nSELECT IdCajaRegist, FechaAbierta, MontoApertura, Mont" +
+                "oVenta, MontoSinpe, MontoTarjeta, MontoDolares, MontoPagoServicios, MontoCompraD" +
+                "olares, MontoRetiroDolares, MontoRetiroColones, FechaCierre, SaldoCajas, Activo," +
+                " IsOpen, Billete20Mil, Billete10Mil, BIllete5Mil, Billete2Mil, Billete1Mil, Mone" +
+                "da500, Moneda100, Moneda50, Moneda25, Moneda10, Moneda5 FROM TbCajaRegist WHERE " +
+                "(IdCajaRegist = @IdCajaRegist)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@FechaAbierta", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "FechaAbierta", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@MontoApertura", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "MontoApertura", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -9191,10 +9191,10 @@ SELECT IdConfig, PrinterLong, PrinterName, PrinterFontSize, PrinterOpenCasher, E
                 "AND [Email] IS NULL) OR ([Email] = @Original_Email)) AND ((@IsNull_EnviarTelegra" +
                 "m = 1 AND [EnviarTelegram] IS NULL) OR ([EnviarTelegram] = @Original_EnviarTeleg" +
                 "ram)) AND ((@IsNull_CargarMontoPredifinido = 1 AND [CargarMontoPredifinido] IS N" +
-                "ULL) OR ([CargarMontoPredifinido] = @Original_CargarMontoPredifinido)));\r\nSELECT" +
-                " IdConfig, PrinterLong, PrinterName, PrinterFontSize, PrinterOpenCasher, Empresa" +
-                "Nombre, Token, ChatId, Email, EnviarTelegram, CargarMontoPredifinido FROM TbConf" +
-                "ig WHERE (IdConfig = @IdConfig)";
+                "ULL) OR ([CargarMontoPredifinido] = @Original_CargarMontoPredifinido)));\nSELECT " +
+                "IdConfig, PrinterLong, PrinterName, PrinterFontSize, PrinterOpenCasher, EmpresaN" +
+                "ombre, Token, ChatId, Email, EnviarTelegram, CargarMontoPredifinido FROM TbConfi" +
+                "g WHERE (IdConfig = @IdConfig)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@PrinterLong", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "PrinterLong", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@PrinterName", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "PrinterName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -11425,9 +11425,8 @@ SELECT IdRetiro, FechaRetiro, Colones, Dolares, Motivo, Activo, IdCaja FROM TbRe
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Descripcion", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Descripcion", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[TbTipoMovimiento] ([Descripcion]) VALUES (@Descripcion);\r\nSELE" +
-                "CT IdTipoM, Descripcion FROM TbTipoMovimiento WHERE (IdTipoM = SCOPE_IDENTITY())" +
-                "";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[TbTipoMovimiento] ([Descripcion]) VALUES (@Descripcion);\nSELEC" +
+                "T IdTipoM, Descripcion FROM TbTipoMovimiento WHERE (IdTipoM = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Descripcion", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Descripcion", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
@@ -11817,10 +11816,9 @@ SELECT IdVenta, IdCaja, Venta, FechaVenta, MontoCambio, MontoColones, MontoDolar
                 "chaBorrado = 1 AND [FechaBorrado] IS NULL) OR ([FechaBorrado] = @Original_FechaB" +
                 "orrado)) AND ((@IsNull_MotivoBorrado = 1 AND [MotivoBorrado] IS NULL) OR ([Motiv" +
                 "oBorrado] = @Original_MotivoBorrado)) AND ((@IsNull_Activo = 1 AND [Activo] IS N" +
-                "ULL) OR ([Activo] = @Original_Activo)));\r\nSELECT IdVenta, IdCaja, Venta, FechaVe" +
-                "nta, MontoCambio, MontoColones, MontoDolares, MontoSinpe, MontoTarjeta, TipoCamb" +
-                "io, FechaBorrado, MotivoBorrado, Activo FROM TbVentas WHERE (IdVenta = @IdVenta)" +
-                "";
+                "ULL) OR ([Activo] = @Original_Activo)));\nSELECT IdVenta, IdCaja, Venta, FechaVen" +
+                "ta, MontoCambio, MontoColones, MontoDolares, MontoSinpe, MontoTarjeta, TipoCambi" +
+                "o, FechaBorrado, MotivoBorrado, Activo FROM TbVentas WHERE (IdVenta = @IdVenta)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IdCaja", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IdCaja", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Venta", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "Venta", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
